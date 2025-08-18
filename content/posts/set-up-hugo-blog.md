@@ -1,9 +1,10 @@
-+++
-date = '2025-08-17T16:30:05-07:00'
-title = 'Set Up Hugo Blog'
-toc = true
-tocOpen = true
-+++
+---
+date: '2025-08-17T16:30:05-07:00'
+title: 'Set Up Hugo Blog'
+toc: true
+tocOpen: true
+---
+
 # Setting Up a Hugo-based Blog on GitHub Pages
 
 I will be showing you how I set up a Hugo blog, being published to GitHub Pages using GitHub Actions for free.
