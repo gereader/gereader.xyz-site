@@ -4,8 +4,11 @@ title = 'Set Up Hugo Blog'
 +++
 # Setting Up a Hugo-based Blog on GitHub Pages
 
-I will be showing you how I set up a Hugo blog, being published to GitHub Pages using GitHub Actions for free. 
+I will be showing you how I set up a Hugo blog, being published to GitHub Pages using GitHub Actions for free.
 
+I chose GitHub Pages because it offers the ability to host static websites for free with minimal configuration, and I have a new interest in GitHub Actions. I noted that the "modern" method to deploy a website on GitHub is with Actions and I couldn't pass up the opportunity. While going through the process of deploying this blog, I found that no single resource had all the information I needed to get everything stood up. I figured, "hey I'm making a blog why not write what I wish I had" and that's how this post came to be. The process is fairly simple from start to finish once you know where all the moving parts are located. 
+
+Follow along and lets deploy a static webpage to GitHub Pages, complete with Custom Domain that is secured via SSL.
 ## Install Hugo on your Computer
 I will be performing these actions from my MacBook, the basic ideas should be compatible across any platform beyond the initial install. 
 

@@ -1,10 +1,18 @@
 baseURL = 'https://blog.gereader.xyz'
 languageCode = 'en-us'
-title = "gereader's Blog"
+title = "Gene's Blog"
 theme = "hugo-blog-awesome"
 
 [params]
   goToTop = true
+  defaultColor = "auto"  # or "light" or "dark"
+  description = "Your blog description here"
+
+[params.author]
+  avatar = "images/MyFace.jpeg"
+  intro = "Gene's Blog"
+  name = "Gene Reader"
+  description = "Network engineer turned platform engineer, writing about the practical side of DevOps, solutions that work, and occasionally yelling at YAML files."
 
 [[params.socialIcons]]
   name = "github"
