@@ -1,4 +1,18 @@
 baseURL = 'https://blog.gereader.xyz'
 languageCode = 'en-us'
-title = 'My New Hugo Site'
+title = "gereader's Blog"
 theme = "hugo-blog-awesome"
+
+[params]
+  goToTop = true
+
+[[params.socialIcons]]
+  name = "github"
+  url = "https://github.com/gereader"
+
+[[params.socialIcons]]
+  name = "linkedin"
+  url = "https://linkedin.com/in/ereader"
+
+[services.disqus]
+  shortname = "blog-gereader-xyz"
