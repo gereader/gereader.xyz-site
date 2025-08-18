@@ -1,6 +1,7 @@
 ---
 date: '2025-08-17T16:30:05-07:00'
 title: 'Set Up Hugo Blog'
+description: "How to set up a Hugo blog with GitHub Pages"
 toc: true
 tocOpen: true
 ---
