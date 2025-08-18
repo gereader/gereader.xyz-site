@@ -24,3 +24,6 @@ theme = "hugo-blog-awesome"
 
 [services.disqus]
   shortname = "blog-gereader-xyz"
+
+[frontmatter]
+  format = "yaml"
