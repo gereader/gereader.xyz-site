@@ -1,6 +1,8 @@
 +++
 date = '2025-08-17T16:30:05-07:00'
 title = 'Set Up Hugo Blog'
+toc = true
+tocOpen = true
 +++
 # Setting Up a Hugo-based Blog on GitHub Pages
 

@@ -3,11 +3,11 @@
 <meta http-equiv="content-type" content="text/html">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title itemprop="name">Set Up Hugo Blog | gereader&#39;s Blog</title>
-<meta property="og:title" content="Set Up Hugo Blog | gereader&#39;s Blog" />
-<meta name="twitter:title" content="Set Up Hugo Blog | gereader&#39;s Blog" />
-<meta itemprop="name" content="Set Up Hugo Blog | gereader&#39;s Blog" />
-<meta name="application-name" content="Set Up Hugo Blog | gereader&#39;s Blog" />
+<title itemprop="name">Set Up Hugo Blog | Gene&#39;s Blog</title>
+<meta property="og:title" content="Set Up Hugo Blog | Gene&#39;s Blog" />
+<meta name="twitter:title" content="Set Up Hugo Blog | Gene&#39;s Blog" />
+<meta itemprop="name" content="Set Up Hugo Blog | Gene&#39;s Blog" />
+<meta name="application-name" content="Set Up Hugo Blog | Gene&#39;s Blog" />
 <meta property="og:site_name" content="" />
 
 <meta name="description" content="Your blog description here">
@@ -62,7 +62,7 @@
         },
         "publisher": {
         "@type": "Organization",
-        "name": "gereader\u0027s Blog"
+        "name": "Gene\u0027s Blog"
         }
     }
     </script>
@@ -72,7 +72,7 @@
 
     
     <meta property="og:url" content="http://localhost:1313/posts/set-up-hugo-blog/">
-  <meta property="og:site_name" content="gereader&#39;s Blog">
+  <meta property="og:site_name" content="Gene&#39;s Blog">
   <meta property="og:title" content="Set Up Hugo Blog">
   <meta property="og:description" content="Setting Up a Hugo-based Blog on GitHub Pages I will be showing you how I set up a Hugo blog, being published to GitHub Pages using GitHub Actions for free.
 I chose GitHub Pages because it offers the ability to host static websites for free with minimal configuration, and I have a new interest in GitHub Actions. I noted that the “modern” method to deploy a website on GitHub is with Actions and I couldn’t pass up the opportunity. While going through the process of deploying this blog, I found that no single resource had all the information I needed to get everything stood up. I figured, “hey I’m making a blog why not write what I wish I had” and that’s how this post came to be. The process is fairly simple from start to finish once you know where all the moving parts are located.">
@@ -175,6 +175,36 @@ stroke-linejoin="round" class="feather feather-home">
                 
             </header>
             
+    
+        
+            
+        
+    
+    <details class="toc" open>
+        <summary><b></b></summary>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#install-hugo-on-your-computer">Install Hugo on your Computer</a></li>
+    <li><a href="#create-a-hugo-site-locally">Create a Hugo site locally</a></li>
+    <li><a href="#test-run">Test Run</a></li>
+    <li><a href="#push-it-to-github">Push it to GitHub</a></li>
+    <li><a href="#setup-github-actions-to-deploy">Setup GitHub Actions to Deploy</a></li>
+    <li><a href="#update-github-pages-settings">Update GitHub Pages Settings</a></li>
+    <li><a href="#deploy-your-website">Deploy your website</a></li>
+    <li><a href="#key-points-to-remember">Key Points to Remember</a></li>
+    <li><a href="#optional-steps">Optional Steps</a>
+      <ul>
+        <li><a href="#configure-dns-using-cloudflare">Configure DNS (Using Cloudflare)</a></li>
+        <li><a href="#configure-github-pages-custom-domain">Configure GitHub Pages Custom Domain</a></li>
+        <li><a href="#add-cname-file-to-hugo">Add CNAME file to Hugo</a></li>
+        <li><a href="#update-your-hugotoml">Update your hugo.toml</a></li>
+        <li><a href="#push-the-changes-to-github">Push the changes to GitHub</a></li>
+        <li><a href="#wait-for-ssl-and-enable-https">Wait for SSL and enable HTTPS</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </details>
             <div class="page-content">
                 <h1 id="setting-up-a-hugo-based-blog-on-github-pages">Setting Up a Hugo-based Blog on GitHub Pages</h1>
 <p>I will be showing you how I set up a Hugo blog, being published to GitHub Pages using GitHub Actions for free.</p>
