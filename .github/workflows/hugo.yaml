@@ -38,6 +38,7 @@ jobs:
         uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: 'latest'
+          # Required for most modern themes
           extended: true
 
       - name: Setup Pages
