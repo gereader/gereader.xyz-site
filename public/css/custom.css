@@ -1,0 +1,103 @@
+/* Hugo Blog Awesome specific targeting */
+.container,
+.container-fluid,
+.mx-auto,
+article,
+.post,
+.single {
+    max-width: 1400px !important;
+    width: 95% !important;
+}
+
+/* Target Bootstrap container classes that might be used */
+.container-lg,
+.container-xl {
+    max-width: 1400px !important;
+}
+
+/* Target header/navigation area */
+header,
+nav,
+.navbar,
+.header,
+.site-header,
+.top-nav,
+.navigation {
+    max-width: 1400px !important;
+    width: 95% !important;
+    margin: 0 auto;
+}
+
+/* If the header has its own container */
+header .container,
+nav .container,
+.navbar .container {
+    max-width: 1400px !important;
+    width: 95% !important;
+}
+
+/* Make code blocks utilize full width and left-aligned */
+pre {
+    max-width: 100% !important;
+    width: 100% !important;
+    overflow-x: auto;
+    text-align: left !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+/* Target any wrapper containers around code blocks */
+.highlight,
+.code-block,
+.language-bash,
+div[class*="highlight"],
+div[class*="code"] {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+/* Ensure code blocks don't break layout and are left-aligned */
+code {
+    text-align: left !important;
+    max-width: 100% !important;
+    width: 100% !important;
+}
+
+/* Target all code-related elements for left alignment */
+pre code,
+.highlight,
+.highlight pre,
+.highlight code,
+.chroma,
+.chroma pre,
+.chroma code {
+    text-align: left !important;
+}
+
+/* Fix flexbox alignment in code spans without breaking display */
+pre code span[style*="display:flex"],
+pre span[style*="display:flex"] {
+    justify-content: flex-start !important;
+}
+
+/* For really wide screens, you might want even more width */
+@media (min-width: 1600px) {
+    .container,
+    .content,
+    .post-content,
+    main {
+        max-width: 1600px !important;
+    }
+}
+
+/* Ultra-wide screens */
+@media (min-width: 2000px) {
+    .container,
+    .content, 
+    .post-content,
+    main {
+        max-width: 1800px !important;
+    }
+}

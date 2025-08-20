@@ -27,3 +27,7 @@ theme = "hugo-blog-awesome"
 
 [frontmatter]
   format = "yaml"
+
+[params.seo]
+  title = "Gene's Blog"
+  description = "Blog about DevOps, CICD, AWS, OCI, anything cloud and other tech insights"

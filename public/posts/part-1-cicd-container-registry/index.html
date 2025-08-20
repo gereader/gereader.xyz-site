@@ -1,0 +1,3182 @@
+<!DOCTYPE html>
+<html lang="en-us"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">Part 1 - Building a CI/CD Pipeline with GitHub Actions and Container Registries | Gene&#39;s Blog</title>
+<meta property="og:title" content="Part 1 - Building a CI/CD Pipeline with GitHub Actions and Container Registries | Gene&#39;s Blog" />
+<meta name="twitter:title" content="Part 1 - Building a CI/CD Pipeline with GitHub Actions and Container Registries | Gene&#39;s Blog" />
+<meta itemprop="name" content="Part 1 - Building a CI/CD Pipeline with GitHub Actions and Container Registries | Gene&#39;s Blog" />
+<meta name="application-name" content="Part 1 - Building a CI/CD Pipeline with GitHub Actions and Container Registries | Gene&#39;s Blog" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="Build a complete CI/CD pipeline with GitHub Actions for Flask apps. Learn to test containers, push to GHCR and AWS ECR, handle gotchas, and set up automated testing workflows - all within free AWS tier limits.">
+<meta itemprop="description" content="Build a complete CI/CD pipeline with GitHub Actions for Flask apps. Learn to test containers, push to GHCR and AWS ECR, handle gotchas, and set up automated testing workflows - all within free AWS tier limits." />
+<meta property="og:description" content="Build a complete CI/CD pipeline with GitHub Actions for Flask apps. Learn to test containers, push to GHCR and AWS ECR, handle gotchas, and set up automated testing workflows - all within free AWS tier limits." />
+<meta name="twitter:description" content="Build a complete CI/CD pipeline with GitHub Actions for Flask apps. Learn to test containers, push to GHCR and AWS ECR, handle gotchas, and set up automated testing workflows - all within free AWS tier limits." />
+
+<meta property="og:locale" content="en-us" />
+<meta name="language" content="en-us" />
+
+  <link rel="alternate" hreflang="en" href="http://localhost:1313/posts/part-1-cicd-container-registry/" title="" />
+
+
+
+
+
+    
+    
+    
+
+    <meta property="og:type" content="article" />
+    <meta property="og:article:published_time" content=2025-08-18T15:10:14-0700 />
+    <meta property="article:published_time" content=2025-08-18T15:10:14-0700 />
+    <meta property="og:url" content="http://localhost:1313/posts/part-1-cicd-container-registry/" />
+
+    
+    <meta property="og:article:author" content="Gene Reader" />
+    <meta property="article:author" content="Gene Reader" />
+    <meta name="author" content="Gene Reader" />
+    
+    
+
+    
+
+    <script defer type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "Article",
+        "headline": "Part 1 - Building a CI/CD Pipeline with GitHub Actions and Container Registries",
+        "author": {
+        "@type": "Person",
+        "name": ""
+        },
+        "datePublished": "2025-08-18",
+        "description": "Build a complete CI/CD pipeline with GitHub Actions for Flask apps. Learn to test containers, push to GHCR and AWS ECR, handle gotchas, and set up automated testing workflows - all within free AWS tier limits.",
+        "wordCount":  3968 ,
+        "mainEntityOfPage": "True",
+        "dateModified": "2025-08-18",
+        "image": {
+        "@type": "imageObject",
+        "url": ""
+        },
+        "publisher": {
+        "@type": "Organization",
+        "name": "Gene\u0027s Blog"
+        }
+    }
+    </script>
+
+
+<meta name="generator" content="Hugo 0.148.2">
+
+    
+    <meta property="og:url" content="http://localhost:1313/posts/part-1-cicd-container-registry/">
+  <meta property="og:site_name" content="Gene&#39;s Blog">
+  <meta property="og:title" content="Part 1 - Building a CI/CD Pipeline with GitHub Actions and Container Registries">
+  <meta property="og:description" content="Build a complete CI/CD pipeline with GitHub Actions for Flask apps. Learn to test containers, push to GHCR and AWS ECR, handle gotchas, and set up automated testing workflows - all within free AWS tier limits.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-08-18T15:10:14-07:00">
+    <meta property="article:modified_time" content="2025-08-18T15:10:14-07:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Part 1 - Building a CI/CD Pipeline with GitHub Actions and Container Registries">
+  <meta name="twitter:description" content="Build a complete CI/CD pipeline with GitHub Actions for Flask apps. Learn to test containers, push to GHCR and AWS ECR, handle gotchas, and set up automated testing workflows - all within free AWS tier limits.">
+
+
+    
+
+    <link rel="canonical" href="http://localhost:1313/posts/part-1-cicd-container-registry/">
+    <link href="/style.min.2d921c18cf1ec555ffc03d59a8adc211c402c68c930c27d6a0c306ab175a8d09.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="http://localhost:1313/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+    
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+
+    
+    
+      <link rel="stylesheet" href="/css/custom.css">
+    
+</head>
+<body data-theme = "auto" class="notransition">
+
+<script src="/js/theme.js"></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="http://localhost:1313/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title></title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">Part 1 - Building a CI/CD Pipeline with GitHub Actions and Container Registries</h1>
+                
+                
+                
+                <div class="post-meta">
+                    <time datetime="2025-08-18T15:10:14-07:00" itemprop="datePublished"> Aug 18, 2025 </time>
+                </div>
+                
+            </header>
+            
+    
+        
+            
+        
+    
+    <details class="toc" open>
+        <summary><b></b></summary>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#what-to-expect-in-part-1">What to expect in Part 1</a></li>
+    <li><a href="#overview-of-flask-job-application-tracking-app">Overview of Flask Job Application Tracking App</a>
+      <ul>
+        <li><a href="#health-check-endpoints-the-foundation-of-the-pipeline">Health Check Endpoints, The Foundation of the Pipeline</a></li>
+        <li><a href="#flask-app-structure">Flask App Structure</a></li>
+        <li><a href="#why-this-setup-works-for-cicd">Why This Setup Works for CI/CD</a></li>
+      </ul>
+    </li>
+    <li><a href="#setting-up-the-container-testing-in-github-actions">Setting Up the Container Testing in GitHub Actions</a>
+      <ul>
+        <li><a href="#basic-workflow-structure">Basic Workflow Structure</a></li>
+        <li><a href="#container-testing-strategy">Container Testing Strategy</a></li>
+      </ul>
+    </li>
+    <li><a href="#docker-context-gotcha">Docker Context Gotcha</a></li>
+    <li><a href="#github-container-registry-ghcr-setup">GitHub Container Registry (GHCR) Setup</a>
+      <ul>
+        <li><a href="#authentication-setup">Authentication Setup</a></li>
+        <li><a href="#repository-secrets-setup">Repository Secrets Setup</a></li>
+        <li><a href="#repository-naming-gotcha-for-ghcr">Repository Naming Gotcha for GHCR</a></li>
+        <li><a href="#complete-ghcr-push-workflow">Complete GHCR Push Workflow</a></li>
+      </ul>
+    </li>
+    <li><a href="#aws-elastic-container-registry-ecr-setup">AWS Elastic Container Registry (ECR) Setup</a>
+      <ul>
+        <li><a href="#cost-reality-check">Cost Reality Check</a></li>
+        <li><a href="#aws-cli-configuration">AWS CLI Configuration</a></li>
+        <li><a href="#ecr-repository-creation">ECR Repository Creation</a></li>
+        <li><a href="#iam-setup-for-github-actions">IAM Setup for GitHub Actions</a></li>
+        <li><a href="#ecr-authentication-gotchas">ECR Authentication Gotchas</a></li>
+        <li><a href="#dynamic-registry-uri-lookup">Dynamic Registry URI Lookup</a></li>
+        <li><a href="#complete-ecr-push-workflow">Complete ECR Push Workflow</a></li>
+      </ul>
+    </li>
+    <li><a href="#the-complete-part-1-workflow">The Complete Part 1 Workflow</a></li>
+    <li><a href="#whats-next">What&rsquo;s Next</a></li>
+    <li><a href="#resources">Resources</a></li>
+  </ul>
+</nav>
+    </details>
+            <div class="page-content">
+                <h1 id="building-a-cicd-pipeline-with-github-actions-and-container-registries">Building a CI/CD Pipeline with GitHub Actions and Container Registries</h1>
+<p>I recently built a complete CI/CD pipeline for my Flask job application tracking app. Like my Hugo blog setup, I struggled to find a single source covering everything I needed. I found myself cobbling together multiple YouTube videos, tutorials, and AWS and GitHub Actions documentation just to get a working pipeline. There&rsquo;s a lot of moving parts here, so I decided to split this into a two-part series.</p>
+<p>In this first part, I&rsquo;ll walk you through setting up the continuous integration side of the pipeline. We&rsquo;ll cover my Flask app structure, the Docker build process, and how I configured GitHub Actions to automatically test containers and push images to both GitHub Container Registry (GHCR) and Amazon Elastic Container Registry (ECR).</p>
+<h2 id="what-to-expect-in-part-1">What to expect in Part 1</h2>
+<ul>
+<li>Set up automated testing with basic health checks for containerized Flask apps</li>
+<li>Push to GitHub Container Registry (GHCR)</li>
+<li>Push to Amazon Elastic Container Registry (ECR)</li>
+<li>Handle all the gotchas I ran into</li>
+</ul>
+<p>Part 2 will cover deploying these containers to AWS ECS.</p>
+<h2 id="overview-of-flask-job-application-tracking-app">Overview of Flask Job Application Tracking App</h2>
+<p>Before diving into the CI/CD pipeline, let me show you what we&rsquo;re working with in terms of this Flask app. I built a job application tracking app, it&rsquo;s not complex, but it includes key components needed for a robust pipeline.</p>
+<p>The app itself is fairly basic with features like adding new job applications, viewing them in a dashboard, and updating their status as you progress through interview processes. It uses SQLite for the database currently and includes forms for data entry. I intend to eventually move the database to something like AWS RDS and build a user portal. For now, we&rsquo;ll keep the AWS Security Group limited to my own IP.</p>
+<h3 id="health-check-endpoints-the-foundation-of-the-pipeline">Health Check Endpoints, The Foundation of the Pipeline</h3>
+<p>One of the most important parts of this CI/CD pipeline is the health check implementation. This is used to test if the container is working as expected before uploading it to a registry.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Health checks</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@app.route</span>(<span style="color:#e6db74">&#34;/healthz/live&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">health_live</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;OK&#34;</span>, <span style="color:#ae81ff">200</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@app.route</span>(<span style="color:#e6db74">&#34;/healthz/readiness&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">health_readiness</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">with</span> db<span style="color:#f92672">.</span>engine<span style="color:#f92672">.</span>connect() <span style="color:#66d9ef">as</span> connection:
+</span></span><span style="display:flex;"><span>            connection<span style="color:#f92672">.</span>execute(db<span style="color:#f92672">.</span>text(<span style="color:#e6db74">&#34;SELECT 1&#34;</span>))
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;OK&#34;</span>, <span style="color:#ae81ff">200</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;Not Ready&#34;</span>, <span style="color:#ae81ff">500</span>
+</span></span></code></pre></div><p>I created these endpoints following patterns that you see in Kubernetes and other container orchestration systems:</p>
+<ul>
+<li><code>/healthz/live</code> - Simple &ldquo;is the app running?&rdquo; check that just returns OK</li>
+<li><code>/healthz/readiness</code> - &ldquo;Can the app serve traffic?&rdquo; checks that database is communicating with the app</li>
+</ul>
+<p>This separation is crucial for our container testing strategy. The liveness check confirms the Flask server started successfully, while the readiness check ensures the database is accessible and the app can actually handle requests. The readiness health check is expected to be used if a load balancer is added in front of the app, this will ensure the app is up and able to function.</p>
+<h3 id="flask-app-structure">Flask App Structure</h3>
+<p>Here&rsquo;s the structure of the app that is being containerized:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>app/
+</span></span><span style="display:flex;"><span>├── Dockerfile            <span style="color:#75715e"># Container build instructions</span>
+</span></span><span style="display:flex;"><span>├── app.py                <span style="color:#75715e"># Main Flask application</span>
+</span></span><span style="display:flex;"><span>├── docker-compose.yml    <span style="color:#75715e"># Local development setup</span>
+</span></span><span style="display:flex;"><span>├── requirements.txt      <span style="color:#75715e"># Python dependencies </span>
+</span></span><span style="display:flex;"><span>├── static
+</span></span><span style="display:flex;"><span>│   └── style.css         <span style="color:#75715e"># CSS Style Sheet</span>
+</span></span><span style="display:flex;"><span>└── templates             <span style="color:#75715e"># HTML templates</span>
+</span></span><span style="display:flex;"><span>    ├── add_job.html
+</span></span><span style="display:flex;"><span>    ├── base.html
+</span></span><span style="display:flex;"><span>    ├── dashboard.html
+</span></span><span style="display:flex;"><span>    ├── edit_job.html
+</span></span><span style="display:flex;"><span>    ├── job_details.html
+</span></span><span style="display:flex;"><span>    └── jobs.html
+</span></span></code></pre></div><p>The app runs on port 8080 and uses SQLite for simplicity. You can view the complete source code and all these files in my <a href="https://github.com/gereader/FlaskJobTracker">GitHub repository</a>.</p>
+<h3 id="why-this-setup-works-for-cicd">Why This Setup Works for CI/CD</h3>
+<p>This Flask app gives us everything we need to demonstrate a real-world CI/CD pipeline:</p>
+<p>Realistic dependencies - Uses SQLAlchemy, WTForms, and other common libraries
+Database testing - The readiness endpoint validates database connectivity
+Simple deployment - Self-contained with SQLite, no external services required
+Health check - Proper endpoints for automated testing and monitoring</p>
+<p>The health check endpoints will be the foundation of our container testing strategy. We can use them to verify that our container is working correctly before pushing it to the registry.</p>
+<h2 id="setting-up-the-container-testing-in-github-actions">Setting Up the Container Testing in GitHub Actions</h2>
+<p>This is the foundation, testing before we put anything in production. You want to ensure that you have thought about how you validate that your code will work before launching it anywhere you consider production. In this case, I don&rsquo;t want to upload a bad version of my container, so I need to validate that it works before uploading it into my registries.</p>
+<h3 id="basic-workflow-structure">Basic Workflow Structure</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">jobs</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Test Job</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">test</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># ... test steps</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Push to GHCR Job</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">build_and_push_ghcr</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">needs</span>: <span style="color:#ae81ff">test </span> <span style="color:#75715e"># Only runs if test passes</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Push to ECR Job</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">build_and_push_ecr</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">needs</span>: <span style="color:#ae81ff">test </span> <span style="color:#75715e"># Only runs if test passes</span>
+</span></span></code></pre></div><p>The <code>needs: test</code> dependency ensures the fail-fast approach, we do not want ANY bad containers make it to production, so if it fails the test, we will not push a container to production.</p>
+<h3 id="container-testing-strategy">Container Testing Strategy</h3>
+<p>This will show how I approached the testing my container using the <code>healthz/live</code> and <code>healthz/readiness</code> endpoints. If they fail, the whole task fails.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># Build container during test</span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Build Docker Image</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">run</span>: <span style="color:#ae81ff">docker build -t ${{ steps.ghcr_tag.outputs.lowercase }} app</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Start the container running the Flask app</span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Run container in background</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    docker run -d --name flask-test -p 8080:8080 ${{ steps.ghcr_tag.outputs.lowercase }}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Wait for container to test &#34;ok&#34; or timeout in 30s, this makes sure the container is comes &#34;up&#34;</span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Wait for Container Test</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    timeout 30 bash -c &#39;until curl -f http://localhost:8080/healthz/live; do sleep 10; done&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Second test, make sure the readiness passes, can the Flask app talk to the database?</span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Container Readiness check</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    HTTP_CODE=$(curl -s -o /dev/null -w &#34;%{http_code}&#34; &#34;http://localhost:8080/healthz/readiness&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ &#34;$HTTP_CODE&#34; -eq 200 ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;Readiness request was successful (HTTP 200 OK).&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;Readiness Request failed with HTTP status code: $HTTP_CODE&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Stop the container, job is completed, test passes</span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Stop container, test complete</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">run</span>: <span style="color:#ae81ff">docker stop flask-test</span>
+</span></span></code></pre></div><p>Here is what the testing looks like in action. The first screenshot shows a failed test where the container couldn&rsquo;t start properly. Notice the repeated 404 errors from curl trying to reach the health endpoint, this container couldn&rsquo;t reach the <code>healthz/live</code> endpoint so it failed after 30s.</p>
+
+
+
+
+<figure>
+  <img src="Actions-Test-Fail.png" alt="Screenshot showing GitHub Actions interface with red x and error message &#39;Process completed with exit code 124&#39;" loading="lazy" style="cursor: pointer;" onclick="openLightbox('Actions-Test-Fail.png', 'Screenshot showing GitHub Actions interface with red x and error message \u0027Process completed with exit code 124\u0027')">
+  
+  <figcaption>Our initial test run fails because the container can&#39;t connect to the healthz/live endpoint</figcaption>
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  
+  img.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<p>Then this is what a successful test run where both health checks pass looks like.</p>
+
+
+
+
+<figure>
+  <img src="Actions-Test-Pass.png" alt="Screenshot showing GitHub Actions interface with check marks and passing test status &#39;OK&#39;" loading="lazy" style="cursor: pointer;" onclick="openLightbox('Actions-Test-Pass.png', 'Screenshot showing GitHub Actions interface with check marks and passing test status \u0027OK\u0027')">
+  
+  <figcaption>The workflow shows our Flask app tests and Docker build completed successfully</figcaption>
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  
+  img.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<h2 id="docker-context-gotcha">Docker Context Gotcha</h2>
+<p>My Flask app lives in /app subdirectory, not the root of the repo. This caused issues at first because the <code>docker/build-push-action@v6</code> action needs to know where the Dockerfile is located. Luckily, smarter minds than me had already thought of this and built in the ability to set your context to indicate where the Dockerfile is located.</p>
+<p>FlaskJobTracker
+└── app
+├── Dockerfile</p>
+<p>Problem: Default context looks in repository root
+Solution: Use context: &ldquo;{{defaultContext}}:app&rdquo;</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>      <span style="color:#75715e"># https://github.com/marketplace/actions/build-and-push-docker-images</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Build and push</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">docker/build-push-action@v6</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># Define context since Dockerfile is not in the root</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">context</span>: <span style="color:#e6db74">&#34;{{defaultContext}}:app&#34;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">push</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">tags</span>: <span style="color:#ae81ff">${{ steps.ghcr_tag.outputs.lowercase }}</span>
+</span></span></code></pre></div><p>The Dockerfile itself is straightforward Flask containerization. Feel free to check out the complete Dockerfile on my <a href="https://github.com/gereader/FlaskJobTracker/blob/main/app/Dockerfile">GitHub</a>.</p>
+<h2 id="github-container-registry-ghcr-setup">GitHub Container Registry (GHCR) Setup</h2>
+<p>GHCR is available under GitHub free accounts. You will need to configure authentication to get this working with GitHub Actions though.</p>
+<h3 id="authentication-setup">Authentication Setup</h3>
+<p>You will need to generate a Personal Access Token (PAT), and give it appropriate permissions to access repos, write packages, and delete packages.</p>
+<p>GitHub Account Settings → Developer settings → Personal access tokens → Tokens (Classic)</p>
+<p>Set the Note, this will be what your PAT is referred by when viewing your configured tokens.</p>
+<p>Make sure to set an appropriate Expiration time. I set mine to 90 days, and I know that I will need to update the token when it expires. You will be required to us the Classic token because fine-grained don&rsquo;t yet support container registry.</p>
+<p>I set my permissions to allow &ldquo;repo&rdquo;, &ldquo;write:packages&rdquo;, and &ldquo;delete:packages&rdquo; permissions.</p>
+
+
+
+
+<figure>
+  <img src="GitHub-Generate-PAT.png" alt="Screenshot showing GitHub New personal access token (classic) screen" loading="lazy" style="cursor: pointer;" onclick="openLightbox('GitHub-Generate-PAT.png', 'Screenshot showing GitHub New personal access token (classic) screen')">
+  
+  <figcaption>The token doesn&#39;t note need access to everything, only a the required permissions to interact with your repo and container registry</figcaption>
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  
+  img.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<h3 id="repository-secrets-setup">Repository Secrets Setup</h3>
+<p>You will need to create a GitHub Action Secret with the PAT token you generated. I have also added a secret with my GitHub username, that way I do not need to hardcode my username. I could have added my username as a variable instead, but it&rsquo;s easy enough to access secrets that I included it here.</p>
+<p>Repo → Settings → Security → Secrets and variables</p>
+
+
+
+
+<figure>
+  <img src="GitHub-Repo-Secrets.png" alt="Screenshot showing GitHub Actions secrets screen with secrets already set" loading="lazy" style="cursor: pointer;" onclick="openLightbox('GitHub-Repo-Secrets.png', 'Screenshot showing GitHub Actions secrets screen with secrets already set')">
+  
+  <figcaption>Set your PAT secret named &#39;GH_PAT_GHCR&#39; and username named &#39;GH_USERNAME&#39;</figcaption>
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  
+  img.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<p>We will reference these secrets when logging in to GHCR from docker in our workflow.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>      <span style="color:#75715e"># Login to ghcr action</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># https://github.com/docker/login-action?tab=readme-ov-file#github-container-registry</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Login to GitHub Container Registry</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">docker/login-action@v3</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">registry</span>: <span style="color:#ae81ff">ghcr.io</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">username</span>: <span style="color:#ae81ff">${{ secrets.GH_USERNAME }}</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">password</span>: <span style="color:#ae81ff">${{ secrets.GH_PAT_GHCR }}</span>
+</span></span></code></pre></div><h3 id="repository-naming-gotcha-for-ghcr">Repository Naming Gotcha for GHCR</h3>
+<p>GHCR requires lowercase names in the tags, but my repo &ldquo;FlaskJobTracker&rdquo; has capital letters so I had to come up with a method to lowercase my name since I really didn&rsquo;t want to rename my repo to make it work. I found the <code>ASzc/change-string-case-action@v6</code> action was made to be able to upper or lowercase string, so we create a variable for our tag and call the <code>.lowercase</code> variable.</p>
+<p>Problem: GHCR requires lowercase names, but my repo is &ldquo;FlaskJobTracker&rdquo;
+Solution: Automatic case conversion in the workflow</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>      <span style="color:#75715e"># Convert tag to lowercase since its required by ghcr</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">id</span>: <span style="color:#ae81ff">ghcr_tag</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">ASzc/change-string-case-action@v6</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">string</span>: <span style="color:#ae81ff">ghcr.io/${{ github.repository }}:latest</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Example Build and Push step showing the lowercase string</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Build and push</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">docker/build-push-action@v6</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">tags</span>: <span style="color:#ae81ff">${{ steps.ghcr_tag.outputs.lowercase }}</span>
+</span></span><span style="display:flex;"><span>          
+</span></span></code></pre></div><h3 id="complete-ghcr-push-workflow">Complete GHCR Push Workflow</h3>
+<p>This is the full workflow to push a container to GHCR.</p>
+<ol>
+<li>Checkout latest repo</li>
+<li>Docker Login, use Secrets we defined</li>
+<li>Enable string to be Lowercased</li>
+<li>Build and Push container to GHCR</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>  <span style="color:#f92672">build_and_push_ghcr</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">needs</span>: <span style="color:#ae81ff">test</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">steps</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Latest checkout action</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># https://github.com/actions/checkout</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@v5</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Login to ghcr action</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># https://github.com/docker/login-action?tab=readme-ov-file#github-container-registry</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Login to GitHub Container Registry</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">docker/login-action@v3</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">registry</span>: <span style="color:#ae81ff">ghcr.io</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">username</span>: <span style="color:#ae81ff">${{ secrets.GH_USERNAME }}</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">password</span>: <span style="color:#ae81ff">${{ secrets.GH_PAT_GHCR }}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Convert tag to lowercase since its required by ghcr</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">id</span>: <span style="color:#ae81ff">ghcr_tag</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">ASzc/change-string-case-action@v6</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">string</span>: <span style="color:#ae81ff">ghcr.io/${{ github.repository }}:latest</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># https://github.com/marketplace/actions/build-and-push-docker-images</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Build and push</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">docker/build-push-action@v6</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># Define context since Dockerfile is not in the root</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">context</span>: <span style="color:#e6db74">&#34;{{defaultContext}}:app&#34;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">push</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># This tag is used to name and set tags for the container</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># This is being made lowercase from the previous step ghcr_tag</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">tags</span>: <span style="color:#ae81ff">${{ steps.ghcr_tag.outputs.lowercase }}</span>
+</span></span></code></pre></div>
+
+
+
+<figure>
+  <img src="GitHub-Actions-Push-GHCR.png" alt="Screenshot showing GitHub Actions build_and_push_ghcr job completing" loading="lazy" style="cursor: pointer;" onclick="openLightbox('GitHub-Actions-Push-GHCR.png', 'Screenshot showing GitHub Actions build_and_push_ghcr job completing')">
+  
+  <figcaption>Now you should can run the GitHub Actions Job to push the container to GHCR</figcaption>
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  
+  img.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<p>You can look at all your package versions from your repo here. You can add additional tags and they will also show.</p>
+
+
+
+
+<figure>
+  <img src="GHCR-Packages.png" alt="Screenshot showing GitHub repo with arrow pointing to Packages" loading="lazy" style="cursor: pointer;" onclick="openLightbox('GHCR-Packages.png', 'Screenshot showing GitHub repo with arrow pointing to Packages')">
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  
+  img.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<p>Now that we have GHCR working, let&rsquo;s set up AWS ECR as our second registry. This gives us redundancy and prepares us for AWS ECS deployment in Part 2.</p>
+<h2 id="aws-elastic-container-registry-ecr-setup">AWS Elastic Container Registry (ECR) Setup</h2>
+<p>We are going to be tackling setting up AWS ECR for our containers while staying within the free tier and minimizing cost as much as possible. ECR will be our second registry and what we&rsquo;ll use for ECS deployment in Part 2.</p>
+<h3 id="cost-reality-check">Cost Reality Check</h3>
+<p>Before I go further into AWS ECR setup, let me address the reality of costs. Despite AWS calling much of this &ldquo;free tier,&rdquo; my current month-to-date costs are $0.94 after implementing this workflow and letting it run for a few days:</p>
+<ul>
+<li><strong>EC2 (ECS cluster):</strong> $0.355</li>
+<li><strong>VPC networking:</strong> $0.351</li>
+<li><strong>ECR storage:</strong> $0.252</li>
+</ul>
+<p>I&rsquo;m currently using AWS credits that I received when opening a new AWS Free Tier account, so this isn&rsquo;t costing me any money out of pocket yet. However, once those credits expire, based on that ~$0.40/day cost. I&rsquo;m expecting around $12/month ($144/year) in ongoing costs. This is still fairly affordable for a complete CI/CD pipeline, but worth factoring into your budget planning rather than assuming it&rsquo;s perpetually free. I myself will likely rework this project in the future to automate the infrastructure so I can run it when I need it, which will reduce the cost further.</p>
+<h3 id="aws-cli-configuration">AWS CLI Configuration</h3>
+<p>I prefer to set up an AWS CLI profile for an account at the start. This allows me to easily use AWS CLI and know that I am running commands against the desired account. Here is the basics, with AWS CLI installed, run the <code>aws configure --profile &lt;name of profile&gt;</code> command. This sets up a profile using the name you specify. You&rsquo;ll need to provide the Access Key ID and Secret Access Key for your account. I have created an IAM User in my account called <code>iamadmin</code> that I give admin permissions to, I do this for improved security so I only have to login to my root account as a last resort.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>aws configure --profile learning
+</span></span><span style="display:flex;"><span>AWS Access Key ID <span style="color:#f92672">[</span>None<span style="color:#f92672">]</span>: REDACTED
+</span></span><span style="display:flex;"><span>AWS Secret Access Key <span style="color:#f92672">[</span>None<span style="color:#f92672">]</span>: REDACTED
+</span></span><span style="display:flex;"><span>Default region name <span style="color:#f92672">[</span>None<span style="color:#f92672">]</span>: us-west-2
+</span></span><span style="display:flex;"><span>Default output format <span style="color:#f92672">[</span>None<span style="color:#f92672">]</span>:
+</span></span></code></pre></div><p>Let&rsquo;s verify the profile is working correctly:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>aws sts get-caller-identity --profile learning
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;UserId&#34;</span>: <span style="color:#e6db74">&#34;AIDA4SO3J6TLRKIIX5JGU&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;Account&#34;</span>: <span style="color:#e6db74">&#34;REDACTED-ACCOUNT&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;Arn&#34;</span>: <span style="color:#e6db74">&#34;arn:aws:iam::REDACTED-ACCOUNT:user/iamadmin&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>Now that I have my AWS CLI setup, I like to verify that my budget is setup to make sure I&rsquo;m aware if I exceed my $10 monthly limit. I setup this budget whenever I create a new AWS account using the Monthly Cost Budget template.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>aws budgets describe-budgets --account-id <span style="color:#66d9ef">$(</span>aws sts get-caller-identity --query Account --output text --profile learning<span style="color:#66d9ef">)</span> --profile learning
+</span></span></code></pre></div><p>Lets break that command down. We are looking at all of the budgets on my account. The command with <code>$()</code> is returning my account number so that it can be used as the <code>account-id</code> in the outer command.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>~ $ aws budgets describe-budgets --account-id <span style="color:#66d9ef">$(</span>aws sts get-caller-identity --query Account --output text --profile learning<span style="color:#66d9ef">)</span> --profile learning
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;Budgets&#34;</span>: <span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;BudgetName&#34;</span>: <span style="color:#e6db74">&#34;My Monthly Cost Budget&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;BudgetLimit&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;Amount&#34;</span>: <span style="color:#e6db74">&#34;10.0&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;Unit&#34;</span>: <span style="color:#e6db74">&#34;USD&#34;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;TimeUnit&#34;</span>: <span style="color:#e6db74">&#34;MONTHLY&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;TimePeriod&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;Start&#34;</span>: <span style="color:#e6db74">&#34;2025-06-30T17:00:00-07:00&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;End&#34;</span>: <span style="color:#e6db74">&#34;2087-06-14T17:00:00-07:00&#34;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;CalculatedSpend&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;ActualSpend&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#e6db74">&#34;Amount&#34;</span>: <span style="color:#e6db74">&#34;0.938&#34;</span>,
+</span></span><span style="display:flex;"><span>                    <span style="color:#e6db74">&#34;Unit&#34;</span>: <span style="color:#e6db74">&#34;USD&#34;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;BudgetType&#34;</span>: <span style="color:#e6db74">&#34;COST&#34;</span>,
+</span></span><span style="display:flex;"><span>:...skipping...
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;Budgets&#34;</span>: <span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;BudgetName&#34;</span>: <span style="color:#e6db74">&#34;My Monthly Cost Budget&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;BudgetLimit&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;Amount&#34;</span>: <span style="color:#e6db74">&#34;10.0&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;Unit&#34;</span>: <span style="color:#e6db74">&#34;USD&#34;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;TimeUnit&#34;</span>: <span style="color:#e6db74">&#34;MONTHLY&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;TimePeriod&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;Start&#34;</span>: <span style="color:#e6db74">&#34;2025-06-30T17:00:00-07:00&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;End&#34;</span>: <span style="color:#e6db74">&#34;2087-06-14T17:00:00-07:00&#34;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;CalculatedSpend&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;ActualSpend&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#e6db74">&#34;Amount&#34;</span>: <span style="color:#e6db74">&#34;0.938&#34;</span>,
+</span></span><span style="display:flex;"><span>                    <span style="color:#e6db74">&#34;Unit&#34;</span>: <span style="color:#e6db74">&#34;USD&#34;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;BudgetType&#34;</span>: <span style="color:#e6db74">&#34;COST&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;LastUpdatedTime&#34;</span>: <span style="color:#e6db74">&#34;2025-08-19T21:05:47.565000-07:00&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;FilterExpression&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;Not&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#e6db74">&#34;Dimensions&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                        <span style="color:#e6db74">&#34;Key&#34;</span>: <span style="color:#e6db74">&#34;RECORD_TYPE&#34;</span>,
+</span></span><span style="display:flex;"><span>                        <span style="color:#e6db74">&#34;Values&#34;</span>: <span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>                            <span style="color:#e6db74">&#34;Credit&#34;</span>,
+</span></span><span style="display:flex;"><span>                            <span style="color:#e6db74">&#34;Refund&#34;</span>
+</span></span><span style="display:flex;"><span>                        <span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;Metrics&#34;</span>: <span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;UnblendedCost&#34;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>~
+</span></span><span style="display:flex;"><span>~
+</span></span><span style="display:flex;"><span>~
+</span></span><span style="display:flex;"><span>~ $
+</span></span></code></pre></div><p>You can see here that I have a monthly budget setup for $10 and you can see my current actual spend $0.938.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;BudgetLimit&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> {
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;Amount&#34;</span>: <span style="color:#e6db74">&#34;10.0&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;Unit&#34;</span>: <span style="color:#e6db74">&#34;USD&#34;</span>
+</span></span><span style="display:flex;"><span>            }<span style="color:#960050;background-color:#1e0010">,</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;TimeUnit&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#e6db74">&#34;MONTHLY&#34;</span><span style="color:#960050;background-color:#1e0010">,</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;ActualSpend&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> {
+</span></span><span style="display:flex;"><span>                    <span style="color:#f92672">&#34;Amount&#34;</span>: <span style="color:#e6db74">&#34;0.938&#34;</span>,
+</span></span><span style="display:flex;"><span>                    <span style="color:#f92672">&#34;Unit&#34;</span>: <span style="color:#e6db74">&#34;USD&#34;</span>
+</span></span><span style="display:flex;"><span>                }
+</span></span></code></pre></div><p>This confirms I&rsquo;m well within my budget before setting up any new services, and serves as a reminder in case I forgot to setup a budget in my account. This is useful to make sure I am not going to be surprised by a really expensive bill in the future.</p>
+<h3 id="ecr-repository-creation">ECR Repository Creation</h3>
+<p><!-- raw HTML omitted --><strong>Note</strong> I am going to be duplicating my initial deployment of this so that I can take current screenshots. <!-- raw HTML omitted --></p>
+<p>Here is where I hit my first gotcha, right out the gate. When trying to create a public ECR repository, the default action of clicking &ldquo;create&rdquo;  on the root Amazon Elastic Container Registry page was creating a private repository.</p>
+
+
+
+
+<figure>
+  <img src="ECR-private-repo.png" alt="AWS ECR console showing confusing interface defaulting to private repository creation" loading="lazy" style="cursor: pointer;" onclick="openLightbox('ECR-private-repo.png', 'AWS ECR console showing confusing interface defaulting to private repository creation')">
+  
+  <figcaption>The ECR console kept trying to make me create a private repo</figcaption>
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  
+  img.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<p><strong>The solution:</strong> Navigate to the public registry repositories from the sidebar. Once there you can create a repository that is public. Because the sidebar was hidden on the root page I didn&rsquo;t think to check there at first.</p>
+
+
+
+
+<figure>
+  <img src="ECR-public-repo-sidebar.png" alt="AWS ECR console sidebar highlighting the &#39;Public registry&#39; option" loading="lazy" style="cursor: pointer;" onclick="openLightbox('ECR-public-repo-sidebar.png', 'AWS ECR console sidebar highlighting the \u0027Public registry\u0027 option')">
+  
+  <figcaption>Use the sidebar to access public registry options to create a public repo</figcaption>
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  
+  img.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<p>You&rsquo;ll want to create a public repository. I created mine with a namespace matching my github username, but that is not necessary. I will call this new repository gereader/flaskjobtracker-v2, otherwise I am taking all of the default options.</p>
+
+
+
+
+<figure>
+  <img src="ECR-repo-created.png" alt="AWS ECR public repository showing created banner with repository name &#39;gereader/flaskjobtracker-v2&#39; and showing the URI" loading="lazy" style="cursor: pointer;" onclick="openLightbox('ECR-repo-created.png', 'AWS ECR public repository showing created banner with repository name \u0027gereader\/flaskjobtracker-v2\u0027 and showing the URI')">
+  
+  <figcaption>When you create your repository you will be given a URI for it</figcaption>
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  
+  img.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<p>The public repository gives us a URI like: <code>public.ecr.aws/w8m5m8y0/gereader/flaskjobtracker-v2</code></p>
+<h3 id="iam-setup-for-github-actions">IAM Setup for GitHub Actions</h3>
+<p>Next up I am going to be setting up a restricted access account to access the AWS repositories. I don&rsquo;t want to put my admin level account into my repository for automation. It&rsquo;s considered best practice to have an account for a single purpose, so I&rsquo;ll generate a new one specifically for this GitHub Actions workflow in IAM.</p>
+<p>To make it so I can easily add other accounts if I need them, I setup permissions in a group. You could apply the permissions directly to a User, but I find that it&rsquo;s often better to setup groups with desired permissions to easily add Users in the future.</p>
+<p>Go ahead and navigate under IAM in your AWS account and setup a User Group. I am calling mine <code>gereader-flaskjobtracker-v2</code> so it&rsquo;s apparent what it is used for. For the permissions, for now we want to give access to read/write/delete in our Public registries. I am opting to give <code>AmazonElasticContainerRegistryPublicFullAccess</code> which contains all the required permissions.</p>
+
+
+
+
+<figure>
+  <img src="AWS-Create-Group.png" alt="AWS IAM console showing group creation with name &#39;gereader-flaskjobtracker-v2&#39; and AmazonElasticContainerRegistryPublicFullAccess policy attached" loading="lazy" style="cursor: pointer;" onclick="openLightbox('AWS-Create-Group.png', 'AWS IAM console showing group creation with name \u0027gereader-flaskjobtracker-v2\u0027 and AmazonElasticContainerRegistryPublicFullAccess policy attached')">
+  
+  <figcaption>Created IAM group with the necessary permissions for ECR</figcaption>
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  
+  img.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<p>We then need to create a User and make it a member of the group we just created. This will be the user that GitHub Actions will use so I like to name it in a way to easily identify it. We&rsquo;ll call it <code>user-github-actions-flaskjobtracker</code> and add it to the group we created.</p>
+
+
+
+
+<figure>
+  <img src="create-user-with-group.png" alt="AWS IAM console showing user creation with username &#39;user-flaskjobtracker&#39; being added to the gereader-flaskjobtracker-v2 group" loading="lazy" style="cursor: pointer;" onclick="openLightbox('create-user-with-group.png', 'AWS IAM console showing user creation with username \u0027user-flaskjobtracker\u0027 being added to the gereader-flaskjobtracker-v2 group')">
+  
+  <figcaption>Created dedicated IAM user and added it to the permissions group</figcaption>
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  
+  img.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<p>Now that we have the user created we can generated access key for it. You&rsquo;ll be able to generate access keys if you navigate under your created user and go to the <code>Security credentials</code> tab.</p>
+
+
+
+
+<figure>
+  <img src="IAM-User-Generate-Key.png" alt="AWS IAM console showing user settings under the Security credentials tab with the &#39;create access key&#39;" loading="lazy" style="cursor: pointer;" onclick="openLightbox('IAM-User-Generate-Key.png', 'AWS IAM console showing user settings under the Security credentials tab with the \u0027create access key\u0027')">
+  
+  <figcaption>Create an access key for the user we created</figcaption>
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  
+  img.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<p>Once you create the access key AWS will only give you access to the secret the first time. So make sure you download it or copy the details down. You can keep this window open for now and we can copy it directly into GitHub repository secrets, but I suggest storing it somewhere safe as well.</p>
+
+
+
+
+<figure>
+  <img src="Create-Access-Key.png" alt="AWS IAM access key creation screen with access key ID visible but secret key hidden" loading="lazy" style="cursor: pointer;" onclick="openLightbox('Create-Access-Key.png', 'AWS IAM access key creation screen with access key ID visible but secret key hidden')">
+  
+  <figcaption>Generated access keys for the our user</figcaption>
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  
+  img.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<p>Add these access keys into GitHub repository secrets just like we did for GHCR:</p>
+<ul>
+<li><code>ECR_USER_KEY</code>: Your generated access key ID</li>
+<li><code>ECR_USER_KEY_SECRET</code>: Your generated secret access key</li>
+<li><code>AWS_ACCOUNT_ID</code>: Your AWS account ID (I do this to avoid hardcoding it)</li>
+</ul>
+
+
+
+
+<figure>
+  <img src="GitHub-ECR-Secrets.png" alt="GitHub repository secrets page showing ECR_USER_KEY, ECR_USER_KEY_SECRET, and AWS_ACCOUNT_ID secrets configured" loading="lazy" style="cursor: pointer;" onclick="openLightbox('GitHub-ECR-Secrets.png', 'GitHub repository secrets page showing ECR_USER_KEY, ECR_USER_KEY_SECRET, and AWS_ACCOUNT_ID secrets configured')">
+  
+  <figcaption>GitHub repository secrets configured for ECR authentication</figcaption>
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  
+  img.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<h3 id="ecr-authentication-gotchas">ECR Authentication Gotchas</h3>
+<p>Public ECR has some quirks that I didn&rsquo;t see called out initially when researching this.</p>
+<p><strong>Key gotchas:</strong></p>
+<ul>
+<li>Public ECR repos are <strong>global</strong></li>
+<li>You <strong>must authenticate to us-east-1</strong> regardless of your default region</li>
+<li>You have to tell the action the registry is public so it uses the correct authentication endpoint</li>
+</ul>
+<p>This is how the authentication works in GitHub Actions.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Configure AWS credentials</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">aws-actions/configure-aws-credentials@v4.3.1</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">aws-access-key-id</span>: <span style="color:#ae81ff">${{ secrets.ECR_USER_KEY }}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">aws-secret-access-key</span>: <span style="color:#ae81ff">${{ secrets.ECR_USER_KEY_SECRET }}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">aws-region</span>: <span style="color:#ae81ff">us-east-1</span> <span style="color:#75715e"># ECR Public can only be logged into from us-east-1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Login to Amazon ECR</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">id</span>: <span style="color:#ae81ff">login-ecr-public</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">aws-actions/amazon-ecr-login@v2</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">registry-type</span>: <span style="color:#ae81ff">public</span> <span style="color:#75715e"># This has to be set to properly authenticate</span>
+</span></span></code></pre></div><h3 id="dynamic-registry-uri-lookup">Dynamic Registry URI Lookup</h3>
+<p>In an effort to minimize hardcoding where I could, I opted to lookup the public uri using the AWS CLI in my workflow.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Get ECR Public registry URI</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">id</span>: <span style="color:#ae81ff">ecr-public-details</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    REGISTRY_URI=$(aws ecr-public describe-registries --region us-east-1 --query &#39;registries[0].registryUri&#39; --output text)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;uri=$REGISTRY_URI&#34; &gt;&gt; $GITHUB_OUTPUT
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;container_uri=$REGISTRY_URI/gereader/flaskjobtracker&#34; &gt;&gt; $GITHUB_OUTPUT</span>
+</span></span></code></pre></div><p>This queries AWS for my registry URI and creates variables I can use in later steps. I believe this is cleaner than hardcoding account-specific information and makes the overall content more reusable.</p>
+<h3 id="complete-ecr-push-workflow">Complete ECR Push Workflow</h3>
+<p>Here is the complete workflow to push the container to ECR.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>  <span style="color:#f92672">build_and_push_ecr</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">needs</span>: <span style="color:#ae81ff">test</span> <span style="color:#75715e"># Test the build first</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">steps</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Checkout code</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@v5</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Configure AWS credentials</span> <span style="color:#75715e"># Setup Credentials for login, note the region</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">aws-actions/configure-aws-credentials@v4.3.1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">aws-access-key-id</span>: <span style="color:#ae81ff">${{ secrets.ECR_USER_KEY }}</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">aws-secret-access-key</span>: <span style="color:#ae81ff">${{ secrets.ECR_USER_KEY_SECRET }}</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">aws-region</span>: <span style="color:#ae81ff">us-east-1</span> <span style="color:#75715e"># ECR Public can only be logged into from us-east-1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Get ECR Public registry URI</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">id</span>: <span style="color:#ae81ff">ecr-public-details</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          REGISTRY_URI=$(aws ecr-public describe-registries --region us-east-1 --query &#39;registries[0].registryUri&#39; --output text)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          echo &#34;uri=$REGISTRY_URI&#34; &gt;&gt; $GITHUB_OUTPUT
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          echo &#34;container_uri=$REGISTRY_URI/gereader/flaskjobtracker&#34; &gt;&gt; $GITHUB_OUTPUT</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Login to Amazon ECR</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">id</span>: <span style="color:#ae81ff">login-ecr-public</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">aws-actions/amazon-ecr-login@v2</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">registry-type</span>: <span style="color:#ae81ff">public</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Build and push Docker image to ECR</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">docker/build-push-action@v6</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">context</span>: <span style="color:#e6db74">&#34;{{defaultContext}}:app&#34;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">push</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># Using both latest and commit SHA for versioning, multiline is supported for tags</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">tags</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ${{ steps.ecr-public-details.outputs.container_uri }}:latest
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ${{ steps.ecr-public-details.outputs.container_uri }}:${{ github.sha }}</span>
+</span></span></code></pre></div><p>Notice I&rsquo;m using both <code>latest</code> and <code>${{ github.sha }}</code> tags. This gives me a latest version for quick reference and a specific commit-based version to easily identify a new container. One gotcha I ran into here is, for multiline tags to work, you cannot surround the tags by double quotes, it will try to add the double quotes to the tag which fails. You could also do comma separated, but the length of the lines it makes it difficult to read at a glance.</p>
+
+
+
+
+<figure>
+  <img src="GitHub-Actions-ECR-Push.png" alt="GitHub Actions workflow logs showing successful ECR push with login and build steps completed with a task definition (covered in part 2) that shows the image tag &#39;public.ecr.aws/w8m5m8y0/gereader/flaskjobtracker:d53bd318f2f775a51bafc0be78d9b6c8a2200c8a&#39;" loading="lazy" style="cursor: pointer;" onclick="openLightbox('GitHub-Actions-ECR-Push.png', 'GitHub Actions workflow logs showing successful ECR push with login and build steps completed with a task definition (covered in part 2) that shows the image tag \u0027public.ecr.aws\/w8m5m8y0\/gereader\/flaskjobtracker:d53bd318f2f775a51bafc0be78d9b6c8a2200c8a\u0027')">
+  
+  <figcaption>Successful ECR push workflow showing all authentication and build steps</figcaption>
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  
+  img.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+
+
+
+
+<figure>
+  <img src="ECR-Console-Images.png" alt="AWS ECR console showing the pushed container image with both latest and commit SHA tag &#39;d53bd318f2f775a51bafc0be78d9b6c8a2200c8a&#39;" loading="lazy" style="cursor: pointer;" onclick="openLightbox('ECR-Console-Images.png', 'AWS ECR console showing the pushed container image with both latest and commit SHA tag \u0027d53bd318f2f775a51bafc0be78d9b6c8a2200c8a\u0027')">
+  
+  <figcaption>ECR repository now contains our Flask app container with all of the desired tags</figcaption>
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  
+  img.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<h2 id="the-complete-part-1-workflow">The Complete Part 1 Workflow</h2>
+<p>Now we can put everything together. This is the complete workflow file that handles testing and pushing to both GHCR and ECR registries:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#f92672">name</span>: <span style="color:#ae81ff">Docker Image CI for GHCR for our FlaskApp</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">on</span>: 
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">push</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">jobs</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">test</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">steps</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@v5</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Convert tag to lowercase since its required by ghcr</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">id</span>: <span style="color:#ae81ff">ghcr_tag</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">ASzc/change-string-case-action@v6</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">string</span>: <span style="color:#ae81ff">ghcr.io/${{ github.repository }}:latest</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Build container during test</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Build Docker Image</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: <span style="color:#ae81ff">docker build -t ${{ steps.ghcr_tag.outputs.lowercase }} app</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Run container</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Run container in background</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          docker run -d --name flask-test -p 8080:8080 ${{ steps.ghcr_tag.outputs.lowercase }}</span>
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Wait for container to test okay or timeout in 30s</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Wait for Container Test</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          timeout 30 bash -c &#39;until curl -f http://localhost:8080/healthz/live; do sleep 10; done&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Readiness check</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Container Readiness check</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          HTTP_CODE=$(curl -s -o /dev/null -w &#34;%{http_code}&#34; &#34;http://localhost:8080/healthz/readiness&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          if [ &#34;$HTTP_CODE&#34; -eq 200 ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">              echo &#34;Readiness request was successful (HTTP 200 OK).&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">              echo &#34;Readiness Request failed with HTTP status code: $HTTP_CODE&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">              exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Stop container, test complete</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: <span style="color:#ae81ff">docker stop flask-test</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">build_and_push_ghcr</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">needs</span>: <span style="color:#ae81ff">test</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">steps</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@v5</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Login to GitHub Container Registry</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">docker/login-action@v3</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">registry</span>: <span style="color:#ae81ff">ghcr.io</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">username</span>: <span style="color:#ae81ff">${{ secrets.GH_USERNAME }}</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">password</span>: <span style="color:#ae81ff">${{ secrets.GH_PAT_GHCR }}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">id</span>: <span style="color:#ae81ff">ghcr_tag</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">ASzc/change-string-case-action@v6</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">string</span>: <span style="color:#ae81ff">ghcr.io/${{ github.repository }}:latest</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Build and push</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">docker/build-push-action@v6</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">context</span>: <span style="color:#e6db74">&#34;{{defaultContext}}:app&#34;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">push</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">tags</span>: <span style="color:#ae81ff">${{ steps.ghcr_tag.outputs.lowercase }}</span>
+</span></span><span style="display:flex;"><span>          
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">build_and_push_ecr</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">needs</span>: <span style="color:#ae81ff">test</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">steps</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@v5</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Configure AWS credentials</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">aws-actions/configure-aws-credentials@v4.3.1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">aws-access-key-id</span>: <span style="color:#ae81ff">${{ secrets.ECR_USER_KEY }}</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">aws-secret-access-key</span>: <span style="color:#ae81ff">${{ secrets.ECR_USER_KEY_SECRET }}</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">aws-region</span>: <span style="color:#ae81ff">us-east-1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Get ECR Public registry URI</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">id</span>: <span style="color:#ae81ff">ecr-public-details</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          REGISTRY_URI=$(aws ecr-public describe-registries --region us-east-1 --query &#39;registries[0].registryUri&#39; --output text)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          echo &#34;uri=$REGISTRY_URI&#34; &gt;&gt; $GITHUB_OUTPUT
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          echo &#34;container_uri=$REGISTRY_URI/gereader/flaskjobtracker&#34; &gt;&gt; $GITHUB_OUTPUT</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Login to Amazon ECR</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">id</span>: <span style="color:#ae81ff">login-ecr-public</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">aws-actions/amazon-ecr-login@v2</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">registry-type</span>: <span style="color:#ae81ff">public</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Build and push Docker image to ECR</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">docker/build-push-action@v6</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">context</span>: <span style="color:#e6db74">&#34;{{defaultContext}}:app&#34;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">push</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">tags</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ${{ steps.ecr-public-details.outputs.container_uri }}:latest
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ${{ steps.ecr-public-details.outputs.container_uri }}:${{ github.sha }}</span>
+</span></span></code></pre></div>
+
+
+
+<figure>
+  <img src="GitHub-Actions-Complete-Workflow.png" alt="GitHub Actions workflow summary showing all three jobs (test, build_and_push_ghcr, build_and_push_ecr) with green check marks" loading="lazy" style="cursor: pointer;" onclick="openLightbox('GitHub-Actions-Complete-Workflow.png', 'GitHub Actions workflow summary showing all three jobs (test, build_and_push_ghcr, build_and_push_ecr) with green check marks')">
+  
+  <figcaption>Complete workflow run showing successful test and dual registry push</figcaption>
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  
+  img.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<h2 id="whats-next">What&rsquo;s Next</h2>
+<p>In Part 2, we&rsquo;ll take the container image and deploy them to AWS ECS:</p>
+<ul>
+<li>Setting up an ECS cluster in free tier</li>
+<li>Creating task definitions and services</li>
+<li>Automating deployments from our GitHub Actions</li>
+<li>Implementing rolling updates and monitoring</li>
+</ul>
+<p>This has only been the foundation so far as we prepare to deploy our code to a production environment. We&rsquo;ll see you in part 2 when we configure the infrastructure to host our application.</p>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://github.com/marketplace/actions/build-and-push-docker-images">GitHub Actions Docker build/push documentation</a></li>
+<li><a href="https://docs.aws.amazon.com/AmazonECR/latest/public/">AWS ECR Public documentation</a></li>
+<li><a href="https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry">GitHub Container Registry documentation</a></li>
+<li><a href="https://github.com/docker/login-action?tab=readme-ov-file#github-container-registry">Docker login action for GHCR</a></li>
+</ul>
+
+            </div>
+        </article><hr style="margin-top: 40px; margin-bottom: 40px;" />
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "blog-gereader-xyz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <div class="footer_social-icons">
+<a href="https://github.com/gereader" target="_blank" rel="noopener noreferrer me"
+    title="Github">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+    stroke-linecap="round" stroke-linejoin="round">
+    <path
+        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+    </path>
+</svg>
+</a>
+<a href="https://linkedin.com/in/ereader" target="_blank" rel="noopener noreferrer me"
+    title="Linkedin">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+    stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+    <rect x="2" y="9" width="4" height="12"></rect>
+    <circle cx="4" cy="4" r="2"></circle>
+</svg>
+</a>
+</div>
+    <small class="footer_copyright">
+        © 2025 Gene Reader.
+        
+    </small>
+</footer><a href="#" title="" id="totop">
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" stroke="currentColor" viewBox="0 96 960 960">
+    <path d="M283 704.739 234.261 656 480 410.261 725.739 656 677 704.739l-197-197-197 197Z"/>
+</svg>
+
+</a>
+
+
+    
+
+
+
+
+
+
+    
+    <script async src="http://localhost:1313/js/main.js" ></script>
+
+    
+
+</body>
+</html>

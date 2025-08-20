@@ -1,0 +1,139 @@
+{{ $src := .Get "src" }}
+{{ $alt := .Get "alt" }}
+{{ $caption := .Get "caption" | default "" }}
+
+<figure>
+  <img src="{{ $src }}" alt="{{ $alt }}" loading="lazy" style="cursor: pointer;" onclick="openLightbox('{{ $src }}', '{{ $alt }}')">
+  {{ if $caption }}
+  <figcaption>{{ $caption }}</figcaption>
+  {{ end }}
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden;
+  `;
+  
+  // Close button
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  
+  // Zoom with mouse wheel
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  // Touch zoom
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+  });
+  
+  // Dragging
+  const startDrag = (clientX, clientY) => {
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  // Mouse events
+  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  // Touch events for dragging
+  img.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  // Close on ESC key
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  // Close on background click (areas around the image)
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>

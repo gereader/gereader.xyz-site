@@ -6,7 +6,19 @@
     <description>Recent content on Gene&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 17 Aug 2025 16:30:05 -0700</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 18 Aug 2025 15:10:23 -0700</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Part 1 - Building a CI/CD Pipeline with GitHub Actions and Container Registries</title>
+      <link>http://localhost:1313/posts/part-1-cicd-container-registry/</link>
+      <pubDate>Mon, 18 Aug 2025 15:10:14 -0700</pubDate>
+      
+      <guid>http://localhost:1313/posts/part-1-cicd-container-registry/</guid>
+      
+      <description>&lt;h1 id=&#34;building-a-cicd-pipeline-with-github-actions-and-container-registries&#34;&gt;Building a CI/CD Pipeline with GitHub Actions and Container Registries&lt;/h1&gt;
+&lt;p&gt;I recently built a complete CI/CD pipeline for my Flask job application tracking app. Like my Hugo blog setup, I struggled to find a single source covering everything I needed. I found myself cobbling together multiple YouTube videos, tutorials, and AWS and GitHub Actions documentation just to get a working pipeline. There&amp;rsquo;s a lot of moving parts here, so I decided to split this into a two-part series.&lt;/p&gt;</description>
+      
+    </item>
+    
     <item>
       <title>Set Up Hugo Blog</title>
       <link>http://localhost:1313/posts/set-up-hugo-blog/</link>
