@@ -157,9 +157,11 @@ Then this is what a successful test run where both health checks pass looks like
 ## Docker Context Gotcha
 My Flask app lives in /app subdirectory, not the root of the repo. This caused issues at first because the `docker/build-push-action@v6` action needs to know where the Dockerfile is located. Luckily, smarter minds than me had already thought of this and built in the ability to set your context to indicate where the Dockerfile is located.
 
+```bash
 FlaskJobTracker
 └── app
     ├── Dockerfile
+```
 
 Problem: Default context looks in repository root
 Solution: Use context: "{{defaultContext}}:app"
