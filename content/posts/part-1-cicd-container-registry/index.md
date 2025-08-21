@@ -144,13 +144,13 @@ This will show how I approached the testing my container using the `healthz/live
 
 Here is what the testing looks like in action. The first screenshot shows a failed test where the container couldn't start properly. Notice the repeated 404 errors from curl trying to reach the health endpoint, this container couldn't reach the `healthz/live` endpoint so it failed after 30s. 
 
-{{< lightbox src="Actions-Test-Fail.png" 
+{{< lightbox src="Actions-Test-Fail.webp" 
     alt="Screenshot showing GitHub Actions interface with red x and error message 'Process completed with exit code 124'" 
     caption="Our initial test run fails because the container can't connect to the healthz/live endpoint" >}}
 
 Then this is what a successful test run where both health checks pass looks like.
 
-{{< lightbox src="Actions-Test-Pass.png" 
+{{< lightbox src="Actions-Test-Pass.webp" 
     alt="Screenshot showing GitHub Actions interface with check marks and passing test status 'OK'" 
     caption="The workflow shows our Flask app tests and Docker build completed successfully" >}}
 
@@ -195,7 +195,7 @@ Make sure to set an appropriate Expiration time. I set mine to 90 days, and I kn
 I set my permissions to allow "repo", "write:packages", and "delete:packages" permissions.
 
 
-{{< lightbox src="GitHub-Generate-PAT.png" 
+{{< lightbox src="GitHub-Generate-PAT.webp" 
     alt="Screenshot showing GitHub New personal access token (classic) screen" 
     caption="The token doesn't note need access to everything, only a the required permissions to interact with your repo and container registry" >}}
 
@@ -205,7 +205,7 @@ You will need to create a GitHub Action Secret with the PAT token you generated.
 
 Repo → Settings → Security → Secrets and variables
 
-{{< lightbox src="GitHub-Repo-Secrets.png" 
+{{< lightbox src="GitHub-Repo-Secrets.webp" 
     alt="Screenshot showing GitHub Actions secrets screen with secrets already set" 
     caption="Set your PAT secret named 'GH_PAT_GHCR' and username named 'GH_USERNAME'" >}}
 
@@ -288,13 +288,13 @@ This is the full workflow to push a container to GHCR.
           # This is being made lowercase from the previous step ghcr_tag
           tags: ${{ steps.ghcr_tag.outputs.lowercase }}
 ```
-{{< lightbox src="GitHub-Actions-Push-GHCR.png" 
+{{< lightbox src="GitHub-Actions-Push-GHCR.webp" 
     alt="Screenshot showing GitHub Actions build_and_push_ghcr job completing" 
     caption="Now you should can run the GitHub Actions Job to push the container to GHCR" >}}
 
 You can look at all your package versions from your repo here. You can add additional tags and they will also show. 
 
-{{< lightbox src="GHCR-Packages.png" 
+{{< lightbox src="GHCR-Packages.webp" 
     alt="Screenshot showing GitHub repo with arrow pointing to Packages"  >}}
 
 Now that we have GHCR working, let's set up AWS ECR as our second registry. This gives us redundancy and prepares us for AWS ECS deployment in Part 2.
@@ -439,20 +439,20 @@ This confirms I'm well within my budget before setting up any new services, and 
 
 Here is where I hit my first gotcha, right out the gate. When trying to create a public ECR repository, the default action of clicking "create"  on the root Amazon Elastic Container Registry page was creating a private repository. 
 
-{{< lightbox src="ECR-private-repo.png" 
+{{< lightbox src="ECR-private-repo.webp" 
     alt="AWS ECR console showing confusing interface defaulting to private repository creation" 
     caption="The ECR console kept trying to make me create a private repo" >}}
 
 **The solution:** Navigate to the public registry repositories from the sidebar. Once there you can create a repository that is public. Because the sidebar was hidden on the root page I didn't think to check there at first. 
 
-{{< lightbox src="ECR-public-repo-sidebar.png" 
+{{< lightbox src="ECR-public-repo-sidebar.webp" 
     alt="AWS ECR console sidebar highlighting the 'Public registry' option" 
     caption="Use the sidebar to access public registry options to create a public repo" >}}
 
 
 You'll want to create a public repository. I created mine with a namespace matching my github username, but that is not necessary. I will call this new repository gereader/flaskjobtracker-v2, otherwise I am taking all of the default options. 
 
-{{< lightbox src="ECR-repo-created.png" 
+{{< lightbox src="ECR-repo-created.webp" 
     alt="AWS ECR public repository showing created banner with repository name 'gereader/flaskjobtracker-v2' and showing the URI" 
     caption="When you create your repository you will be given a URI for it" >}}
 
@@ -467,25 +467,25 @@ To make it so I can easily add other accounts if I need them, I setup permission
 
 Go ahead and navigate under IAM in your AWS account and setup a User Group. I am calling mine `gereader-flaskjobtracker-v2` so it's apparent what it is used for. For the permissions, for now we want to give access to read/write/delete in our Public registries. I am opting to give `AmazonElasticContainerRegistryPublicFullAccess` which contains all the required permissions. 
 
-{{< lightbox src="AWS-Create-Group.png" 
+{{< lightbox src="AWS-Create-Group.webp" 
     alt="AWS IAM console showing group creation with name 'gereader-flaskjobtracker-v2' and AmazonElasticContainerRegistryPublicFullAccess policy attached" 
     caption="Created IAM group with the necessary permissions for ECR" >}}
 
 We then need to create a User and make it a member of the group we just created. This will be the user that GitHub Actions will use so I like to name it in a way to easily identify it. We'll call it `user-github-actions-flaskjobtracker` and add it to the group we created. 
 
-{{< lightbox src="create-user-with-group.png" 
+{{< lightbox src="create-user-with-group.webp" 
     alt="AWS IAM console showing user creation with username 'user-flaskjobtracker' being added to the gereader-flaskjobtracker-v2 group" 
     caption="Created dedicated IAM user and added it to the permissions group" >}}
 
 Now that we have the user created we can generated access key for it. You'll be able to generate access keys if you navigate under your created user and go to the `Security credentials` tab. 
 
-{{< lightbox src="IAM-User-Generate-Key.png" 
+{{< lightbox src="IAM-User-Generate-Key.webp" 
     alt="AWS IAM console showing user settings under the Security credentials tab with the 'create access key'" 
     caption="Create an access key for the user we created" >}}
 
 Once you create the access key AWS will only give you access to the secret the first time. So make sure you download it or copy the details down. You can keep this window open for now and we can copy it directly into GitHub repository secrets, but I suggest storing it somewhere safe as well. 
 
-{{< lightbox src="Create-Access-Key.png" 
+{{< lightbox src="Create-Access-Key.webp" 
     alt="AWS IAM access key creation screen with access key ID visible but secret key hidden" 
     caption="Generated access keys for the our user" >}}
 
@@ -494,7 +494,7 @@ Add these access keys into GitHub repository secrets just like we did for GHCR:
 - `ECR_USER_KEY_SECRET`: Your generated secret access key
 - `AWS_ACCOUNT_ID`: Your AWS account ID (I do this to avoid hardcoding it)
 
-{{< lightbox src="GitHub-ECR-Secrets.png" 
+{{< lightbox src="GitHub-ECR-Secrets.webp" 
     alt="GitHub repository secrets page showing ECR_USER_KEY, ECR_USER_KEY_SECRET, and AWS_ACCOUNT_ID secrets configured" 
     caption="GitHub repository secrets configured for ECR authentication" >}}
 
@@ -584,11 +584,11 @@ Here is the complete workflow to push the container to ECR.
 
 Notice I'm using both `latest` and `${{ github.sha }}` tags. This gives me a latest version for quick reference and a specific commit-based version to easily identify a new container. One gotcha I ran into here is, for multiline tags to work, you cannot surround the tags by double quotes, it will try to add the double quotes to the tag which fails. You could also do comma separated, but the length of the lines it makes it difficult to read at a glance.
 
-{{< lightbox src="GitHub-Actions-ECR-Push.png" 
+{{< lightbox src="GitHub-Actions-ECR-Push.webp" 
     alt="GitHub Actions workflow logs showing successful ECR push with login and build steps completed with a task definition (covered in part 2) that shows the image tag 'public.ecr.aws/w8m5m8y0/gereader/flaskjobtracker:d53bd318f2f775a51bafc0be78d9b6c8a2200c8a'" 
     caption="Successful ECR push workflow showing all authentication and build steps" >}}
 
-{{< lightbox src="ECR-Console-Images.png" 
+{{< lightbox src="ECR-Console-Images.webp" 
     alt="AWS ECR console showing the pushed container image with both latest and commit SHA tag 'd53bd318f2f775a51bafc0be78d9b6c8a2200c8a'" 
     caption="ECR repository now contains our Flask app container with all of the desired tags" >}}
 
@@ -704,7 +704,7 @@ jobs:
             ${{ steps.ecr-public-details.outputs.container_uri }}:${{ github.sha }}
 ```
 
-{{< lightbox src="GitHub-Actions-Complete-Workflow.png" 
+{{< lightbox src="GitHub-Actions-Complete-Workflow.webp" 
     alt="GitHub Actions workflow summary showing all three jobs (test, build_and_push_ghcr, build_and_push_ecr) with green check marks" 
     caption="Complete workflow run showing successful test and dual registry push" >}}
 
