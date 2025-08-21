@@ -352,7 +352,7 @@ function openLightbox(src, alt) {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
     justify-content: center; align-items: center;
-    overflow: hidden;
+    overflow: hidden; touch-action: none;
   `;
   
   
@@ -362,6 +362,7 @@ function openLightbox(src, alt) {
     position: absolute; top: 20px; right: 30px; color: white;
     font-size: 40px; cursor: pointer; z-index: 1001;
     user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
   `;
   closeBtn.onclick = () => document.body.removeChild(overlay);
   
@@ -369,6 +370,7 @@ function openLightbox(src, alt) {
   container.style.cssText = `
     position: relative; overflow: hidden; width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
+    touch-action: none;
   `;
   
   const img = document.createElement('img');
@@ -377,12 +379,14 @@ function openLightbox(src, alt) {
   img.style.cssText = `
     max-width: 90%; max-height: 90%; object-fit: contain;
     transition: transform 0.2s; cursor: grab;
+    touch-action: none;
   `;
   
   let scale = 1;
   let startX = 0, startY = 0;
   let translateX = 0, translateY = 0;
   let isDragging = false;
+  let isZooming = false;
   
   
   container.addEventListener('wheel', (e) => {
@@ -397,16 +401,22 @@ function openLightbox(src, alt) {
   let lastTouchDistance = 0;
   container.addEventListener('touchstart', (e) => {
     if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
       lastTouchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
       );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
     }
   });
   
   container.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    if (e.touches.length === 2) {
+    if (e.touches.length === 2 && isZooming) {
+      
       const touchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
@@ -415,11 +425,22 @@ function openLightbox(src, alt) {
       scale = Math.max(0.5, Math.min(scale, 5));
       lastTouchDistance = touchDistance;
       img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
     }
   });
   
   
   const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
     isDragging = true;
     startX = clientX - translateX;
     startY = clientY - translateY;
@@ -427,7 +448,7 @@ function openLightbox(src, alt) {
   };
   
   const drag = (clientX, clientY) => {
-    if (!isDragging) return;
+    if (!isDragging || isZooming) return;
     translateX = clientX - startX;
     translateY = clientY - startY;
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
@@ -439,16 +460,12 @@ function openLightbox(src, alt) {
   };
   
   
-  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
   document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
   document.addEventListener('mouseup', stopDrag);
-  
-  
-  img.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-      startDrag(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  });
   
   container.appendChild(img);
   overlay.appendChild(container);
@@ -492,7 +509,7 @@ function openLightbox(src, alt) {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
     justify-content: center; align-items: center;
-    overflow: hidden;
+    overflow: hidden; touch-action: none;
   `;
   
   
@@ -502,6 +519,7 @@ function openLightbox(src, alt) {
     position: absolute; top: 20px; right: 30px; color: white;
     font-size: 40px; cursor: pointer; z-index: 1001;
     user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
   `;
   closeBtn.onclick = () => document.body.removeChild(overlay);
   
@@ -509,6 +527,7 @@ function openLightbox(src, alt) {
   container.style.cssText = `
     position: relative; overflow: hidden; width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
+    touch-action: none;
   `;
   
   const img = document.createElement('img');
@@ -517,12 +536,14 @@ function openLightbox(src, alt) {
   img.style.cssText = `
     max-width: 90%; max-height: 90%; object-fit: contain;
     transition: transform 0.2s; cursor: grab;
+    touch-action: none;
   `;
   
   let scale = 1;
   let startX = 0, startY = 0;
   let translateX = 0, translateY = 0;
   let isDragging = false;
+  let isZooming = false;
   
   
   container.addEventListener('wheel', (e) => {
@@ -537,16 +558,22 @@ function openLightbox(src, alt) {
   let lastTouchDistance = 0;
   container.addEventListener('touchstart', (e) => {
     if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
       lastTouchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
       );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
     }
   });
   
   container.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    if (e.touches.length === 2) {
+    if (e.touches.length === 2 && isZooming) {
+      
       const touchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
@@ -555,11 +582,22 @@ function openLightbox(src, alt) {
       scale = Math.max(0.5, Math.min(scale, 5));
       lastTouchDistance = touchDistance;
       img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
     }
   });
   
   
   const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
     isDragging = true;
     startX = clientX - translateX;
     startY = clientY - translateY;
@@ -567,7 +605,7 @@ function openLightbox(src, alt) {
   };
   
   const drag = (clientX, clientY) => {
-    if (!isDragging) return;
+    if (!isDragging || isZooming) return;
     translateX = clientX - startX;
     translateY = clientY - startY;
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
@@ -579,16 +617,12 @@ function openLightbox(src, alt) {
   };
   
   
-  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
   document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
   document.addEventListener('mouseup', stopDrag);
-  
-  
-  img.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-      startDrag(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  });
   
   container.appendChild(img);
   overlay.appendChild(container);
@@ -615,10 +649,10 @@ function openLightbox(src, alt) {
 </script>
 <h2 id="docker-context-gotcha">Docker Context Gotcha</h2>
 <p>My Flask app lives in /app subdirectory, not the root of the repo. This caused issues at first because the <code>docker/build-push-action@v6</code> action needs to know where the Dockerfile is located. Luckily, smarter minds than me had already thought of this and built in the ability to set your context to indicate where the Dockerfile is located.</p>
-<p>FlaskJobTracker
-└── app
-├── Dockerfile</p>
-<p>Problem: Default context looks in repository root
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>FlaskJobTracker
+</span></span><span style="display:flex;"><span>└── app
+</span></span><span style="display:flex;"><span>    ├── Dockerfile
+</span></span></code></pre></div><p>Problem: Default context looks in repository root
 Solution: Use context: &ldquo;{{defaultContext}}:app&rdquo;</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>      <span style="color:#75715e"># https://github.com/marketplace/actions/build-and-push-docker-images</span>
 </span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Build and push</span>
@@ -655,7 +689,7 @@ function openLightbox(src, alt) {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
     justify-content: center; align-items: center;
-    overflow: hidden;
+    overflow: hidden; touch-action: none;
   `;
   
   
@@ -665,6 +699,7 @@ function openLightbox(src, alt) {
     position: absolute; top: 20px; right: 30px; color: white;
     font-size: 40px; cursor: pointer; z-index: 1001;
     user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
   `;
   closeBtn.onclick = () => document.body.removeChild(overlay);
   
@@ -672,6 +707,7 @@ function openLightbox(src, alt) {
   container.style.cssText = `
     position: relative; overflow: hidden; width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
+    touch-action: none;
   `;
   
   const img = document.createElement('img');
@@ -680,12 +716,14 @@ function openLightbox(src, alt) {
   img.style.cssText = `
     max-width: 90%; max-height: 90%; object-fit: contain;
     transition: transform 0.2s; cursor: grab;
+    touch-action: none;
   `;
   
   let scale = 1;
   let startX = 0, startY = 0;
   let translateX = 0, translateY = 0;
   let isDragging = false;
+  let isZooming = false;
   
   
   container.addEventListener('wheel', (e) => {
@@ -700,16 +738,22 @@ function openLightbox(src, alt) {
   let lastTouchDistance = 0;
   container.addEventListener('touchstart', (e) => {
     if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
       lastTouchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
       );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
     }
   });
   
   container.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    if (e.touches.length === 2) {
+    if (e.touches.length === 2 && isZooming) {
+      
       const touchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
@@ -718,11 +762,22 @@ function openLightbox(src, alt) {
       scale = Math.max(0.5, Math.min(scale, 5));
       lastTouchDistance = touchDistance;
       img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
     }
   });
   
   
   const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
     isDragging = true;
     startX = clientX - translateX;
     startY = clientY - translateY;
@@ -730,7 +785,7 @@ function openLightbox(src, alt) {
   };
   
   const drag = (clientX, clientY) => {
-    if (!isDragging) return;
+    if (!isDragging || isZooming) return;
     translateX = clientX - startX;
     translateY = clientY - startY;
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
@@ -742,16 +797,12 @@ function openLightbox(src, alt) {
   };
   
   
-  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
   document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
   document.addEventListener('mouseup', stopDrag);
-  
-  
-  img.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-      startDrag(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  });
   
   container.appendChild(img);
   overlay.appendChild(container);
@@ -797,7 +848,7 @@ function openLightbox(src, alt) {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
     justify-content: center; align-items: center;
-    overflow: hidden;
+    overflow: hidden; touch-action: none;
   `;
   
   
@@ -807,6 +858,7 @@ function openLightbox(src, alt) {
     position: absolute; top: 20px; right: 30px; color: white;
     font-size: 40px; cursor: pointer; z-index: 1001;
     user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
   `;
   closeBtn.onclick = () => document.body.removeChild(overlay);
   
@@ -814,6 +866,7 @@ function openLightbox(src, alt) {
   container.style.cssText = `
     position: relative; overflow: hidden; width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
+    touch-action: none;
   `;
   
   const img = document.createElement('img');
@@ -822,12 +875,14 @@ function openLightbox(src, alt) {
   img.style.cssText = `
     max-width: 90%; max-height: 90%; object-fit: contain;
     transition: transform 0.2s; cursor: grab;
+    touch-action: none;
   `;
   
   let scale = 1;
   let startX = 0, startY = 0;
   let translateX = 0, translateY = 0;
   let isDragging = false;
+  let isZooming = false;
   
   
   container.addEventListener('wheel', (e) => {
@@ -842,16 +897,22 @@ function openLightbox(src, alt) {
   let lastTouchDistance = 0;
   container.addEventListener('touchstart', (e) => {
     if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
       lastTouchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
       );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
     }
   });
   
   container.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    if (e.touches.length === 2) {
+    if (e.touches.length === 2 && isZooming) {
+      
       const touchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
@@ -860,11 +921,22 @@ function openLightbox(src, alt) {
       scale = Math.max(0.5, Math.min(scale, 5));
       lastTouchDistance = touchDistance;
       img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
     }
   });
   
   
   const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
     isDragging = true;
     startX = clientX - translateX;
     startY = clientY - translateY;
@@ -872,7 +944,7 @@ function openLightbox(src, alt) {
   };
   
   const drag = (clientX, clientY) => {
-    if (!isDragging) return;
+    if (!isDragging || isZooming) return;
     translateX = clientX - startX;
     translateY = clientY - startY;
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
@@ -884,16 +956,12 @@ function openLightbox(src, alt) {
   };
   
   
-  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
   document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
   document.addEventListener('mouseup', stopDrag);
-  
-  
-  img.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-      startDrag(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  });
   
   container.appendChild(img);
   overlay.appendChild(container);
@@ -1004,7 +1072,7 @@ function openLightbox(src, alt) {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
     justify-content: center; align-items: center;
-    overflow: hidden;
+    overflow: hidden; touch-action: none;
   `;
   
   
@@ -1014,6 +1082,7 @@ function openLightbox(src, alt) {
     position: absolute; top: 20px; right: 30px; color: white;
     font-size: 40px; cursor: pointer; z-index: 1001;
     user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
   `;
   closeBtn.onclick = () => document.body.removeChild(overlay);
   
@@ -1021,6 +1090,7 @@ function openLightbox(src, alt) {
   container.style.cssText = `
     position: relative; overflow: hidden; width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
+    touch-action: none;
   `;
   
   const img = document.createElement('img');
@@ -1029,12 +1099,14 @@ function openLightbox(src, alt) {
   img.style.cssText = `
     max-width: 90%; max-height: 90%; object-fit: contain;
     transition: transform 0.2s; cursor: grab;
+    touch-action: none;
   `;
   
   let scale = 1;
   let startX = 0, startY = 0;
   let translateX = 0, translateY = 0;
   let isDragging = false;
+  let isZooming = false;
   
   
   container.addEventListener('wheel', (e) => {
@@ -1049,16 +1121,22 @@ function openLightbox(src, alt) {
   let lastTouchDistance = 0;
   container.addEventListener('touchstart', (e) => {
     if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
       lastTouchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
       );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
     }
   });
   
   container.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    if (e.touches.length === 2) {
+    if (e.touches.length === 2 && isZooming) {
+      
       const touchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
@@ -1067,11 +1145,22 @@ function openLightbox(src, alt) {
       scale = Math.max(0.5, Math.min(scale, 5));
       lastTouchDistance = touchDistance;
       img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
     }
   });
   
   
   const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
     isDragging = true;
     startX = clientX - translateX;
     startY = clientY - translateY;
@@ -1079,7 +1168,7 @@ function openLightbox(src, alt) {
   };
   
   const drag = (clientX, clientY) => {
-    if (!isDragging) return;
+    if (!isDragging || isZooming) return;
     translateX = clientX - startX;
     translateY = clientY - startY;
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
@@ -1091,16 +1180,12 @@ function openLightbox(src, alt) {
   };
   
   
-  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
   document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
   document.addEventListener('mouseup', stopDrag);
-  
-  
-  img.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-      startDrag(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  });
   
   container.appendChild(img);
   overlay.appendChild(container);
@@ -1142,7 +1227,7 @@ function openLightbox(src, alt) {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
     justify-content: center; align-items: center;
-    overflow: hidden;
+    overflow: hidden; touch-action: none;
   `;
   
   
@@ -1152,6 +1237,7 @@ function openLightbox(src, alt) {
     position: absolute; top: 20px; right: 30px; color: white;
     font-size: 40px; cursor: pointer; z-index: 1001;
     user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
   `;
   closeBtn.onclick = () => document.body.removeChild(overlay);
   
@@ -1159,6 +1245,7 @@ function openLightbox(src, alt) {
   container.style.cssText = `
     position: relative; overflow: hidden; width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
+    touch-action: none;
   `;
   
   const img = document.createElement('img');
@@ -1167,12 +1254,14 @@ function openLightbox(src, alt) {
   img.style.cssText = `
     max-width: 90%; max-height: 90%; object-fit: contain;
     transition: transform 0.2s; cursor: grab;
+    touch-action: none;
   `;
   
   let scale = 1;
   let startX = 0, startY = 0;
   let translateX = 0, translateY = 0;
   let isDragging = false;
+  let isZooming = false;
   
   
   container.addEventListener('wheel', (e) => {
@@ -1187,16 +1276,22 @@ function openLightbox(src, alt) {
   let lastTouchDistance = 0;
   container.addEventListener('touchstart', (e) => {
     if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
       lastTouchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
       );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
     }
   });
   
   container.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    if (e.touches.length === 2) {
+    if (e.touches.length === 2 && isZooming) {
+      
       const touchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
@@ -1205,11 +1300,22 @@ function openLightbox(src, alt) {
       scale = Math.max(0.5, Math.min(scale, 5));
       lastTouchDistance = touchDistance;
       img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
     }
   });
   
   
   const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
     isDragging = true;
     startX = clientX - translateX;
     startY = clientY - translateY;
@@ -1217,7 +1323,7 @@ function openLightbox(src, alt) {
   };
   
   const drag = (clientX, clientY) => {
-    if (!isDragging) return;
+    if (!isDragging || isZooming) return;
     translateX = clientX - startX;
     translateY = clientY - startY;
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
@@ -1229,16 +1335,12 @@ function openLightbox(src, alt) {
   };
   
   
-  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
   document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
   document.addEventListener('mouseup', stopDrag);
-  
-  
-  img.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-      startDrag(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  });
   
   container.appendChild(img);
   overlay.appendChild(container);
@@ -1387,7 +1489,7 @@ function openLightbox(src, alt) {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
     justify-content: center; align-items: center;
-    overflow: hidden;
+    overflow: hidden; touch-action: none;
   `;
   
   
@@ -1397,6 +1499,7 @@ function openLightbox(src, alt) {
     position: absolute; top: 20px; right: 30px; color: white;
     font-size: 40px; cursor: pointer; z-index: 1001;
     user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
   `;
   closeBtn.onclick = () => document.body.removeChild(overlay);
   
@@ -1404,6 +1507,7 @@ function openLightbox(src, alt) {
   container.style.cssText = `
     position: relative; overflow: hidden; width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
+    touch-action: none;
   `;
   
   const img = document.createElement('img');
@@ -1412,12 +1516,14 @@ function openLightbox(src, alt) {
   img.style.cssText = `
     max-width: 90%; max-height: 90%; object-fit: contain;
     transition: transform 0.2s; cursor: grab;
+    touch-action: none;
   `;
   
   let scale = 1;
   let startX = 0, startY = 0;
   let translateX = 0, translateY = 0;
   let isDragging = false;
+  let isZooming = false;
   
   
   container.addEventListener('wheel', (e) => {
@@ -1432,16 +1538,22 @@ function openLightbox(src, alt) {
   let lastTouchDistance = 0;
   container.addEventListener('touchstart', (e) => {
     if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
       lastTouchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
       );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
     }
   });
   
   container.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    if (e.touches.length === 2) {
+    if (e.touches.length === 2 && isZooming) {
+      
       const touchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
@@ -1450,11 +1562,22 @@ function openLightbox(src, alt) {
       scale = Math.max(0.5, Math.min(scale, 5));
       lastTouchDistance = touchDistance;
       img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
     }
   });
   
   
   const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
     isDragging = true;
     startX = clientX - translateX;
     startY = clientY - translateY;
@@ -1462,7 +1585,7 @@ function openLightbox(src, alt) {
   };
   
   const drag = (clientX, clientY) => {
-    if (!isDragging) return;
+    if (!isDragging || isZooming) return;
     translateX = clientX - startX;
     translateY = clientY - startY;
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
@@ -1474,16 +1597,12 @@ function openLightbox(src, alt) {
   };
   
   
-  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
   document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
   document.addEventListener('mouseup', stopDrag);
-  
-  
-  img.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-      startDrag(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  });
   
   container.appendChild(img);
   overlay.appendChild(container);
@@ -1527,7 +1646,7 @@ function openLightbox(src, alt) {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
     justify-content: center; align-items: center;
-    overflow: hidden;
+    overflow: hidden; touch-action: none;
   `;
   
   
@@ -1537,6 +1656,7 @@ function openLightbox(src, alt) {
     position: absolute; top: 20px; right: 30px; color: white;
     font-size: 40px; cursor: pointer; z-index: 1001;
     user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
   `;
   closeBtn.onclick = () => document.body.removeChild(overlay);
   
@@ -1544,6 +1664,7 @@ function openLightbox(src, alt) {
   container.style.cssText = `
     position: relative; overflow: hidden; width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
+    touch-action: none;
   `;
   
   const img = document.createElement('img');
@@ -1552,12 +1673,14 @@ function openLightbox(src, alt) {
   img.style.cssText = `
     max-width: 90%; max-height: 90%; object-fit: contain;
     transition: transform 0.2s; cursor: grab;
+    touch-action: none;
   `;
   
   let scale = 1;
   let startX = 0, startY = 0;
   let translateX = 0, translateY = 0;
   let isDragging = false;
+  let isZooming = false;
   
   
   container.addEventListener('wheel', (e) => {
@@ -1572,16 +1695,22 @@ function openLightbox(src, alt) {
   let lastTouchDistance = 0;
   container.addEventListener('touchstart', (e) => {
     if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
       lastTouchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
       );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
     }
   });
   
   container.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    if (e.touches.length === 2) {
+    if (e.touches.length === 2 && isZooming) {
+      
       const touchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
@@ -1590,11 +1719,22 @@ function openLightbox(src, alt) {
       scale = Math.max(0.5, Math.min(scale, 5));
       lastTouchDistance = touchDistance;
       img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
     }
   });
   
   
   const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
     isDragging = true;
     startX = clientX - translateX;
     startY = clientY - translateY;
@@ -1602,7 +1742,7 @@ function openLightbox(src, alt) {
   };
   
   const drag = (clientX, clientY) => {
-    if (!isDragging) return;
+    if (!isDragging || isZooming) return;
     translateX = clientX - startX;
     translateY = clientY - startY;
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
@@ -1614,16 +1754,12 @@ function openLightbox(src, alt) {
   };
   
   
-  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
   document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
   document.addEventListener('mouseup', stopDrag);
-  
-  
-  img.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-      startDrag(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  });
   
   container.appendChild(img);
   overlay.appendChild(container);
@@ -1667,7 +1803,7 @@ function openLightbox(src, alt) {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
     justify-content: center; align-items: center;
-    overflow: hidden;
+    overflow: hidden; touch-action: none;
   `;
   
   
@@ -1677,6 +1813,7 @@ function openLightbox(src, alt) {
     position: absolute; top: 20px; right: 30px; color: white;
     font-size: 40px; cursor: pointer; z-index: 1001;
     user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
   `;
   closeBtn.onclick = () => document.body.removeChild(overlay);
   
@@ -1684,6 +1821,7 @@ function openLightbox(src, alt) {
   container.style.cssText = `
     position: relative; overflow: hidden; width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
+    touch-action: none;
   `;
   
   const img = document.createElement('img');
@@ -1692,12 +1830,14 @@ function openLightbox(src, alt) {
   img.style.cssText = `
     max-width: 90%; max-height: 90%; object-fit: contain;
     transition: transform 0.2s; cursor: grab;
+    touch-action: none;
   `;
   
   let scale = 1;
   let startX = 0, startY = 0;
   let translateX = 0, translateY = 0;
   let isDragging = false;
+  let isZooming = false;
   
   
   container.addEventListener('wheel', (e) => {
@@ -1712,16 +1852,22 @@ function openLightbox(src, alt) {
   let lastTouchDistance = 0;
   container.addEventListener('touchstart', (e) => {
     if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
       lastTouchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
       );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
     }
   });
   
   container.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    if (e.touches.length === 2) {
+    if (e.touches.length === 2 && isZooming) {
+      
       const touchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
@@ -1730,11 +1876,22 @@ function openLightbox(src, alt) {
       scale = Math.max(0.5, Math.min(scale, 5));
       lastTouchDistance = touchDistance;
       img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
     }
   });
   
   
   const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
     isDragging = true;
     startX = clientX - translateX;
     startY = clientY - translateY;
@@ -1742,7 +1899,7 @@ function openLightbox(src, alt) {
   };
   
   const drag = (clientX, clientY) => {
-    if (!isDragging) return;
+    if (!isDragging || isZooming) return;
     translateX = clientX - startX;
     translateY = clientY - startY;
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
@@ -1754,16 +1911,12 @@ function openLightbox(src, alt) {
   };
   
   
-  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
   document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
   document.addEventListener('mouseup', stopDrag);
-  
-  
-  img.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-      startDrag(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  });
   
   container.appendChild(img);
   overlay.appendChild(container);
@@ -1811,7 +1964,7 @@ function openLightbox(src, alt) {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
     justify-content: center; align-items: center;
-    overflow: hidden;
+    overflow: hidden; touch-action: none;
   `;
   
   
@@ -1821,6 +1974,7 @@ function openLightbox(src, alt) {
     position: absolute; top: 20px; right: 30px; color: white;
     font-size: 40px; cursor: pointer; z-index: 1001;
     user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
   `;
   closeBtn.onclick = () => document.body.removeChild(overlay);
   
@@ -1828,6 +1982,7 @@ function openLightbox(src, alt) {
   container.style.cssText = `
     position: relative; overflow: hidden; width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
+    touch-action: none;
   `;
   
   const img = document.createElement('img');
@@ -1836,12 +1991,14 @@ function openLightbox(src, alt) {
   img.style.cssText = `
     max-width: 90%; max-height: 90%; object-fit: contain;
     transition: transform 0.2s; cursor: grab;
+    touch-action: none;
   `;
   
   let scale = 1;
   let startX = 0, startY = 0;
   let translateX = 0, translateY = 0;
   let isDragging = false;
+  let isZooming = false;
   
   
   container.addEventListener('wheel', (e) => {
@@ -1856,16 +2013,22 @@ function openLightbox(src, alt) {
   let lastTouchDistance = 0;
   container.addEventListener('touchstart', (e) => {
     if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
       lastTouchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
       );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
     }
   });
   
   container.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    if (e.touches.length === 2) {
+    if (e.touches.length === 2 && isZooming) {
+      
       const touchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
@@ -1874,11 +2037,22 @@ function openLightbox(src, alt) {
       scale = Math.max(0.5, Math.min(scale, 5));
       lastTouchDistance = touchDistance;
       img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
     }
   });
   
   
   const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
     isDragging = true;
     startX = clientX - translateX;
     startY = clientY - translateY;
@@ -1886,7 +2060,7 @@ function openLightbox(src, alt) {
   };
   
   const drag = (clientX, clientY) => {
-    if (!isDragging) return;
+    if (!isDragging || isZooming) return;
     translateX = clientX - startX;
     translateY = clientY - startY;
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
@@ -1898,16 +2072,12 @@ function openLightbox(src, alt) {
   };
   
   
-  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
   document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
   document.addEventListener('mouseup', stopDrag);
-  
-  
-  img.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-      startDrag(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  });
   
   container.appendChild(img);
   overlay.appendChild(container);
@@ -1951,7 +2121,7 @@ function openLightbox(src, alt) {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
     justify-content: center; align-items: center;
-    overflow: hidden;
+    overflow: hidden; touch-action: none;
   `;
   
   
@@ -1961,6 +2131,7 @@ function openLightbox(src, alt) {
     position: absolute; top: 20px; right: 30px; color: white;
     font-size: 40px; cursor: pointer; z-index: 1001;
     user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
   `;
   closeBtn.onclick = () => document.body.removeChild(overlay);
   
@@ -1968,6 +2139,7 @@ function openLightbox(src, alt) {
   container.style.cssText = `
     position: relative; overflow: hidden; width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
+    touch-action: none;
   `;
   
   const img = document.createElement('img');
@@ -1976,12 +2148,14 @@ function openLightbox(src, alt) {
   img.style.cssText = `
     max-width: 90%; max-height: 90%; object-fit: contain;
     transition: transform 0.2s; cursor: grab;
+    touch-action: none;
   `;
   
   let scale = 1;
   let startX = 0, startY = 0;
   let translateX = 0, translateY = 0;
   let isDragging = false;
+  let isZooming = false;
   
   
   container.addEventListener('wheel', (e) => {
@@ -1996,16 +2170,22 @@ function openLightbox(src, alt) {
   let lastTouchDistance = 0;
   container.addEventListener('touchstart', (e) => {
     if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
       lastTouchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
       );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
     }
   });
   
   container.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    if (e.touches.length === 2) {
+    if (e.touches.length === 2 && isZooming) {
+      
       const touchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
@@ -2014,11 +2194,22 @@ function openLightbox(src, alt) {
       scale = Math.max(0.5, Math.min(scale, 5));
       lastTouchDistance = touchDistance;
       img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
     }
   });
   
   
   const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
     isDragging = true;
     startX = clientX - translateX;
     startY = clientY - translateY;
@@ -2026,7 +2217,7 @@ function openLightbox(src, alt) {
   };
   
   const drag = (clientX, clientY) => {
-    if (!isDragging) return;
+    if (!isDragging || isZooming) return;
     translateX = clientX - startX;
     translateY = clientY - startY;
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
@@ -2038,16 +2229,12 @@ function openLightbox(src, alt) {
   };
   
   
-  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
   document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
   document.addEventListener('mouseup', stopDrag);
-  
-  
-  img.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-      startDrag(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  });
   
   container.appendChild(img);
   overlay.appendChild(container);
@@ -2091,7 +2278,7 @@ function openLightbox(src, alt) {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
     justify-content: center; align-items: center;
-    overflow: hidden;
+    overflow: hidden; touch-action: none;
   `;
   
   
@@ -2101,6 +2288,7 @@ function openLightbox(src, alt) {
     position: absolute; top: 20px; right: 30px; color: white;
     font-size: 40px; cursor: pointer; z-index: 1001;
     user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
   `;
   closeBtn.onclick = () => document.body.removeChild(overlay);
   
@@ -2108,6 +2296,7 @@ function openLightbox(src, alt) {
   container.style.cssText = `
     position: relative; overflow: hidden; width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
+    touch-action: none;
   `;
   
   const img = document.createElement('img');
@@ -2116,12 +2305,14 @@ function openLightbox(src, alt) {
   img.style.cssText = `
     max-width: 90%; max-height: 90%; object-fit: contain;
     transition: transform 0.2s; cursor: grab;
+    touch-action: none;
   `;
   
   let scale = 1;
   let startX = 0, startY = 0;
   let translateX = 0, translateY = 0;
   let isDragging = false;
+  let isZooming = false;
   
   
   container.addEventListener('wheel', (e) => {
@@ -2136,16 +2327,22 @@ function openLightbox(src, alt) {
   let lastTouchDistance = 0;
   container.addEventListener('touchstart', (e) => {
     if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
       lastTouchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
       );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
     }
   });
   
   container.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    if (e.touches.length === 2) {
+    if (e.touches.length === 2 && isZooming) {
+      
       const touchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
@@ -2154,11 +2351,22 @@ function openLightbox(src, alt) {
       scale = Math.max(0.5, Math.min(scale, 5));
       lastTouchDistance = touchDistance;
       img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
     }
   });
   
   
   const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
     isDragging = true;
     startX = clientX - translateX;
     startY = clientY - translateY;
@@ -2166,7 +2374,7 @@ function openLightbox(src, alt) {
   };
   
   const drag = (clientX, clientY) => {
-    if (!isDragging) return;
+    if (!isDragging || isZooming) return;
     translateX = clientX - startX;
     translateY = clientY - startY;
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
@@ -2178,16 +2386,12 @@ function openLightbox(src, alt) {
   };
   
   
-  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
   document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
   document.addEventListener('mouseup', stopDrag);
-  
-  
-  img.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-      startDrag(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  });
   
   container.appendChild(img);
   overlay.appendChild(container);
@@ -2231,7 +2435,7 @@ function openLightbox(src, alt) {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
     justify-content: center; align-items: center;
-    overflow: hidden;
+    overflow: hidden; touch-action: none;
   `;
   
   
@@ -2241,6 +2445,7 @@ function openLightbox(src, alt) {
     position: absolute; top: 20px; right: 30px; color: white;
     font-size: 40px; cursor: pointer; z-index: 1001;
     user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
   `;
   closeBtn.onclick = () => document.body.removeChild(overlay);
   
@@ -2248,6 +2453,7 @@ function openLightbox(src, alt) {
   container.style.cssText = `
     position: relative; overflow: hidden; width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
+    touch-action: none;
   `;
   
   const img = document.createElement('img');
@@ -2256,12 +2462,14 @@ function openLightbox(src, alt) {
   img.style.cssText = `
     max-width: 90%; max-height: 90%; object-fit: contain;
     transition: transform 0.2s; cursor: grab;
+    touch-action: none;
   `;
   
   let scale = 1;
   let startX = 0, startY = 0;
   let translateX = 0, translateY = 0;
   let isDragging = false;
+  let isZooming = false;
   
   
   container.addEventListener('wheel', (e) => {
@@ -2276,16 +2484,22 @@ function openLightbox(src, alt) {
   let lastTouchDistance = 0;
   container.addEventListener('touchstart', (e) => {
     if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
       lastTouchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
       );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
     }
   });
   
   container.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    if (e.touches.length === 2) {
+    if (e.touches.length === 2 && isZooming) {
+      
       const touchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
@@ -2294,11 +2508,22 @@ function openLightbox(src, alt) {
       scale = Math.max(0.5, Math.min(scale, 5));
       lastTouchDistance = touchDistance;
       img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
     }
   });
   
   
   const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
     isDragging = true;
     startX = clientX - translateX;
     startY = clientY - translateY;
@@ -2306,7 +2531,7 @@ function openLightbox(src, alt) {
   };
   
   const drag = (clientX, clientY) => {
-    if (!isDragging) return;
+    if (!isDragging || isZooming) return;
     translateX = clientX - startX;
     translateY = clientY - startY;
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
@@ -2318,16 +2543,12 @@ function openLightbox(src, alt) {
   };
   
   
-  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
   document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
   document.addEventListener('mouseup', stopDrag);
-  
-  
-  img.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-      startDrag(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  });
   
   container.appendChild(img);
   overlay.appendChild(container);
@@ -2376,7 +2597,7 @@ function openLightbox(src, alt) {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
     justify-content: center; align-items: center;
-    overflow: hidden;
+    overflow: hidden; touch-action: none;
   `;
   
   
@@ -2386,6 +2607,7 @@ function openLightbox(src, alt) {
     position: absolute; top: 20px; right: 30px; color: white;
     font-size: 40px; cursor: pointer; z-index: 1001;
     user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
   `;
   closeBtn.onclick = () => document.body.removeChild(overlay);
   
@@ -2393,6 +2615,7 @@ function openLightbox(src, alt) {
   container.style.cssText = `
     position: relative; overflow: hidden; width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
+    touch-action: none;
   `;
   
   const img = document.createElement('img');
@@ -2401,12 +2624,14 @@ function openLightbox(src, alt) {
   img.style.cssText = `
     max-width: 90%; max-height: 90%; object-fit: contain;
     transition: transform 0.2s; cursor: grab;
+    touch-action: none;
   `;
   
   let scale = 1;
   let startX = 0, startY = 0;
   let translateX = 0, translateY = 0;
   let isDragging = false;
+  let isZooming = false;
   
   
   container.addEventListener('wheel', (e) => {
@@ -2421,16 +2646,22 @@ function openLightbox(src, alt) {
   let lastTouchDistance = 0;
   container.addEventListener('touchstart', (e) => {
     if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
       lastTouchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
       );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
     }
   });
   
   container.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    if (e.touches.length === 2) {
+    if (e.touches.length === 2 && isZooming) {
+      
       const touchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
@@ -2439,11 +2670,22 @@ function openLightbox(src, alt) {
       scale = Math.max(0.5, Math.min(scale, 5));
       lastTouchDistance = touchDistance;
       img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
     }
   });
   
   
   const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
     isDragging = true;
     startX = clientX - translateX;
     startY = clientY - translateY;
@@ -2451,7 +2693,7 @@ function openLightbox(src, alt) {
   };
   
   const drag = (clientX, clientY) => {
-    if (!isDragging) return;
+    if (!isDragging || isZooming) return;
     translateX = clientX - startX;
     translateY = clientY - startY;
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
@@ -2463,16 +2705,12 @@ function openLightbox(src, alt) {
   };
   
   
-  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
   document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
   document.addEventListener('mouseup', stopDrag);
-  
-  
-  img.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-      startDrag(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  });
   
   container.appendChild(img);
   overlay.appendChild(container);
@@ -2584,7 +2822,7 @@ function openLightbox(src, alt) {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
     justify-content: center; align-items: center;
-    overflow: hidden;
+    overflow: hidden; touch-action: none;
   `;
   
   
@@ -2594,6 +2832,7 @@ function openLightbox(src, alt) {
     position: absolute; top: 20px; right: 30px; color: white;
     font-size: 40px; cursor: pointer; z-index: 1001;
     user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
   `;
   closeBtn.onclick = () => document.body.removeChild(overlay);
   
@@ -2601,6 +2840,7 @@ function openLightbox(src, alt) {
   container.style.cssText = `
     position: relative; overflow: hidden; width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
+    touch-action: none;
   `;
   
   const img = document.createElement('img');
@@ -2609,12 +2849,14 @@ function openLightbox(src, alt) {
   img.style.cssText = `
     max-width: 90%; max-height: 90%; object-fit: contain;
     transition: transform 0.2s; cursor: grab;
+    touch-action: none;
   `;
   
   let scale = 1;
   let startX = 0, startY = 0;
   let translateX = 0, translateY = 0;
   let isDragging = false;
+  let isZooming = false;
   
   
   container.addEventListener('wheel', (e) => {
@@ -2629,16 +2871,22 @@ function openLightbox(src, alt) {
   let lastTouchDistance = 0;
   container.addEventListener('touchstart', (e) => {
     if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
       lastTouchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
       );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
     }
   });
   
   container.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    if (e.touches.length === 2) {
+    if (e.touches.length === 2 && isZooming) {
+      
       const touchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
@@ -2647,11 +2895,22 @@ function openLightbox(src, alt) {
       scale = Math.max(0.5, Math.min(scale, 5));
       lastTouchDistance = touchDistance;
       img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
     }
   });
   
   
   const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
     isDragging = true;
     startX = clientX - translateX;
     startY = clientY - translateY;
@@ -2659,7 +2918,7 @@ function openLightbox(src, alt) {
   };
   
   const drag = (clientX, clientY) => {
-    if (!isDragging) return;
+    if (!isDragging || isZooming) return;
     translateX = clientX - startX;
     translateY = clientY - startY;
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
@@ -2671,16 +2930,12 @@ function openLightbox(src, alt) {
   };
   
   
-  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
   document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
   document.addEventListener('mouseup', stopDrag);
-  
-  
-  img.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-      startDrag(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  });
   
   container.appendChild(img);
   overlay.appendChild(container);
@@ -2723,7 +2978,7 @@ function openLightbox(src, alt) {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
     justify-content: center; align-items: center;
-    overflow: hidden;
+    overflow: hidden; touch-action: none;
   `;
   
   
@@ -2733,6 +2988,7 @@ function openLightbox(src, alt) {
     position: absolute; top: 20px; right: 30px; color: white;
     font-size: 40px; cursor: pointer; z-index: 1001;
     user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
   `;
   closeBtn.onclick = () => document.body.removeChild(overlay);
   
@@ -2740,6 +2996,7 @@ function openLightbox(src, alt) {
   container.style.cssText = `
     position: relative; overflow: hidden; width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
+    touch-action: none;
   `;
   
   const img = document.createElement('img');
@@ -2748,12 +3005,14 @@ function openLightbox(src, alt) {
   img.style.cssText = `
     max-width: 90%; max-height: 90%; object-fit: contain;
     transition: transform 0.2s; cursor: grab;
+    touch-action: none;
   `;
   
   let scale = 1;
   let startX = 0, startY = 0;
   let translateX = 0, translateY = 0;
   let isDragging = false;
+  let isZooming = false;
   
   
   container.addEventListener('wheel', (e) => {
@@ -2768,16 +3027,22 @@ function openLightbox(src, alt) {
   let lastTouchDistance = 0;
   container.addEventListener('touchstart', (e) => {
     if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
       lastTouchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
       );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
     }
   });
   
   container.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    if (e.touches.length === 2) {
+    if (e.touches.length === 2 && isZooming) {
+      
       const touchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
@@ -2786,11 +3051,22 @@ function openLightbox(src, alt) {
       scale = Math.max(0.5, Math.min(scale, 5));
       lastTouchDistance = touchDistance;
       img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
     }
   });
   
   
   const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
     isDragging = true;
     startX = clientX - translateX;
     startY = clientY - translateY;
@@ -2798,7 +3074,7 @@ function openLightbox(src, alt) {
   };
   
   const drag = (clientX, clientY) => {
-    if (!isDragging) return;
+    if (!isDragging || isZooming) return;
     translateX = clientX - startX;
     translateY = clientY - startY;
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
@@ -2810,16 +3086,12 @@ function openLightbox(src, alt) {
   };
   
   
-  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
   document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
   document.addEventListener('mouseup', stopDrag);
-  
-  
-  img.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-      startDrag(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  });
   
   container.appendChild(img);
   overlay.appendChild(container);
@@ -2969,7 +3241,7 @@ function openLightbox(src, alt) {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
     justify-content: center; align-items: center;
-    overflow: hidden;
+    overflow: hidden; touch-action: none;
   `;
   
   
@@ -2979,6 +3251,7 @@ function openLightbox(src, alt) {
     position: absolute; top: 20px; right: 30px; color: white;
     font-size: 40px; cursor: pointer; z-index: 1001;
     user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
   `;
   closeBtn.onclick = () => document.body.removeChild(overlay);
   
@@ -2986,6 +3259,7 @@ function openLightbox(src, alt) {
   container.style.cssText = `
     position: relative; overflow: hidden; width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
+    touch-action: none;
   `;
   
   const img = document.createElement('img');
@@ -2994,12 +3268,14 @@ function openLightbox(src, alt) {
   img.style.cssText = `
     max-width: 90%; max-height: 90%; object-fit: contain;
     transition: transform 0.2s; cursor: grab;
+    touch-action: none;
   `;
   
   let scale = 1;
   let startX = 0, startY = 0;
   let translateX = 0, translateY = 0;
   let isDragging = false;
+  let isZooming = false;
   
   
   container.addEventListener('wheel', (e) => {
@@ -3014,16 +3290,22 @@ function openLightbox(src, alt) {
   let lastTouchDistance = 0;
   container.addEventListener('touchstart', (e) => {
     if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
       lastTouchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
       );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
     }
   });
   
   container.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    if (e.touches.length === 2) {
+    if (e.touches.length === 2 && isZooming) {
+      
       const touchDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
@@ -3032,11 +3314,22 @@ function openLightbox(src, alt) {
       scale = Math.max(0.5, Math.min(scale, 5));
       lastTouchDistance = touchDistance;
       img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
     }
   });
   
   
   const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
     isDragging = true;
     startX = clientX - translateX;
     startY = clientY - translateY;
@@ -3044,7 +3337,7 @@ function openLightbox(src, alt) {
   };
   
   const drag = (clientX, clientY) => {
-    if (!isDragging) return;
+    if (!isDragging || isZooming) return;
     translateX = clientX - startX;
     translateY = clientY - startY;
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
@@ -3056,16 +3349,12 @@ function openLightbox(src, alt) {
   };
   
   
-  img.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
   document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
   document.addEventListener('mouseup', stopDrag);
-  
-  
-  img.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-      startDrag(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  });
   
   container.appendChild(img);
   overlay.appendChild(container);

@@ -1,39 +1,97 @@
-/* Hugo Blog Awesome specific targeting */
-.container,
-.container-fluid,
-.mx-auto,
-article,
-.post,
-.single {
-    max-width: 1400px !important;
-    width: 95% !important;
+/* Hugo Blog Awesome specific targeting - DESKTOP ONLY */
+@media (min-width: 769px) {
+    .container,
+    .container-fluid,
+    .mx-auto,
+    article,
+    .post,
+    .single {
+        max-width: 1400px !important;
+        width: 95% !important;
+    }
+
+    /* Target Bootstrap container classes that might be used */
+    .container-lg,
+    .container-xl {
+        max-width: 1400px !important;
+    }
+
+    /* Target header/navigation area */
+    header,
+    nav,
+    .navbar,
+    .header,
+    .site-header,
+    .top-nav,
+    .navigation {
+        max-width: 1400px !important;
+        width: 95% !important;
+        margin: 0 auto;
+    }
+
+    /* If the header has its own container */
+    header .container,
+    nav .container,
+    .navbar .container {
+        max-width: 1400px !important;
+        width: 95% !important;
+    }
 }
 
-/* Target Bootstrap container classes that might be used */
-.container-lg,
-.container-xl {
-    max-width: 1400px !important;
-}
-
-/* Target header/navigation area */
-header,
-nav,
-.navbar,
-.header,
-.site-header,
-.top-nav,
-.navigation {
-    max-width: 1400px !important;
-    width: 95% !important;
-    margin: 0 auto;
-}
-
-/* If the header has its own container */
-header .container,
-nav .container,
-.navbar .container {
-    max-width: 1400px !important;
-    width: 95% !important;
+/* Mobile-friendly adjustments */
+@media (max-width: 768px) {
+    .container,
+    .container-fluid,
+    .mx-auto,
+    article,
+    .post,
+    .single,
+    header,
+    nav,
+    .navbar,
+    .header,
+    .site-header,
+    .top-nav,
+    .navigation {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* Target Bootstrap container classes for mobile */
+    .container-lg,
+    .container-xl {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+    }
+    
+    /* If the header has its own container */
+    header .container,
+    nav .container,
+    .navbar .container {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+    }
+    
+    /* Ensure body allows proper scrolling when zoomed */
+    body {
+        touch-action: pan-x pan-y pinch-zoom !important;
+        -webkit-overflow-scrolling: touch !important;
+        overflow-x: hidden !important;
+    }
+    
+    /* Allow proper zoom and pan */
+    html {
+        touch-action: pan-x pan-y pinch-zoom !important;
+        overflow-x: hidden !important;
+    }
 }
 
 /* Make code blocks utilize full width and left-aligned */
