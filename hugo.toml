@@ -6,7 +6,8 @@ theme = "hugo-blog-awesome"
 [params]
   goToTop = true
   defaultColor = "auto"  # or "light" or "dark"
-  description = "Your blog description here"
+  description = "My technical blog to showcase projects as I build them"
+  renderAnchorLinks = true
 
 [params.author]
   avatar = "images/MyFace.jpeg"
@@ -31,3 +32,8 @@ theme = "hugo-blog-awesome"
 [params.seo]
   title = "Gene's Blog"
   description = "Blog about DevOps, CICD, AWS, OCI, anything cloud and other tech insights"
+
+
+[markup]
+  [markup.goldmark.parser]
+    autoHeadingID = true

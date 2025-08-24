@@ -160,16 +160,17 @@ pre span[style*="display:flex"] {
     }
 }
 
-.mermaid {
-  background-color: white !important;
-  padding: 1em;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  overflow-x: auto;
-  max-width: 100%;
-  margin: 1em auto;
+.anchorjs-link {
+  color: inherit;
+  margin-left: 0.5rem;
+  text-decoration: none;
+  opacity: 0.3;
+  font-size: 0.9em;
+  transition: opacity 0.2s;
 }
 
-html.dark div.mermaid {
-  background-color: white !important;
+h2:hover .anchorjs-link,
+h3:hover .anchorjs-link {
+  opacity: 1;
+  color: inherit; 
 }
