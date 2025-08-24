@@ -159,3 +159,17 @@ pre span[style*="display:flex"] {
         max-width: 1800px !important;
     }
 }
+
+.mermaid {
+  background-color: white !important;
+  padding: 1em;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  overflow-x: auto;
+  max-width: 100%;
+  margin: 1em auto;
+}
+
+html.dark div.mermaid {
+  background-color: white !important;
+}
