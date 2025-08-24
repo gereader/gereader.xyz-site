@@ -17,8 +17,7 @@ In this first part, I'll walk you through setting up the continuous integration 
 - Push to Amazon Elastic Container Registry (ECR)
 - Handle all the gotchas I ran into
 
-<!-- [Part 2]({{< ref "part-2-cicd-deploy-aws-ecs.md" >}}) will cover deploying these containers to AWS ECS. -->
-Part 2 will cover deploying these containers to AWS ECS.
+[Part 2]({{< ref "part-2-cicd-deploy-aws-ecs.md" >}}) will cover deploying these containers to AWS ECS.
 
 ## Overview of Flask Job Application Tracking App
 Before diving into the CI/CD pipeline, let me show you what we're working with in terms of this Flask app. I built a job application tracking app, it's not complex, but it includes key components needed for a robust pipeline.

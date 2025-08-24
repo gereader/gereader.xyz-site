@@ -159,3 +159,18 @@ pre span[style*="display:flex"] {
         max-width: 1800px !important;
     }
 }
+
+.anchorjs-link {
+  color: inherit;
+  margin-left: 0.5rem;
+  text-decoration: none;
+  opacity: 0.3;
+  font-size: 0.9em;
+  transition: opacity 0.2s;
+}
+
+h2:hover .anchorjs-link,
+h3:hover .anchorjs-link {
+  opacity: 1;
+  color: inherit; 
+}

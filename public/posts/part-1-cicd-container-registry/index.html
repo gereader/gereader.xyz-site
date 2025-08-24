@@ -117,6 +117,11 @@
     
     
       <link rel="stylesheet" href="/css/custom.css">
+
+
+
+
+
     
 </head>
 <body data-theme = "auto" class="notransition">
@@ -235,7 +240,7 @@ stroke-linejoin="round" class="feather feather-home">
 <li>Push to Amazon Elastic Container Registry (ECR)</li>
 <li>Handle all the gotchas I ran into</li>
 </ul>
-<p>Part 2 will cover deploying these containers to AWS ECS.</p>
+<p><a href="http://localhost:1313/posts/part-2-cicd-deploy-aws-ecs/">Part 2</a> will cover deploying these containers to AWS ECS.</p>
 <h2 id="overview-of-flask-job-application-tracking-app">Overview of Flask Job Application Tracking App</h2>
 <p>Before diving into the CI/CD pipeline, let me show you what we&rsquo;re working with in terms of this Flask app. I built a job application tracking app, it&rsquo;s not complex, but it includes key components needed for a robust pipeline.</p>
 <p>The app itself is fairly basic with features like adding new job applications, viewing them in a dashboard, and updating their status as you progress through interview processes. It uses SQLite for the database currently and includes forms for data entry. I intend to eventually move the database to something like AWS RDS and build a user portal. For now, we&rsquo;ll keep the AWS Security Group limited to my own IP.</p>
@@ -1469,7 +1474,7 @@ function openLightbox(src, alt) {
 </span></span><span style="display:flex;"><span>                }
 </span></span></code></pre></div><p>This confirms I&rsquo;m well within my budget before setting up any new services, and serves as a reminder in case I forgot to setup a budget in my account. This is useful to make sure I am not going to be surprised by a really expensive bill in the future.</p>
 <h3 id="ecr-repository-creation">ECR Repository Creation</h3>
-<p><!-- raw HTML omitted --><strong>Note</strong> I am going to be duplicating my initial deployment of this so that I can take current screenshots. <!-- raw HTML omitted --></p>
+<p><strong>Note</strong> I am going to be duplicating my initial deployment of this so that I can take current screenshots.</p>
 <p>Here is where I hit my first gotcha, right out the gate. When trying to create a public ECR repository, the default action of clicking &ldquo;create&rdquo;  on the root Amazon Elastic Container Registry page was creating a private repository.</p>
 
 

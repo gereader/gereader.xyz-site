@@ -1,0 +1,2468 @@
+<!DOCTYPE html>
+<html lang="en-us"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">Part 2 - Deploying to AWS ECS: From Container Registry to Production | Gene&#39;s Blog</title>
+<meta property="og:title" content="Part 2 - Deploying to AWS ECS: From Container Registry to Production | Gene&#39;s Blog" />
+<meta name="twitter:title" content="Part 2 - Deploying to AWS ECS: From Container Registry to Production | Gene&#39;s Blog" />
+<meta itemprop="name" content="Part 2 - Deploying to AWS ECS: From Container Registry to Production | Gene&#39;s Blog" />
+<meta name="application-name" content="Part 2 - Deploying to AWS ECS: From Container Registry to Production | Gene&#39;s Blog" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="Deploy Flask containers to AWS ECS with automated GitHub Actions deployment. Learn ECS cluster setup, task definitions, services, and minimal-downtime deployments while staying within free tier limits.">
+<meta itemprop="description" content="Deploy Flask containers to AWS ECS with automated GitHub Actions deployment. Learn ECS cluster setup, task definitions, services, and minimal-downtime deployments while staying within free tier limits." />
+<meta property="og:description" content="Deploy Flask containers to AWS ECS with automated GitHub Actions deployment. Learn ECS cluster setup, task definitions, services, and minimal-downtime deployments while staying within free tier limits." />
+<meta name="twitter:description" content="Deploy Flask containers to AWS ECS with automated GitHub Actions deployment. Learn ECS cluster setup, task definitions, services, and minimal-downtime deployments while staying within free tier limits." />
+
+<meta property="og:locale" content="en-us" />
+<meta name="language" content="en-us" />
+
+  <link rel="alternate" hreflang="en" href="http://localhost:1313/posts/part-2-cicd-deploy-aws-ecs/" title="" />
+
+
+
+
+
+    
+    
+    
+
+    <meta property="og:type" content="article" />
+    <meta property="og:article:published_time" content=2025-08-22T15:10:14-0700 />
+    <meta property="article:published_time" content=2025-08-22T15:10:14-0700 />
+    <meta property="og:url" content="http://localhost:1313/posts/part-2-cicd-deploy-aws-ecs/" />
+
+    
+    <meta property="og:article:author" content="Gene Reader" />
+    <meta property="article:author" content="Gene Reader" />
+    <meta name="author" content="Gene Reader" />
+    
+    
+
+    
+
+    <script defer type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "Article",
+        "headline": "Part 2 - Deploying to AWS ECS: From Container Registry to Production",
+        "author": {
+        "@type": "Person",
+        "name": ""
+        },
+        "datePublished": "2025-08-22",
+        "description": "Deploy Flask containers to AWS ECS with automated GitHub Actions deployment. Learn ECS cluster setup, task definitions, services, and minimal-downtime deployments while staying within free tier limits.",
+        "wordCount":  3288 ,
+        "mainEntityOfPage": "True",
+        "dateModified": "2025-08-22",
+        "image": {
+        "@type": "imageObject",
+        "url": ""
+        },
+        "publisher": {
+        "@type": "Organization",
+        "name": "Gene\u0027s Blog"
+        }
+    }
+    </script>
+
+
+<meta name="generator" content="Hugo 0.148.2">
+
+    
+    <meta property="og:url" content="http://localhost:1313/posts/part-2-cicd-deploy-aws-ecs/">
+  <meta property="og:site_name" content="Gene&#39;s Blog">
+  <meta property="og:title" content="Part 2 - Deploying to AWS ECS: From Container Registry to Production">
+  <meta property="og:description" content="Deploy Flask containers to AWS ECS with automated GitHub Actions deployment. Learn ECS cluster setup, task definitions, services, and minimal-downtime deployments while staying within free tier limits.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-08-22T15:10:14-07:00">
+    <meta property="article:modified_time" content="2025-08-22T15:10:14-07:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Part 2 - Deploying to AWS ECS: From Container Registry to Production">
+  <meta name="twitter:description" content="Deploy Flask containers to AWS ECS with automated GitHub Actions deployment. Learn ECS cluster setup, task definitions, services, and minimal-downtime deployments while staying within free tier limits.">
+
+
+    
+
+    <link rel="canonical" href="http://localhost:1313/posts/part-2-cicd-deploy-aws-ecs/">
+    <link href="/style.min.2d921c18cf1ec555ffc03d59a8adc211c402c68c930c27d6a0c306ab175a8d09.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="http://localhost:1313/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+    
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+
+    
+    
+      <link rel="stylesheet" href="/css/custom.css">
+
+
+  <style>
+     
+    .mermaid {
+      text-align: center;
+      margin: 1em 0;
+    }
+  </style>
+
+    <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+
+    
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'default',  
+    });
+
+    
+    const observer = new MutationObserver(() => {});
+
+    observer.observe(document.documentElement, { attributes: true });
+
+    </script>
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      var anchors = new AnchorJS();  
+      anchors.options = {
+        icon: '#'
+      };
+      anchors.add('h2, h3');
+    });
+  </script>
+
+    
+</head>
+<body data-theme = "auto" class="notransition">
+
+<script src="/js/theme.js"></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="http://localhost:1313/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title></title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">Part 2 - Deploying to AWS ECS: From Container Registry to Production</h1>
+                
+                
+                
+                <div class="post-meta">
+                    <time datetime="2025-08-22T15:10:14-07:00" itemprop="datePublished"> Aug 22, 2025 </time>
+                </div>
+                
+            </header>
+            
+    
+        
+            
+        
+    
+    <details class="toc" open>
+        <summary><b></b></summary>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#what-ill-accomplish-in-part-2">What I&rsquo;ll accomplish in Part 2</a></li>
+    <li><a href="#why-ecs-over-other-aws-options">Why ECS Over Other AWS Options</a></li>
+    <li><a href="#aws-ecs-architecture-overview">AWS ECS Architecture Overview</a></li>
+    <li><a href="#setting-up-ecs-cluster-within-the-free-tier">Setting Up ECS Cluster within the Free Tier</a>
+      <ul>
+        <li><a href="#cluster-configuration">Cluster Configuration</a></li>
+        <li><a href="#security-group-configuration">Security Group Configuration</a></li>
+      </ul>
+    </li>
+    <li><a href="#creating-the-task-definition">Creating the Task Definition</a>
+      <ul>
+        <li><a href="#container-configuration">Container Configuration</a></li>
+        <li><a href="#resource-limits-for-t3micro">Resource Limits for t3.micro</a></li>
+      </ul>
+    </li>
+    <li><a href="#setting-up-the-ecs-service">Setting Up the ECS Service</a>
+      <ul>
+        <li><a href="#service-configuration">Service Configuration</a></li>
+      </ul>
+    </li>
+    <li><a href="#extending-github-actions-for-ecs-deployment">Extending GitHub Actions for ECS Deployment</a>
+      <ul>
+        <li><a href="#additional-aws-permissions">Additional AWS Permissions</a></li>
+        <li><a href="#ecs-deployment-strategy">ECS Deployment Strategy</a></li>
+        <li><a href="#complete-ecs-deployment-job">Complete ECS Deployment Job</a></li>
+        <li><a href="#task-definition">Task Definition</a></li>
+        <li><a href="#ecs-service">ECS Service</a></li>
+        <li><a href="#the-complete-updated-workflow">The Complete Updated Workflow</a></li>
+      </ul>
+    </li>
+    <li><a href="#running-the-workflow">Running the Workflow</a></li>
+    <li><a href="#common-issues-and-solutions">Common Issues and Solutions</a></li>
+    <li><a href="#cost-reality-and-optimization">Cost Reality and Optimization</a>
+      <ul>
+        <li><a href="#current-cost-breakdown">Current Cost Breakdown</a></li>
+      </ul>
+    </li>
+    <li><a href="#conclusion">Conclusion</a></li>
+    <li><a href="#resources-and-references">Resources and References</a></li>
+  </ul>
+</nav>
+    </details>
+            <div class="page-content">
+                <h1 id="deploying-to-aws-ecs-from-container-registry-to-production">Deploying to AWS ECS: From Container Registry to Production</h1>
+<p>In <a href="http://localhost:1313/posts/part-1-cicd-container-registry/">Part 1</a>, I built a pipeline that automatically tests my Flask app and pushes containers to both GHCR and ECR. I&rsquo;m going to deploy those containers somewhere that people can use them. I&rsquo;m going to use AWS ECS to make my app publicly accessible. (This won&rsquo;t be accessible to the public, I&rsquo;ll be spinning this down after the demo to avoid burning through my AWS credits and racking up costs.)</p>
+<p>Part 2 will take me from having containers sitting in registries to having a live application running in production with automated deployments. I&rsquo;ll set up everything needed for a production-ready deployment while keeping costs as low as possible.</p>
+<h2 id="what-ill-accomplish-in-part-2">What I&rsquo;ll accomplish in Part 2</h2>
+<ul>
+<li>Set up an ECS cluster optimized for free tier usage</li>
+<li>Create task definitions and services to run my containers</li>
+<li>Extend my GitHub Actions workflow to automatically deploy to ECS</li>
+<li>Implement minimal-downtime deployments</li>
+<li>Monitor my production application and handle common issues</li>
+</ul>
+<h2 id="why-ecs-over-other-aws-options">Why ECS Over Other AWS Options</h2>
+<p>Before diving into the setup, let me explain why I chose ECS on EC2 over alternatives like Elastic Beanstalk or Fargate.</p>
+<p><strong>ECS on EC2</strong> = Free tier eligible when using t3.micro instances. You only pay for the underlying EC2 resources, and ECS itself doesn&rsquo;t add additional charges for the EC2 launch type.</p>
+<p><strong>Fargate</strong> = Pay per task with no free tier. While Fargate removes infrastructure management, you are charged for the resources that you use.</p>
+<p><strong>Elastic Beanstalk</strong> = Less control over the underlying infrastructure and harder to optimize for costs. It also abstracts away too much, I did this project for learning purposes.</p>
+<p>For this project, ECS on EC2 gives me the best balance of cost control, learning opportunities, and production capabilities.</p>
+<h2 id="aws-ecs-architecture-overview">AWS ECS Architecture Overview</h2>
+<p>Before I start clicking around the AWS console, let me understand what the components are and how ECS components work together:</p>
+<ul>
+<li><strong>Cluster</strong>: A logical grouping of EC2 instances where containers run</li>
+<li><strong>Task Definition</strong>: A &ldquo;blueprint&rdquo; that describes how containers should run (like a Docker Compose file)</li>
+<li><strong>Service</strong>: Manages running tasks, handles deployments, and maintains defined capacity</li>
+<li><strong>Tasks</strong>: Individual running instances of your containers based on task definitions</li>
+</ul>
+<div class="mermaid">
+graph TD
+
+  subgraph OuterCluster[" "]
+    Cluster[EC2 Cluster]
+
+    subgraph Cluster
+      Service1[Service 1]
+    end
+
+    Service1 -->|runs| TaskA[Task A]
+    Service1 -->|runs| TaskB[Task b]
+
+    TaskA -->|based on| TaskDefinitionA[Task Definition]
+    TaskB -->|based on| TaskDefinitionA
+
+  end
+
+  style OuterCluster fill:#D6EAF8,stroke:#2980B9,stroke-width:2px
+  style Cluster fill:#AED6F1,stroke:#1B4F72,stroke-width:1.5px
+</div>
+
+<p>The flow works like this: I create a Task Definition (the blueprint for how my container should run), create a Service that manages how many tasks I want running, and ECS schedules those tasks across my cluster of EC2 instances. In my setup, I&rsquo;ll have one cluster with one service running one task based on one task definition.</p>
+<h2 id="setting-up-ecs-cluster-within-the-free-tier">Setting Up ECS Cluster within the Free Tier</h2>
+<p>The key to staying within free tier is using ECS on EC2 with t3.micro instances. Let me go ahead and create the cluster now.</p>
+<p>I&rsquo;ll start by navigating to the ECS console and clicking &ldquo;Create Cluster&rdquo;.</p>
+<h3 id="cluster-configuration">Cluster Configuration</h3>
+<p>Here are the specific settings I chose to stay within free tier:</p>
+<p><strong>Cluster Name</strong>: FlaskJobTracker-ExampleCluster</p>
+<p><strong>Infrastructure</strong>:</p>
+<ul>
+<li>Amazon EC2 Instances</li>
+<li>Create new ASG (Auto Scaling Group)</li>
+<li><strong>Spot</strong> provisioning model (to reduce cost further, this is not ideal for production use cases)</li>
+<li>Instance Type: <strong>t3.micro</strong> (1 minimum, 1 maximum)</li>
+</ul>
+<p>I kept many of the default settings as the defaults work for my deployment.</p>
+
+
+
+
+<figure>
+  <img src="ECS-Configuration.webp" alt="Screenshot showing ECS setup with the cluster name, EC2 spot instance set to t3.micro." loading="lazy" style="cursor: pointer;" onclick="openLightbox('ECS-Configuration.webp', 'Screenshot showing ECS setup with the cluster name, EC2 spot instance set to t3.micro.')">
+  
+  <figcaption>I&#39;ll take most of the default settings as I set up ECS</figcaption>
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden; touch-action: none;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+    touch-action: none;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+    touch-action: none;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  let isZooming = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2 && isZooming) {
+      
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging || isZooming) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<h3 id="security-group-configuration">Security Group Configuration</h3>
+<p>The default security group used by ECS will not cover my full use case. I could have created a new one to begin with, but I like to allow the default to be applied in case there are any policies in place to apply specific rules. I need to allow HTTP/s traffic. I quickly created a new security group to cover my access.</p>
+<p>I&rsquo;ll navigate to EC2 → Security Groups and find the security group created for my ECS cluster.</p>
+<p>I&rsquo;ll call my security group <code>Allow-MyIP-Inbound</code> to have a descriptive name of what the Security Group is doing.</p>
+<p>I&rsquo;ll add this inbound rule:</p>
+<ul>
+<li><strong>Type</strong>: All Traffic, <strong>Source</strong>: My IP</li>
+</ul>
+<p><em>I am opening all Traffic for ease, but if you were building this to be deployed full time, you would want to specify the HTTP/HTTPS ports in use.</em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Example security group rules you may need</span>
+</span></span><span style="display:flex;"><span>Type: HTTP
+</span></span><span style="display:flex;"><span>Port: <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>Source: 0.0.0.0/0
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Type: Custom TCP  
+</span></span><span style="display:flex;"><span>Port: <span style="color:#ae81ff">8080</span>
+</span></span><span style="display:flex;"><span>Source: 0.0.0.0/0
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># This would allow incoming HTTP traffic on both port 80 and 8080. In production, you&#39;d want to be as restrictive as possible.</span>
+</span></span></code></pre></div>
+
+
+
+<figure>
+  <img src="SecurityGroup-Config.webp" alt="Screenshot showing security group allowing inbound and outbound rule to &#39;My IP&#39;" loading="lazy" style="cursor: pointer;" onclick="openLightbox('SecurityGroup-Config.webp', 'Screenshot showing security group allowing inbound and outbound rule to \u0027My IP\u0027')">
+  
+  <figcaption>This will limit access to only my Public IP, I don&#39;t want this open to the world.</figcaption>
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden; touch-action: none;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+    touch-action: none;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+    touch-action: none;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  let isZooming = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2 && isZooming) {
+      
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging || isZooming) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<p>Now that I&rsquo;ve created the new security group, let me go add the new security group to my instance. I needed to wait for my cluster to finish deploying, but once the cluster is done creating instances, you will see the instance(s) running under EC2. I was able to easily identify the instance by the cluster name in the instance name. I&rsquo;ll open that instance and under the <code>Actions</code> menu, select <code>Change security groups</code>. Here I can add and remove security groups. I&rsquo;m going to leave the default SG, and add my newly created SG allowing inbound traffic.</p>
+
+
+
+
+<figure>
+  <img src="AddSecurityGroup-to-Instance.webp" alt="Screenshot showing adding security group to instance" loading="lazy" style="cursor: pointer;" onclick="openLightbox('AddSecurityGroup-to-Instance.webp', 'Screenshot showing adding security group to instance')">
+  
+  <figcaption>You can apply multiple security groups to instances and it will have an additive effect.</figcaption>
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden; touch-action: none;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+    touch-action: none;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+    touch-action: none;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  let isZooming = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2 && isZooming) {
+      
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging || isZooming) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<h2 id="creating-the-task-definition">Creating the Task Definition</h2>
+<p>The task definition is like a blueprint that tells ECS exactly how to run my container. This includes resource limits, port mappings, and environment variables.</p>
+<p>I&rsquo;ll navigate to ECS → Task Definitions and click &ldquo;Create new Task Definition&rdquo;.</p>
+<h3 id="container-configuration">Container Configuration</h3>
+<p>I am going to walk through all the settings I am using for my task definition. If I don&rsquo;t mention it, I am taking the default setting.</p>
+<p><strong>Task Definition settings</strong>:</p>
+<ul>
+<li><strong>Task Definition Name</strong>: <code>flask-job-tracker-example-task</code></li>
+</ul>
+<p><strong>Infrastructure Requirements</strong></p>
+<ul>
+<li><strong>Launch Type</strong>: Amazon EC2 Instances</li>
+<li><strong>CPU</strong>: 0.75 vCPU</li>
+<li><strong>Memory</strong>: 0.3GB</li>
+<li><strong>Network Mode</strong>: Default</li>
+</ul>
+
+
+
+
+<figure>
+  <img src="TaskDefinition-Name_and_Infra.webp" alt="Screenshot showing task definition name and Infrastructure settings as specified above" loading="lazy" style="cursor: pointer;" onclick="openLightbox('TaskDefinition-Name_and_Infra.webp', 'Screenshot showing task definition name and Infrastructure settings as specified above')">
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden; touch-action: none;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+    touch-action: none;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+    touch-action: none;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  let isZooming = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2 && isZooming) {
+      
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging || isZooming) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<p><strong>Container definition</strong>:</p>
+<ul>
+<li><strong>Name</strong>: <code>flask-app</code></li>
+<li><strong>Image URI</strong>: <code>public.ecr.aws/w8m5m8y0/gereader/flaskjobtracker:latest</code> (use <a href="http://localhost:1313/posts/part-1-cicd-container-registry/#ecr-repository-creation">your ECR URI from Part 1</a>)</li>
+<li><strong>Host Port</strong>: 80</li>
+<li><strong>Container Port</strong>: 8080 (this is the port my container is listening on)</li>
+<li><strong>Protocol</strong>: TCP</li>
+<li><strong>Port Name</strong>: flask-app-8080-tcp</li>
+<li><strong>App Protocol</strong>: HTTP (I am going to run my app as HTTP)</li>
+<li><strong>Resource Allocation limits</strong> - These limits need to fit within my established maximums for Infrastructure in the Task Definition
+<ul>
+<li><strong>CPU</strong>: 0.5</li>
+<li><strong>GPU</strong>: Leave empty, t3.micro does not support GPU</li>
+<li><strong>Memory Hard limit</strong>: 0.25</li>
+</ul>
+</li>
+</ul>
+
+
+
+
+<figure>
+  <img src="TaskDefinition-Container.webp" alt="Screenshot showing task definition Container configuration as specified above" loading="lazy" style="cursor: pointer;" onclick="openLightbox('TaskDefinition-Container.webp', 'Screenshot showing task definition Container configuration as specified above')">
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden; touch-action: none;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+    touch-action: none;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+    touch-action: none;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  let isZooming = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2 && isZooming) {
+      
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging || isZooming) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<h3 id="resource-limits-for-t3micro">Resource Limits for t3.micro</h3>
+<p>The t3.micro instance has limited resources, so I made my containers use as small a footprint as I felt comfortable with. For a production app you would likely need more resources than I am allocating here.</p>
+<h2 id="setting-up-the-ecs-service">Setting Up the ECS Service</h2>
+<p>The ECS service manages my tasks and handles deployments. It makes sure my desired number of containers are always running and manages rolling deployments when I update my application.</p>
+<p>I&rsquo;m going to create my service to deploy my container next. I&rsquo;ll start by navigating to my ECS cluster and clicking &ldquo;Create&rdquo; under the <code>Services</code> tab.</p>
+<h3 id="service-configuration">Service Configuration</h3>
+<p>As I define the service, I will again be taking default settings. If I don&rsquo;t specify, it means I took the default setting.</p>
+<p><strong>Service details</strong>:</p>
+<ul>
+<li><strong>Task definition family</strong>: flask-job-tracker-example-task - This is the task definition I created in the previous step</li>
+</ul>
+<p><strong>Environment</strong>:</p>
+<ul>
+<li><strong>Compute Configuration</strong>:
+<ul>
+<li><strong>Compute Options</strong>: Launch Type</li>
+<li><strong>Launch Type</strong>: EC2</li>
+</ul>
+</li>
+</ul>
+<p><strong>Deployments configuration</strong>:</p>
+<ul>
+<li><strong>Minimum healthy percent</strong>: 0 (allows complete replacement during deployments)</li>
+<li><strong>Maximum percent</strong>: 200 (allows running extra tasks during deployment)</li>
+</ul>
+<p><strong>NOTE</strong>: With 0% minimum healthy, that means the container can be taken down to replace, this means the application will go down when the container is being replaced. In true production you would have more instances, but I am running a single instance and the ports my container uses are in use so it can&rsquo;t start a new container on the same instance.</p>
+<p>I&rsquo;ll click <strong>Create Service</strong> and ECS will start deploying my container.</p>
+
+
+
+
+<figure>
+  <img src="CreateService.webp" alt="Screenshot showing task definition, environment, and deployment configuration being set as specified above." loading="lazy" style="cursor: pointer;" onclick="openLightbox('CreateService.webp', 'Screenshot showing task definition, environment, and deployment configuration being set as specified above.')">
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden; touch-action: none;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+    touch-action: none;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+    touch-action: none;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  let isZooming = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2 && isZooming) {
+      
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging || isZooming) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<p>Now I wait. I should see my task running after a few minutes. Once the task is running, I can click into it from the Service and I&rsquo;ll be able to see the public IP. If I go to that public ip I can interact with my webapp and prove it is working.</p>
+
+
+
+
+<figure>
+  <img src="TaskSettings.webp" alt="Screenshot showing task running with an arrow pointing to the public IP address assigned." loading="lazy" style="cursor: pointer;" onclick="openLightbox('TaskSettings.webp', 'Screenshot showing task running with an arrow pointing to the public IP address assigned.')">
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden; touch-action: none;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+    touch-action: none;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+    touch-action: none;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  let isZooming = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2 && isZooming) {
+      
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging || isZooming) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+
+
+
+
+<figure>
+  <img src="ApplicationRunning.webp" alt="Screenshot showing the http:// &#39;public IP address&#39; in the address bar, and the webapp dashboard" loading="lazy" style="cursor: pointer;" onclick="openLightbox('ApplicationRunning.webp', 'Screenshot showing the http:\/\/ \u0027public IP address\u0027 in the address bar, and the webapp dashboard')">
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden; touch-action: none;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+    touch-action: none;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+    touch-action: none;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  let isZooming = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2 && isZooming) {
+      
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging || isZooming) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<p>I can tell at this point that my container is running, I&rsquo;m able to access it on the public IP address, which also proves my security group I created is working as expected. Up to this point, I can now tell that I have configured everything correctly because my App is reachable across the internet. You may now be thinking, &ldquo;that&rsquo;s a lot of items to look at, how am I ever going to remember how to do that when I need to update my app?&rdquo; and that is where GitHub Actions will come back in.</p>
+<h2 id="extending-github-actions-for-ecs-deployment">Extending GitHub Actions for ECS Deployment</h2>
+<p>In <a href="http://localhost:1313/posts/part-1-cicd-container-registry/">Part 1</a> I created my GitHub Actions workflow. I am going to extend that workflow to automatically deploy to ECS whenever I push changes into the &ldquo;main&rdquo; branch.</p>
+<h3 id="additional-aws-permissions">Additional AWS Permissions</h3>
+<p>Our existing IAM user needs additional permissions to deploy to ECS. Go back to IAM and add these policies to your defined IAM group, the instructions are similar to what I covered in the <a href="http://localhost:1313/posts/part-1-cicd-container-registry/#iam-setup-for-github-actions">Part 1 IAM setup</a>. I went under IAM -&gt; User Groups -&gt; gereader-flaskjobtracker-v2 and under permissions clicked <code>Add permissions</code>.</p>
+<p>I need to add these two policies to allow users in this group to read EC2 container registry and edit the ECS service:</p>
+<ul>
+<li><code>AmazonECS_FullAccess</code></li>
+<li><code>AmazonEC2ContainerRegistryReadOnly</code></li>
+</ul>
+
+
+
+
+<figure>
+  <img src="IAMPermissions.webp" alt="Screenshot showing the user group with 3 permissions assigned. AmazonEC2ContainerRegistryReadOnly, AmazonECS_FullAccess, AmazonElasticContainerRegistryPublicFullAccess" loading="lazy" style="cursor: pointer;" onclick="openLightbox('IAMPermissions.webp', 'Screenshot showing the user group with 3 permissions assigned. AmazonEC2ContainerRegistryReadOnly, AmazonECS_FullAccess, AmazonElasticContainerRegistryPublicFullAccess')">
+  
+  <figcaption>Now all users assigned to this group will have these permissions</figcaption>
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden; touch-action: none;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+    touch-action: none;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+    touch-action: none;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  let isZooming = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2 && isZooming) {
+      
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging || isZooming) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<h3 id="ecs-deployment-strategy">ECS Deployment Strategy</h3>
+<p>I&rsquo;ll give you a quick overview of the process I am going to be automating to better describe what I will be configuring.</p>
+<ol>
+<li>Container is pushed to Elastic Container Registry (ECR)</li>
+<li>Update the task definition with the new container image tag (I&rsquo;ll use commit sha for the tag)</li>
+<li>Create task definition revision in AWS, applying my update</li>
+<li>Update the service to use the new task definition revision</li>
+<li>ECS service handles the rolling deployment</li>
+</ol>
+<h3 id="complete-ecs-deployment-job">Complete ECS Deployment Job</h3>
+<p>I am going to expand from the workflow in part 1, starting with this <code>build_and_push_ecr</code> job. I am going to expand this job to update ECS with the new container.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>  <span style="color:#f92672">build_and_push_ecr</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">needs</span>: <span style="color:#ae81ff">test</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">steps</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@v5</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Configure AWS credentials</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">aws-actions/configure-aws-credentials@v4.3.1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">aws-access-key-id</span>: <span style="color:#ae81ff">${{ secrets.ECR_USER_KEY }}</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">aws-secret-access-key</span>: <span style="color:#ae81ff">${{ secrets.ECR_USER_KEY_SECRET }}</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">aws-region</span>: <span style="color:#ae81ff">us-east-1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Get ECR Public registry URI</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">id</span>: <span style="color:#ae81ff">ecr-public-details</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          REGISTRY_URI=$(aws ecr-public describe-registries --region us-east-1 --query &#39;registries[0].registryUri&#39; --output text)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          echo &#34;uri=$REGISTRY_URI&#34; &gt;&gt; $GITHUB_OUTPUT
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          echo &#34;container_uri=$REGISTRY_URI/gereader/flaskjobtracker&#34; &gt;&gt; $GITHUB_OUTPUT</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Login to Amazon ECR</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">id</span>: <span style="color:#ae81ff">login-ecr-public</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">aws-actions/amazon-ecr-login@v2</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">registry-type</span>: <span style="color:#ae81ff">public</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Build and push Docker image to ECR</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">docker/build-push-action@v6</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">context</span>: <span style="color:#e6db74">&#34;{{defaultContext}}:app&#34;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">push</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">tags</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ${{ steps.ecr-public-details.outputs.container_uri }}:latest
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ${{ steps.ecr-public-details.outputs.container_uri }}:${{ github.sha }}</span>
+</span></span></code></pre></div><p>The last step I accomplished is pushing the container up to ECR with two tags, <code>latest</code> and the commit sha. The commit sha is the unique sha hash associated with an individual commit.</p>
+<h3 id="task-definition">Task Definition</h3>
+<p>In the AWS console, I went under task definition and clicked <code>Create new revision with json</code> to get the json output. I copied that into the file <code>.aws/task_definition_example.json</code>.
+The task definition lists my AWS account ID in the executionRoleArn. You can leave this hardcoded but I mentioned in Part 1 that I prefer not to have my account ID hardcoded. I put my account ID as a GitHub secret, though I could have added is a var instead. All of that is to say, I created a step to generate the task definition where I used sed to replace the variable with my actual account ID. This isn&rsquo;t a hard requirement but how I prefer to operate to ensure my automation can be easily applied in new jobs without need for editing.</p>
+<p>From here, I use the Amazon ECS task definition action to render the task definition from the file I created. I set the container-name and the image uri including the commit sha variable as the tag. This tells the task that it should use that specific container image. I also set an ID for the step so I can easily refer to it in the next step.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Update task definition with account ID</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Don&#39;t want to hardcode my account ID so using a github secret to work around it</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          sed -i &#39;s/\${AWS_ACCOUNT_ID}/${{ secrets.AWS_ACCOUNT_ID }}/g&#39; .aws/task_definition_example.json</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Render Amazon ECS task definition</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">id</span>: <span style="color:#ae81ff">render-web-container</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">aws-actions/amazon-ecs-render-task-definition@v1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">task-definition</span>: <span style="color:#ae81ff">.aws/task_definition_example.json</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">container-name</span>: <span style="color:#ae81ff">flask-app</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">image</span>: <span style="color:#ae81ff">${{ steps.ecr-public-details.outputs.container_uri }}:${{ github.sha }}</span>
+</span></span></code></pre></div><h3 id="ecs-service">ECS Service</h3>
+<p>Now that I have created a task definition revision step, I need to create the step to update the ECS service to use the new revision of the task definition.</p>
+<p>My ECS service is not in <code>us-east-1</code> which is where I have authenticated to update ECR (a requirement mentioned in Part 1 due to the global public ECR), so I have to tell the step to override the AWS region to us-west-2 where my ECS service is located. I then tell it to use the task definition, by ID, created in the previous step. Finally, I had to specify the name of my cluster and the name of my created service. I copy these directly out of the AWS console under ECS Cluster and from the service tab of my cluster. The cluster name I set when creating the cluster, the service name was generated by default, though one could be created if desired.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Deploy to Amazon ECS service</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">aws-actions/amazon-ecs-deploy-task-definition@v2</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">env</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">AWS_REGION</span>: <span style="color:#ae81ff">us-west-2</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">task-definition</span>: <span style="color:#ae81ff">${{ steps.render-web-container.outputs.task-definition }}</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># Service and Cluster Name from AWS</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">service</span>: <span style="color:#ae81ff">flask-job-tracker-example-task-service-c16358g2</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">cluster</span>: <span style="color:#ae81ff">FlaskJobTracker-ExampleCluster</span>
+</span></span></code></pre></div><p>With that, I have all of the parts required. Once I update the service, it will reference my updated task definition, which references the updated container. Now whenever I update the container, it will be automatically deployed to my ECS EC2 Cluster.</p>
+<h3 id="the-complete-updated-workflow">The Complete Updated Workflow</h3>
+<p>MY complete <code>.github/workflows/main.yml</code> now looks like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#f92672">name</span>: <span style="color:#ae81ff">CI/CD Pipeline for Flask Job Tracker</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">on</span>: 
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">push</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">jobs</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">test</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">steps</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@v5</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Convert tag to lowercase since its required by ghcr</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">id</span>: <span style="color:#ae81ff">ghcr_tag</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">ASzc/change-string-case-action@v6</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">string</span>: <span style="color:#ae81ff">ghcr.io/${{ github.repository }}:latest</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Build container during test</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Build Docker Image</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: <span style="color:#ae81ff">docker build -t ${{ steps.ghcr_tag.outputs.lowercase }} app</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Run container</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Run container in background</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          docker run -d --name flask-test -p 8080:8080 ${{ steps.ghcr_tag.outputs.lowercase }}</span>
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Wait for container to test okay or timeout in 30s</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Wait for Container Test</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          timeout 30 bash -c &#39;until curl -f http://localhost:8080/healthz/live; do sleep 10; done&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Readiness check</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Container Readiness check</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          HTTP_CODE=$(curl -s -o /dev/null -w &#34;%{http_code}&#34; &#34;http://localhost:8080/healthz/readiness&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          if [ &#34;$HTTP_CODE&#34; -eq 200 ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">              echo &#34;Readiness request was successful (HTTP 200 OK).&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">              echo &#34;Readiness Request failed with HTTP status code: $HTTP_CODE&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">              exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Stop container, test complete</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: <span style="color:#ae81ff">docker stop flask-test</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">build_and_push_ghcr</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">needs</span>: <span style="color:#ae81ff">test</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">steps</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Latest checkout action</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># https://github.com/actions/checkout</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@v5</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Login to ghcr action</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># https://github.com/docker/login-action?tab=readme-ov-file#github-container-registry</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Login to GitHub Container Registry</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">docker/login-action@v3</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">registry</span>: <span style="color:#ae81ff">ghcr.io</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">username</span>: <span style="color:#ae81ff">${{ secrets.GH_USERNAME }}</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">password</span>: <span style="color:#ae81ff">${{ secrets.GH_PAT_GHCR }}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Convert tag to lowercase since its required by ghcr</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">id</span>: <span style="color:#ae81ff">ghcr_tag</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">ASzc/change-string-case-action@v6</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">string</span>: <span style="color:#ae81ff">ghcr.io/${{ github.repository }}:latest</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># https://github.com/marketplace/actions/build-and-push-docker-images</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Build and push</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">docker/build-push-action@v6</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># Define context since Dockerfile is not in the root</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">context</span>: <span style="color:#e6db74">&#34;{{defaultContext}}:app&#34;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">push</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># Unclear on the requirement of this tag but saw it referenced multiple times</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># This is being made lowercase from the previous step ghcr_tag</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">tags</span>: <span style="color:#ae81ff">${{ steps.ghcr_tag.outputs.lowercase }}</span>
+</span></span><span style="display:flex;"><span>          
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">build_and_push_ecr</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">needs</span>: <span style="color:#ae81ff">test</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">steps</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Checkout code</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@v5</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Configure AWS credentials</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">aws-actions/configure-aws-credentials@v4.3.1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">aws-access-key-id</span>: <span style="color:#ae81ff">${{ secrets.ECR_USER_KEY }}</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">aws-secret-access-key</span>: <span style="color:#ae81ff">${{ secrets.ECR_USER_KEY_SECRET }}</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">aws-region</span>: <span style="color:#ae81ff">us-east-1</span> <span style="color:#75715e"># ECR Public can only be logged into from us-east-1</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># https://github.com/marketplace/actions/amazon-ecr-login-action-for-github-actions</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Get ECR Public registry URI</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">id</span>: <span style="color:#ae81ff">ecr-public-details</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Looks like to set a var you have to echo it into the github_output var</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          REGISTRY_URI=$(aws ecr-public describe-registries --region us-east-1 --query &#39;registries[0].registryUri&#39; --output text)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          echo &#34;uri=$REGISTRY_URI&#34; &gt;&gt; $GITHUB_OUTPUT
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          echo &#34;container_uri=$REGISTRY_URI/gereader/flaskjobtracker&#34; &gt;&gt; $GITHUB_OUTPUT</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Login to Amazon ECR</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">id</span>: <span style="color:#ae81ff">login-ecr-public</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">aws-actions/amazon-ecr-login@v2</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">registry-type</span>: <span style="color:#ae81ff">public</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Build and push Docker image to ECR</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">docker/build-push-action@v6</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">context</span>: <span style="color:#e6db74">&#34;{{defaultContext}}:app&#34;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">push</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># Grabbed the URI from the ecr-public-details step to simplify and version tags</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">tags</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ${{ steps.ecr-public-details.outputs.container_uri }}:latest
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ${{ steps.ecr-public-details.outputs.container_uri }}:${{ github.sha }}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Update task definition with account ID</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Don&#39;t want to hardcode my account ID so using a github secret to work around it</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          sed -i &#39;s/\${AWS_ACCOUNT_ID}/${{ secrets.AWS_ACCOUNT_ID }}/g&#39; .aws/task_definition_example.json</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Render Amazon ECS task definition</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">id</span>: <span style="color:#ae81ff">render-web-container</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">aws-actions/amazon-ecs-render-task-definition@v1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">task-definition</span>: <span style="color:#ae81ff">.aws/task_definition_example.json</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">container-name</span>: <span style="color:#ae81ff">flask-app</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">image</span>: <span style="color:#ae81ff">${{ steps.ecr-public-details.outputs.container_uri }}:${{ github.sha }}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Deploy to Amazon ECS service</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">aws-actions/amazon-ecs-deploy-task-definition@v2</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">env</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">AWS_REGION</span>: <span style="color:#ae81ff">us-west-2</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">task-definition</span>: <span style="color:#ae81ff">${{ steps.render-web-container.outputs.task-definition }}</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># Service and Cluster Name from AWS</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">service</span>: <span style="color:#ae81ff">flask-job-tracker-example-task-service-c16358g2</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">cluster</span>: <span style="color:#ae81ff">FlaskJobTracker-ExampleCluster</span>
+</span></span></code></pre></div><h2 id="running-the-workflow">Running the Workflow</h2>
+<p>With my workflow complete, I push the changes up to GitHub and I can see the workflow run and the container gets updated in the ECS Cluster.</p>
+<p><strong>NOTE</strong>: I ran into an issue where I misspelled my task definition in the <code>Update task definition with account ID</code> step. This caused me to troubleshoot multiple attempts until I stopped to focus on the crux of the issue and realized my mistake.</p>
+
+
+
+
+<figure>
+  <img src="SuccessWorkflow.webp" alt="Screenshot showing GitHub Actions with green check marks, the jobs completed successfully" loading="lazy" style="cursor: pointer;" onclick="openLightbox('SuccessWorkflow.webp', 'Screenshot showing GitHub Actions with green check marks, the jobs completed successfully')">
+  
+  <figcaption>I see that all of the jobs completed successfully</figcaption>
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden; touch-action: none;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+    touch-action: none;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+    touch-action: none;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  let isZooming = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2 && isZooming) {
+      
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging || isZooming) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+
+
+
+
+<figure>
+  <img src="ClusterUpdated.webp" alt="Screenshot showing AWS ECS Cluster with a task showing 3 minutes age, task definition revision 9" loading="lazy" style="cursor: pointer;" onclick="openLightbox('ClusterUpdated.webp', 'Screenshot showing AWS ECS Cluster with a task showing 3 minutes age, task definition revision 9')">
+  
+  <figcaption>I manually created revision 8, I see that revision 9 is now assigned to the task</figcaption>
+  
+</figure>
+
+<script>
+function openLightbox(src, alt) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; display: flex;
+    justify-content: center; align-items: center;
+    overflow: hidden; touch-action: none;
+  `;
+  
+  
+  const closeBtn = document.createElement('div');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute; top: 20px; right: 30px; color: white;
+    font-size: 40px; cursor: pointer; z-index: 1001;
+    user-select: none; font-weight: bold;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
+  `;
+  closeBtn.onclick = () => document.body.removeChild(overlay);
+  
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; overflow: hidden; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+    touch-action: none;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.style.cssText = `
+    max-width: 90%; max-height: 90%; object-fit: contain;
+    transition: transform 0.2s; cursor: grab;
+    touch-action: none;
+  `;
+  
+  let scale = 1;
+  let startX = 0, startY = 0;
+  let translateX = 0, translateY = 0;
+  let isDragging = false;
+  let isZooming = false;
+  
+  
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale *= delta;
+    scale = Math.max(0.5, Math.min(scale, 5));
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  });
+  
+  
+  let lastTouchDistance = 0;
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      isZooming = true;
+      isDragging = false;
+      lastTouchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2 && isZooming) {
+      
+      const touchDistance = Math.hypot(
+        e.touches[0].pageX - e.touches[1].pageX,
+        e.touches[0].pageY - e.touches[1].pageY
+      );
+      scale *= touchDistance / lastTouchDistance;
+      scale = Math.max(0.5, Math.min(scale, 5));
+      lastTouchDistance = touchDistance;
+      img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    } else if (e.touches.length === 1 && !isZooming) {
+      
+      drag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      isZooming = false;
+      stopDrag();
+    }
+  });
+  
+  
+  const startDrag = (clientX, clientY) => {
+    if (isZooming) return;
+    isDragging = true;
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    img.style.cursor = 'grabbing';
+  };
+  
+  const drag = (clientX, clientY) => {
+    if (!isDragging || isZooming) return;
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  };
+  
+  const stopDrag = () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  };
+  
+  
+  img.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  });
+  document.addEventListener('mousemove', (e) => drag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', stopDrag);
+  
+  container.appendChild(img);
+  overlay.appendChild(container);
+  overlay.appendChild(closeBtn);
+  
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  document.body.appendChild(overlay);
+}
+</script>
+<h2 id="common-issues-and-solutions">Common Issues and Solutions</h2>
+<p>Here are issues I encountered and their solutions:</p>
+<p><strong>Task failing to start with &ldquo;insufficient memory&rdquo; error</strong></p>
+<ul>
+<li>Solution: Reduce memory limits in task definition or upgrade to larger instance type</li>
+<li>Check: Ensure task memory limits don&rsquo;t exceed instance capacity</li>
+</ul>
+<p><strong>Can&rsquo;t access application from internet</strong></p>
+<ul>
+<li>Solution: Check security group inbound rules and auto-assign public IP setting</li>
+<li>Check: Ensure task is running on instance with public IP</li>
+</ul>
+<h2 id="cost-reality-and-optimization">Cost Reality and Optimization</h2>
+<p>Let me update you on the real costs after running 2 versions of this setup for about a week.</p>
+<h3 id="current-cost-breakdown">Current Cost Breakdown</h3>
+<p>After implementing the complete pipeline and running it for a week:</p>
+<ul>
+<li><strong>EC2</strong>: ~$0.54</li>
+<li><strong>VPC</strong>: ~$0.83</li>
+<li><strong>Elastic Cloud Compute</strong>: ~$0.68</li>
+<li><strong>Total</strong>: ~$2.04</li>
+</ul>
+<p>I can make assumptions that the cost will scale evenly, so I&rsquo;m looking at around $8-9/month if I left both of my clusters running.
+This is still quite affordable for a complete production CI/CD pipeline, but it&rsquo;s not technically &ldquo;free&rdquo; unless you are using free tier credits like me.</p>
+<p>I will shut down the clusters to save cost since I am not using the application that I deployed.</p>
+<p><strong>What&rsquo;s next?</strong>
+I intend to build this project out using Terraform, this way the build can be automated and easily destroyed when not in use.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>I now have a complete end-to-end CI/CD pipeline that tests, builds, and deploys my Flask application to AWS ECS. The entire pipeline gives me:</p>
+<p><strong>Automated testing</strong> on every commit with health check validation
+<strong>Dual registry publishing</strong> to both GHCR and ECR for flexibility<br>
+<strong>Minimal-downtime deployments</strong> with rolling updates, this could be zero if running multiple instances or using dynamic ports
+<strong>Cost optimization</strong> within AWS free tier limits</p>
+<p>The fail-fast approach catches issues early in the pipeline, preventing bad deployments from reaching production. The ECS setup provides a production-ready environment without the complexity the need for additional complexity managing Kubernetes clusters.</p>
+<p>This pipeline demonstrates DevOps best practices while remaining accessible and cost-effective for individual developers. The combination of GitHub Actions for CI/CD and AWS ECS for container orchestration creates a robust foundation that can scale up as needed to expand access to the application.</p>
+<h2 id="resources-and-references">Resources and References</h2>
+<ul>
+<li><a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/">AWS ECS Developer Guide</a></li>
+<li><a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html">ECS Task Definition Parameters</a></li>
+<li><a href="https://github.com/marketplace/actions/amazon-ecs-deploy-task-definition">GitHub Actions AWS ECS Deploy</a></li>
+<li><a href="https://aws.amazon.com/free/">AWS Free Tier Documentation</a></li>
+<li><a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-auto-scaling.html">ECS Service Auto Scaling</a></li>
+</ul>
+
+            </div>
+        </article><hr style="margin-top: 40px; margin-bottom: 40px;" />
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "blog-gereader-xyz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <div class="footer_social-icons">
+<a href="https://github.com/gereader" target="_blank" rel="noopener noreferrer me"
+    title="Github">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+    stroke-linecap="round" stroke-linejoin="round">
+    <path
+        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+    </path>
+</svg>
+</a>
+<a href="https://linkedin.com/in/ereader" target="_blank" rel="noopener noreferrer me"
+    title="Linkedin">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+    stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+    <rect x="2" y="9" width="4" height="12"></rect>
+    <circle cx="4" cy="4" r="2"></circle>
+</svg>
+</a>
+</div>
+    <small class="footer_copyright">
+        © 2025 Gene Reader.
+        
+    </small>
+</footer><a href="#" title="" id="totop">
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" stroke="currentColor" viewBox="0 96 960 960">
+    <path d="M283 704.739 234.261 656 480 410.261 725.739 656 677 704.739l-197-197-197 197Z"/>
+</svg>
+
+</a>
+
+
+    
+
+
+
+
+
+
+    
+    <script async src="http://localhost:1313/js/main.js" ></script>
+
+    
+
+</body>
+</html>

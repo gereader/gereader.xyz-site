@@ -6,7 +6,19 @@
     <description>Recent content in Posts on Gene&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 18 Aug 2025 15:10:23 -0700</lastBuildDate><atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 22 Aug 2025 15:10:14 -0700</lastBuildDate><atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Part 2 - Deploying to AWS ECS: From Container Registry to Production</title>
+      <link>http://localhost:1313/posts/part-2-cicd-deploy-aws-ecs/</link>
+      <pubDate>Fri, 22 Aug 2025 15:10:14 -0700</pubDate>
+      
+      <guid>http://localhost:1313/posts/part-2-cicd-deploy-aws-ecs/</guid>
+      
+      <description>&lt;h1 id=&#34;deploying-to-aws-ecs-from-container-registry-to-production&#34;&gt;Deploying to AWS ECS: From Container Registry to Production&lt;/h1&gt;
+&lt;p&gt;In &lt;a href=&#34;http://localhost:1313/posts/part-1-cicd-container-registry/&#34;&gt;Part 1&lt;/a&gt;, I built a pipeline that automatically tests my Flask app and pushes containers to both GHCR and ECR. I&amp;rsquo;m going to deploy those containers somewhere that people can use them. I&amp;rsquo;m going to use AWS ECS to make my app publicly accessible. (This won&amp;rsquo;t be accessible to the public, I&amp;rsquo;ll be spinning this down after the demo to avoid burning through my AWS credits and racking up costs.)&lt;/p&gt;</description>
+      
+    </item>
+    
     <item>
       <title>Part 1 - Building a CI/CD Pipeline with GitHub Actions and Container Registries</title>
       <link>http://localhost:1313/posts/part-1-cicd-container-registry/</link>
