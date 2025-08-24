@@ -435,7 +435,7 @@ This confirms I'm well within my budget before setting up any new services, and 
 
 ### ECR Repository Creation
 
-<small>**Note** I am going to be duplicating my initial deployment of this so that I can take current screenshots. </small>
+**Note** I am going to be duplicating my initial deployment of this so that I can take current screenshots.
 
 Here is where I hit my first gotcha, right out the gate. When trying to create a public ECR repository, the default action of clicking "create"  on the root Amazon Elastic Container Registry page was creating a private repository. 
 
