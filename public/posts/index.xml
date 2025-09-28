@@ -6,7 +6,22 @@
     <description>Recent content in Posts on Gene&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 22 Aug 2025 15:10:14 -0700</lastBuildDate><atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 28 Sep 2025 14:00:00 -0700</lastBuildDate><atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Building a Network Automation Lab: Containerlab &#43; NetBox on macOS</title>
+      <link>http://localhost:1313/posts/intro-to-clab/</link>
+      <pubDate>Sun, 28 Sep 2025 14:00:00 -0700</pubDate>
+      
+      <guid>http://localhost:1313/posts/intro-to-clab/</guid>
+      
+      <description>&lt;h1 id=&#34;building-a-network-automation-lab-containerlab--netbox-on-macos&#34;&gt;Building a Network Automation Lab: Containerlab + NetBox on macOS&lt;/h1&gt;
+&lt;p&gt;&lt;em&gt;Building a foundation for network automation testing and development on a Mac from 2018&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;the-challenge&#34;&gt;The Challenge&lt;/h2&gt;
+&lt;p&gt;I need a reliable local lab environment for testing network automation scripts and prototyping configurations. My 2018 MacBook Pro with 16GB RAM isn&amp;rsquo;t exactly cutting-edge anymore, so I need to be smart about how I use my resources.&lt;/p&gt;
+&lt;p&gt;The goal is to build something that can handle real routing protocols and integrates with modern automation tools, but doesn&amp;rsquo;t require enterprise hardware or cloud resources.&lt;/p&gt;</description>
+      
+    </item>
+    
     <item>
       <title>Part 2 - Deploying to AWS ECS: From Container Registry to Production</title>
       <link>http://localhost:1313/posts/part-2-cicd-deploy-aws-ecs/</link>

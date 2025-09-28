@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en-us"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">Building a Network Automation Lab: Containerlab &#43; NetBox on macOS | Gene&#39;s Blog</title>
+<meta property="og:title" content="Building a Network Automation Lab: Containerlab &#43; NetBox on macOS | Gene&#39;s Blog" />
+<meta name="twitter:title" content="Building a Network Automation Lab: Containerlab &#43; NetBox on macOS | Gene&#39;s Blog" />
+<meta itemprop="name" content="Building a Network Automation Lab: Containerlab &#43; NetBox on macOS | Gene&#39;s Blog" />
+<meta name="application-name" content="Building a Network Automation Lab: Containerlab &#43; NetBox on macOS | Gene&#39;s Blog" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="Setting up a foundation for network automation testing with containerized network devices on macOS">
+<meta itemprop="description" content="Setting up a foundation for network automation testing with containerized network devices on macOS" />
+<meta property="og:description" content="Setting up a foundation for network automation testing with containerized network devices on macOS" />
+<meta name="twitter:description" content="Setting up a foundation for network automation testing with containerized network devices on macOS" />
+
+<meta property="og:locale" content="en-us" />
+<meta name="language" content="en-us" />
+
+  <link rel="alternate" hreflang="en" href="http://localhost:1313/posts/intro-to-clab/" title="" />
+
+
+
+
+
+    
+    
+    
+
+    <meta property="og:type" content="article" />
+    <meta property="og:article:published_time" content=2025-09-28T14:00:00-0700 />
+    <meta property="article:published_time" content=2025-09-28T14:00:00-0700 />
+    <meta property="og:url" content="http://localhost:1313/posts/intro-to-clab/" />
+
+    
+    <meta property="og:article:author" content="Gene Reader" />
+    <meta property="article:author" content="Gene Reader" />
+    <meta name="author" content="Gene Reader" />
+    
+    
+
+    
+
+    <script defer type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "Article",
+        "headline": "Building a Network Automation Lab: Containerlab + NetBox on macOS",
+        "author": {
+        "@type": "Person",
+        "name": ""
+        },
+        "datePublished": "2025-09-28",
+        "description": "Setting up a foundation for network automation testing with containerized network devices on macOS",
+        "wordCount":  2038 ,
+        "mainEntityOfPage": "True",
+        "dateModified": "2025-09-28",
+        "image": {
+        "@type": "imageObject",
+        "url": ""
+        },
+        "publisher": {
+        "@type": "Organization",
+        "name": "Gene\u0027s Blog"
+        }
+    }
+    </script>
+
+
+<meta name="generator" content="Hugo 0.148.2">
+
+    
+    <meta property="og:url" content="http://localhost:1313/posts/intro-to-clab/">
+  <meta property="og:site_name" content="Gene&#39;s Blog">
+  <meta property="og:title" content="Building a Network Automation Lab: Containerlab &#43; NetBox on macOS">
+  <meta property="og:description" content="Setting up a foundation for network automation testing with containerized network devices on macOS">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-09-28T14:00:00-07:00">
+    <meta property="article:modified_time" content="2025-09-28T14:00:00-07:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Building a Network Automation Lab: Containerlab &#43; NetBox on macOS">
+  <meta name="twitter:description" content="Setting up a foundation for network automation testing with containerized network devices on macOS">
+
+
+    
+
+    <link rel="canonical" href="http://localhost:1313/posts/intro-to-clab/">
+    <link href="/style.min.2d921c18cf1ec555ffc03d59a8adc211c402c68c930c27d6a0c306ab175a8d09.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="http://localhost:1313/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+    
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+
+    
+    
+      <link rel="stylesheet" href="/css/custom.css">
+
+
+  <style>
+     
+    .mermaid {
+      text-align: center;
+      margin: 1em 0;
+    }
+  </style>
+
+    <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+
+    
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'default',  
+    });
+
+    
+    const observer = new MutationObserver(() => {});
+
+    observer.observe(document.documentElement, { attributes: true });
+
+    </script>
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      var anchors = new AnchorJS();  
+      anchors.options = {
+        icon: '#'
+      };
+      anchors.add('h2, h3');
+    });
+  </script>
+
+    
+</head>
+<body data-theme = "auto" class="notransition">
+
+<script src="/js/theme.js"></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="http://localhost:1313/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title></title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">Building a Network Automation Lab: Containerlab &#43; NetBox on macOS</h1>
+                
+                
+                
+                <div class="post-meta">
+                    <time datetime="2025-09-28T14:00:00-07:00" itemprop="datePublished"> Sep 28, 2025 </time>
+                </div>
+                
+            </header>
+            
+    
+        
+            
+        
+    
+    <details class="toc" open>
+        <summary><b></b></summary>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#the-challenge">The Challenge</a></li>
+    <li><a href="#why-containerlab-and-netbox">Why Containerlab and NetBox?</a></li>
+    <li><a href="#what-i-built">What I Built</a></li>
+    <li><a href="#step-1-install-orbstack">Step 1: Install OrbStack</a></li>
+    <li><a href="#step-2-install-containerlab">Step 2: Install Containerlab</a></li>
+    <li><a href="#step-3-create-lab-directory-structure">Step 3: Create Lab Directory Structure</a></li>
+    <li><a href="#step-4-define-the-network-topology">Step 4: Define the Network Topology</a></li>
+    <li><a href="#step-5-create-router-configurations">Step 5: Create Router Configurations</a>
+      <ul>
+        <li><a href="#rt1-configuration-topologyrt1cfg">RT1 Configuration (<code>topology/rt1.cfg</code>)</a></li>
+        <li><a href="#rt2-configuration-topologyrt2cfg">RT2 Configuration (<code>topology/rt2.cfg</code>)</a></li>
+      </ul>
+    </li>
+    <li><a href="#step-6-set-up-netbox">Step 6: Set Up NetBox</a></li>
+    <li><a href="#step-7-deploy-everything">Step 7: Deploy Everything</a>
+      <ul>
+        <li><a href="#start-netbox-first">Start NetBox First</a></li>
+        <li><a href="#login-to-netbox">Login to NetBox</a></li>
+        <li><a href="#netbox-data-persistence">NetBox Data Persistence</a></li>
+        <li><a href="#deploy-the-network-lab">Deploy the Network Lab</a></li>
+      </ul>
+    </li>
+    <li><a href="#step-8-verify-everything-works">Step 8: Verify Everything Works</a>
+      <ul>
+        <li><a href="#test-the-network">Test the Network</a></li>
+        <li><a href="#troubleshooting">Troubleshooting</a></li>
+      </ul>
+    </li>
+    <li><a href="#what-actually-happened">What Actually Happened</a></li>
+    <li><a href="#things-that-worked-well">Things That Worked Well</a></li>
+    <li><a href="#next-steps">Next Steps</a></li>
+    <li><a href="#clean-up">Clean Up</a></li>
+  </ul>
+</nav>
+    </details>
+            <div class="page-content">
+                <h1 id="building-a-network-automation-lab-containerlab--netbox-on-macos">Building a Network Automation Lab: Containerlab + NetBox on macOS</h1>
+<p><em>Building a foundation for network automation testing and development on a Mac from 2018</em></p>
+<h2 id="the-challenge">The Challenge</h2>
+<p>I needed a reliable local lab environment for testing network automation scripts and prototyping configurations. My 2018 MacBook Pro with 16GB RAM isn&rsquo;t exactly cutting-edge anymore, so I had to be smart about how I used my resources.</p>
+<p>My goal was to build something that could handle real routing protocols and integrate with modern automation tools, but wouldn&rsquo;t require enterprise hardware or cloud resources.</p>
+<h2 id="why-containerlab-and-netbox">Why Containerlab and NetBox?</h2>
+<p>After looking at options, I settled on Containerlab for the network simulation and NetBox as my source of truth.</p>
+<p><strong>Containerlab</strong> gives me actual Nokia SR Linux containers instead of simulated devices. The containers use way less memory than VMs but still run real network operating systems. Plus the topology files are just YAML, so I can version control the entire lab setup.</p>
+<p><strong>NetBox</strong> has become one of the standard applications for network source of truth. It has a solid REST API for automation integration and understands how network devices connect to each other. Since I eventually want to build automation that pulls device info from NetBox and pushes configs, having it in my lab was essential.</p>
+<h2 id="what-i-built">What I Built</h2>
+<p>I decided on a simple two router topology using Nokia SR Linux routers:</p>
+<div class="mermaid">
+graph TB
+    subgraph Outer["Two Router Lab"]
+        RT1[RT1<br/>10.0.0.0/31<br/>IPv6: fd00:0:0:1::0/127]
+        RT2[RT2<br/>10.0.0.1/31<br/>IPv6: fd00:0:0:1::1/127]
+        
+        RT1 ---|e1-1 to e1-1| RT2
+    end
+    
+    style RT1 fill:DarkSeaGreen
+    style RT2 fill:LightBlue  
+    style Outer fill:white,stroke:steelblue,stroke-width:2px
+</div>
+
+<p>This setup gives me:</p>
+<ul>
+<li>Two Nokia SR Linux routers with direct connectivity</li>
+<li>IPv4 using 10.0.0.0/31</li>
+<li>IPv6 using fd00:: unique local addresses</li>
+<li>A simple but realistic foundation for automation testing</li>
+<li>Easy connectivity verification with ping tests</li>
+</ul>
+<p>The setup includes NetBox running alongside the containerlab network, all managed through OrbStack. I&rsquo;ll use NetBox more in later posts.</p>
+<h2 id="step-1-install-orbstack">Step 1: Install OrbStack</h2>
+<p>Containerlab docs suggest running on Linux in Mac, and even suggest OrbStack to accomplish it. Install OrbStack which provides both a Linux environment and Docker engine in one lightweight package. This replaces the need for Docker Desktop entirely.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Install OrbStack via Homebrew</span>
+</span></span><span style="display:flex;"><span>brew install orbstack
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Start OrbStack</span>
+</span></span><span style="display:flex;"><span>open -a OrbStack
+</span></span></code></pre></div><p>Set your OrbStack to allow it to use 10GB of memory as max to ensure you have enough space for the lab.</p>
+<p>Create an Ubuntu environment for the lab:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Create and start an Ubuntu machine</span>
+</span></span><span style="display:flex;"><span>orb create ubuntu clab
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Connect to the machine</span>
+</span></span><span style="display:flex;"><span>orb shell
+</span></span></code></pre></div><p>Install docker into the Orb Shell:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Install Docker</span>
+</span></span><span style="display:flex;"><span>curl -fsSL https://get.docker.com -o get-docker.sh
+</span></span><span style="display:flex;"><span>sudo sh get-docker.sh
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Add user to docker group to avoid needing sudo</span>
+</span></span><span style="display:flex;"><span>sudo usermod -aG docker $USER
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># May need to exit and re-enter the shell for group changes to take effect</span>
+</span></span><span style="display:flex;"><span>exit
+</span></span><span style="display:flex;"><span>orb shell
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Verify docker works</span>
+</span></span><span style="display:flex;"><span>docker --version
+</span></span></code></pre></div><h2 id="step-2-install-containerlab">Step 2: Install Containerlab</h2>
+<p>Inside the Ubuntu environment, install containerlab:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Install containerlab and dependencies</span>
+</span></span><span style="display:flex;"><span>curl -sL https://containerlab.dev/setup | sudo -E bash -s <span style="color:#e6db74">&#34;all&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Verify it worked</span>
+</span></span><span style="display:flex;"><span>containerlab version
+</span></span></code></pre></div><p>You&rsquo;ll know you have installed it correctly when Containerlab responds with a version:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ containerlab version
+</span></span><span style="display:flex;"><span>  ____ ___  _   _ _____  _    ___ _   _ _____ ____  _       _
+</span></span><span style="display:flex;"><span> / ___/ _ <span style="color:#ae81ff">\|</span> <span style="color:#ae81ff">\ </span>| |_   _|/ <span style="color:#ae81ff">\ </span> |_ _| <span style="color:#ae81ff">\ </span>| | ____|  _ <span style="color:#ae81ff">\|</span> | __ _| |__
+</span></span><span style="display:flex;"><span>| |  | | | |  <span style="color:#ae81ff">\|</span> | | | / _ <span style="color:#ae81ff">\ </span> | <span style="color:#f92672">||</span>  <span style="color:#ae81ff">\|</span> |  _| | |_<span style="color:#f92672">)</span> | |/ _<span style="color:#e6db74">`</span> | <span style="color:#960050;background-color:#1e0010">&#39;</span>_ <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>| |__| |_| | |<span style="color:#ae81ff">\ </span> | | |/ ___ <span style="color:#ae81ff">\ </span>| <span style="color:#f92672">||</span> |<span style="color:#ae81ff">\ </span> | |___|  _ &lt;| | <span style="color:#f92672">(</span>_| | |_<span style="color:#f92672">)</span> |
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">\_</span>___<span style="color:#ae81ff">\_</span>__/|_| <span style="color:#ae81ff">\_</span>| |_/_/   <span style="color:#ae81ff">\_\_</span>__|_| <span style="color:#ae81ff">\_</span>|_____|_| <span style="color:#ae81ff">\_\_</span>|<span style="color:#ae81ff">\_</span>_,_|_.__/
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    version: 0.69.3
+</span></span><span style="display:flex;"><span>     commit: 49ee599b
+</span></span><span style="display:flex;"><span>       date: 2025-08-06T21:02:24Z
+</span></span><span style="display:flex;"><span>     source: https://github.com/srl-labs/containerlab
+</span></span><span style="display:flex;"><span> rel. notes: https://containerlab.dev/rn/0.69/#0693
+</span></span></code></pre></div><h2 id="step-3-create-lab-directory-structure">Step 3: Create Lab Directory Structure</h2>
+<p>Create the lab directory structure. OrbStack makes files easily accessible from both environments. Since you&rsquo;ll be within the directory where you want your lab to exist on your Mac, Orb works similar to a virtual python environment where you&rsquo;re still in that same directory but have access to the linux environment too.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkdir network-lab
+</span></span><span style="display:flex;"><span>cd network-lab
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Create subdirectories for organization</span>
+</span></span><span style="display:flex;"><span>mkdir -p topology
+</span></span></code></pre></div><h2 id="step-4-define-the-network-topology">Step 4: Define the Network Topology</h2>
+<p>Create the containerlab topology file that defines the two-router setup. This is based on the proven example from the official containerlab examples.
+<a href="https://github.com/srl-labs/containerlab/blob/main/lab-examples/srl02">See containerlab example here</a></p>
+<p>Create <code>topology/lab01.yml</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#f92672">name</span>: <span style="color:#ae81ff">lab01</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">topology</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">nodes</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">rt1</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">kind</span>: <span style="color:#ae81ff">nokia_srlinux</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">image</span>: <span style="color:#ae81ff">ghcr.io/nokia/srlinux</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">startup-config</span>: <span style="color:#ae81ff">rt1.cfg</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">rt2</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">kind</span>: <span style="color:#ae81ff">nokia_srlinux</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">image</span>: <span style="color:#ae81ff">ghcr.io/nokia/srlinux</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">startup-config</span>: <span style="color:#ae81ff">rt2.cfg</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">links</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">endpoints</span>: [<span style="color:#e6db74">&#34;rt1:e1-1&#34;</span>, <span style="color:#e6db74">&#34;rt2:e1-1&#34;</span>]
+</span></span></code></pre></div><p>This topology creates two Nokia SR Linux containers connected via their e1-1 interfaces.</p>
+<h2 id="step-5-create-router-configurations">Step 5: Create Router Configurations</h2>
+<p>Create the actual device configs. Base these configurations on the proven configurations from the containerlab examples that work reliably.
+<a href="https://github.com/srl-labs/containerlab/blob/main/lab-examples/srl02">See containerlab example here</a></p>
+<p><a href="https://github.com/gereader/containerlab-lab/tree/main/network-lab01">You can find my copies of these config files here on my GitHub.</a></p>
+<h3 id="rt1-configuration-topologyrt1cfg">RT1 Configuration (<code>topology/rt1.cfg</code>)</h3>
+<pre tabindex="0"><code>set / interface ethernet-1/1 admin-state enable
+set / interface ethernet-1/1 subinterface 0
+set / interface ethernet-1/1 subinterface 0 ipv4
+set / interface ethernet-1/1 subinterface 0 ipv4 admin-state enable
+set / interface ethernet-1/1 subinterface 0 ipv4 address 10.0.0.0/31
+set / interface ethernet-1/1 subinterface 0 ipv6
+set / interface ethernet-1/1 subinterface 0 ipv6 admin-state enable
+set / interface ethernet-1/1 subinterface 0 ipv6 address fd00:0:0:1::0/127
+
+set / network-instance default
+set / network-instance default interface ethernet-1/1.0
+</code></pre><h3 id="rt2-configuration-topologyrt2cfg">RT2 Configuration (<code>topology/rt2.cfg</code>)</h3>
+<pre tabindex="0"><code>set / interface ethernet-1/1 admin-state enable
+set / interface ethernet-1/1 subinterface 0
+set / interface ethernet-1/1 subinterface 0 ipv4
+set / interface ethernet-1/1 subinterface 0 ipv4 admin-state enable
+set / interface ethernet-1/1 subinterface 0 ipv4 address 10.0.0.1/31
+set / interface ethernet-1/1 subinterface 0 ipv6
+set / interface ethernet-1/1 subinterface 0 ipv6 admin-state enable
+set / interface ethernet-1/1 subinterface 0 ipv6 address fd00:0:0:1::1/127
+
+set / network-instance default
+set / network-instance default interface ethernet-1/1.0
+</code></pre><h2 id="step-6-set-up-netbox">Step 6: Set Up NetBox</h2>
+<p>NetBox will run in Docker Compose using OrbStack&rsquo;s Docker engine. I am going to use the pre-built version provided by NetBox to make things as simple as possible:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Clone the netbox docker repository</span>
+</span></span><span style="display:flex;"><span>git clone -b release https://github.com/netbox-community/netbox-docker.git
+</span></span><span style="display:flex;"><span>cd netbox-docker
+</span></span></code></pre></div><h2 id="step-7-deploy-everything">Step 7: Deploy Everything</h2>
+<p>Bring everything up. Everything runs within the OrbStack Ubuntu environment.</p>
+<h3 id="start-netbox-first">Start NetBox First</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Make sure you&#39;re in the Ubuntu environment</span>
+</span></span><span style="display:flex;"><span>orb shell
+</span></span><span style="display:flex;"><span>cd network-lab/netbox-docker
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Pull and start using netbox&#39;s method</span>
+</span></span><span style="display:flex;"><span>docker compose pull
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Setup overrides for our use, this establishes the ports for the website</span>
+</span></span><span style="display:flex;"><span>cat &gt; docker-compose.override.yml <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">services:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  netbox:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    ports:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - &#34;8000:8080&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Start the netbox containers</span>
+</span></span><span style="display:flex;"><span>docker compose up -d
+</span></span></code></pre></div><p>Check that containers are running with <code>docker ps</code>. You can look at their logs through <code>docker logs &lt;container name&gt;</code>.</p>
+<p>Once the containers are running, set up a superuser for the installation:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker compose exec netbox /opt/netbox/netbox/manage.py createsuperuser
+</span></span></code></pre></div><p>If you&rsquo;re alerted to migrations being required, run them like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker compose exec netbox /opt/netbox/netbox/manage.py migrate
+</span></span></code></pre></div><h3 id="login-to-netbox">Login to NetBox</h3>
+<p>Verify NetBox is running by logging in via your web browser. Navigate to <code>127.0.0.1:8000</code> and you should be prompted to login to NetBox. Use the superuser account created in the previous step.</p>
+<h3 id="netbox-data-persistence">NetBox Data Persistence</h3>
+<p>NetBox stores data in Docker volumes, so your database, users, and configuration persist between container restarts. If you need to start completely fresh:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Stop containers and remove all data (including volumes) use -v</span>
+</span></span><span style="display:flex;"><span>docker compose down -v
+</span></span></code></pre></div><p>Then restart with <code>docker compose up -d</code> for a clean installation.</p>
+<h3 id="deploy-the-network-lab">Deploy the Network Lab</h3>
+<p>Navigate back to the network-lab directory and bring everything online:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Deploy the lab topology</span>
+</span></span><span style="display:flex;"><span>sudo containerlab deploy -t topology/lab01.yml
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check the status</span>
+</span></span><span style="display:flex;"><span>containerlab inspect -t topology/lab01.yml
+</span></span></code></pre></div><p>This will pull the Nokia SR Linux images (might take a few minutes the first time) and start the containers.</p>
+<p>Expected output:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ sudo containerlab deploy -t topology/lab01.yml
+</span></span><span style="display:flex;"><span>15:14:25 INFO Containerlab started version<span style="color:#f92672">=</span>0.69.3
+</span></span><span style="display:flex;"><span>15:14:25 INFO Parsing &amp; checking topology file<span style="color:#f92672">=</span>lab01.yml
+</span></span><span style="display:flex;"><span>15:14:25 INFO Creating docker network name<span style="color:#f92672">=</span>clab IPv4 subnet<span style="color:#f92672">=</span>172.20.20.0/24 IPv6 subnet<span style="color:#f92672">=</span>3fff:172:20:20::/64 MTU<span style="color:#f92672">=</span><span style="color:#ae81ff">1500</span>
+</span></span><span style="display:flex;"><span>15:14:26 INFO Creating lab directory path<span style="color:#f92672">=</span>/Users/genereader/Code_Projects/clab-intro/network-lab/topology/clab-lab01
+</span></span><span style="display:flex;"><span>15:14:26 INFO unable to adjust Labdir file ACLs: operation not supported
+</span></span><span style="display:flex;"><span>15:14:26 INFO Creating container name<span style="color:#f92672">=</span>rt2
+</span></span><span style="display:flex;"><span>15:14:26 INFO Creating container name<span style="color:#f92672">=</span>rt1
+</span></span><span style="display:flex;"><span>15:14:26 INFO Running postdeploy actions kind<span style="color:#f92672">=</span>nokia_srlinux node<span style="color:#f92672">=</span>rt2
+</span></span><span style="display:flex;"><span>15:14:26 INFO Created link: rt1:e1-1 ▪┄┄▪ rt2:e1-1
+</span></span><span style="display:flex;"><span>15:14:26 INFO Running postdeploy actions kind<span style="color:#f92672">=</span>nokia_srlinux node<span style="color:#f92672">=</span>rt1
+</span></span><span style="display:flex;"><span>15:14:56 INFO Adding host entries path<span style="color:#f92672">=</span>/etc/hosts
+</span></span><span style="display:flex;"><span>15:14:56 INFO Adding SSH config <span style="color:#66d9ef">for</span> nodes path<span style="color:#f92672">=</span>/etc/ssh/ssh_config.d/clab-lab01.conf
+</span></span><span style="display:flex;"><span>🎉 A newer containerlab version <span style="color:#f92672">(</span>0.70.2<span style="color:#f92672">)</span> is available!
+</span></span><span style="display:flex;"><span>Release notes: https://containerlab.dev/rn/0.70/#0702
+</span></span><span style="display:flex;"><span>Run <span style="color:#e6db74">&#39;sudo clab version upgrade&#39;</span> or see https://containerlab.dev/install/ <span style="color:#66d9ef">for</span> installation options.
+</span></span><span style="display:flex;"><span>╭────────────────┬───────────────────────┬─────────┬───────────────────╮
+</span></span><span style="display:flex;"><span>│      Name      │       Kind/Image      │  State  │   IPv4/6 Address  │
+</span></span><span style="display:flex;"><span>├────────────────┼───────────────────────┼─────────┼───────────────────┤
+</span></span><span style="display:flex;"><span>│ clab-lab01-rt1 │ nokia_srlinux         │ running │ 172.20.20.3       │
+</span></span><span style="display:flex;"><span>│                │ ghcr.io/nokia/srlinux │         │ 3fff:172:20:20::3 │
+</span></span><span style="display:flex;"><span>├────────────────┼───────────────────────┼─────────┼───────────────────┤
+</span></span><span style="display:flex;"><span>│ clab-lab01-rt2 │ nokia_srlinux         │ running │ 172.20.20.2       │
+</span></span><span style="display:flex;"><span>│                │ ghcr.io/nokia/srlinux │         │ 3fff:172:20:20::2 │
+</span></span><span style="display:flex;"><span>╰────────────────┴───────────────────────┴─────────┴───────────────────╯
+</span></span></code></pre></div><h2 id="step-8-verify-everything-works">Step 8: Verify Everything Works</h2>
+<h3 id="test-the-network">Test the Network</h3>
+<p>SSH into the routers and verify connectivity using ping:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Connect to RT1</span>
+</span></span><span style="display:flex;"><span>ssh admin@clab-lab01-rt1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check interface status</span>
+</span></span><span style="display:flex;"><span>show interface ethernet-1/1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Test IPv4 connectivity to RT2</span>
+</span></span><span style="display:flex;"><span>ping 10.0.0.1 network-instance default
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Test IPv6 connectivity to RT2  </span>
+</span></span><span style="display:flex;"><span>ping fd00:0:0:1::1 network-instance default
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Example output</span>
+</span></span><span style="display:flex;"><span>A:admin@rt1# ping 10.0.0.1 network-instance default
+</span></span><span style="display:flex;"><span>Using network instance default
+</span></span><span style="display:flex;"><span>PING 10.0.0.1 <span style="color:#f92672">(</span>10.0.0.1<span style="color:#f92672">)</span> 56<span style="color:#f92672">(</span>84<span style="color:#f92672">)</span> bytes of data.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">64</span> bytes from 10.0.0.1: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span> time<span style="color:#f92672">=</span>54.1 ms
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">64</span> bytes from 10.0.0.1: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span> time<span style="color:#f92672">=</span>1.91 ms
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">64</span> bytes from 10.0.0.1: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span> time<span style="color:#f92672">=</span>1.78 ms
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>A:admin@rt1# ping fd00:0:0:1::1 network-instance default
+</span></span><span style="display:flex;"><span>Using network instance default
+</span></span><span style="display:flex;"><span>PING fd00:0:0:1::1<span style="color:#f92672">(</span>fd00:0:0:1::1<span style="color:#f92672">)</span> <span style="color:#ae81ff">56</span> data bytes
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">64</span> bytes from fd00:0:0:1::1: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span> time<span style="color:#f92672">=</span>14.2 ms
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">64</span> bytes from fd00:0:0:1::1: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span> time<span style="color:#f92672">=</span>3.01 ms
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">64</span> bytes from fd00:0:0:1::1: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span> time<span style="color:#f92672">=</span>2.89 ms
+</span></span></code></pre></div><p>Repeat the same test from RT2:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Connect to RT2</span>
+</span></span><span style="display:flex;"><span>ssh admin@clab-lab01-rt2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check interface status</span>
+</span></span><span style="display:flex;"><span>show interface ethernet-1/1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Test IPv4 connectivity to RT1</span>
+</span></span><span style="display:flex;"><span>ping 10.0.0.0 network-instance default
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Test IPv6 connectivity to RT1  </span>
+</span></span><span style="display:flex;"><span>ping fd00:0:0:1:: network-instance default
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Example output</span>
+</span></span><span style="display:flex;"><span>A:admin@rt2# ping 10.0.0.0 network-instance default
+</span></span><span style="display:flex;"><span>Using network instance default
+</span></span><span style="display:flex;"><span>PING 10.0.0.0 <span style="color:#f92672">(</span>10.0.0.0<span style="color:#f92672">)</span> 56<span style="color:#f92672">(</span>84<span style="color:#f92672">)</span> bytes of data.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">64</span> bytes from 10.0.0.0: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span> time<span style="color:#f92672">=</span>4.57 ms
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">64</span> bytes from 10.0.0.0: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span> time<span style="color:#f92672">=</span>3.46 ms
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">64</span> bytes from 10.0.0.0: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span> time<span style="color:#f92672">=</span>2.39 ms
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">64</span> bytes from 10.0.0.0: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span> time<span style="color:#f92672">=</span>2.95 ms
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">64</span> bytes from 10.0.0.0: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span> time<span style="color:#f92672">=</span>2.77 ms
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>A:admin@rt2# ping fd00:0:0:1:: network-instance default
+</span></span><span style="display:flex;"><span>Using network instance default
+</span></span><span style="display:flex;"><span>PING fd00:0:0:1::<span style="color:#f92672">(</span>fd00:0:0:1::<span style="color:#f92672">)</span> <span style="color:#ae81ff">56</span> data bytes
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">64</span> bytes from fd00:0:0:1::: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span> time<span style="color:#f92672">=</span>2.90 ms
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">64</span> bytes from fd00:0:0:1::: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span> time<span style="color:#f92672">=</span>2.40 ms
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">64</span> bytes from fd00:0:0:1::: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span> time<span style="color:#f92672">=</span>1.92 ms
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">64</span> bytes from fd00:0:0:1::: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span> time<span style="color:#f92672">=</span>2.19 ms
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">64</span> bytes from fd00:0:0:1::: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span> time<span style="color:#f92672">=</span>3.06 ms
+</span></span></code></pre></div><p>If everything is working correctly, you should see:</p>
+<ul>
+<li>Interface ethernet-1/1 shows as &ldquo;up&rdquo; on both devices</li>
+<li>IPv4 pings between 10.0.0.0 and 10.0.0.1 succeed</li>
+<li>IPv6 pings between fd00:0:0:1:: and fd00:0:0:1::1 succeed</li>
+</ul>
+<h3 id="troubleshooting">Troubleshooting</h3>
+<p>I did find that I had to specify the network-instance for the Nokia OS to know how to ping the connected device. By default ping was using the management network-instance.</p>
+<h2 id="what-actually-happened">What Actually Happened</h2>
+<p>After about 1 hour total, I had:</p>
+<ul>
+<li>NetBox running and accessible via OrbStack</li>
+<li>Two Nokia SR Linux routers with working IPv4 and IPv6 connectivity</li>
+<li>A quickly deployable lab environment</li>
+<li>The foundation for building more complex automation scenarios</li>
+</ul>
+<p>Using OrbStack kept everything contained in one lightweight environment while providing both Docker and Linux capabilities.</p>
+<h2 id="things-that-worked-well">Things That Worked Well</h2>
+<ul>
+<li>Using OrbStack for everything eliminated the complexity of managing Docker Desktop separately. The resource usage was reasonable, and having everything in one environment made troubleshooting much easier. My computer fans were audible but that&rsquo;s not uncommon when using resources.</li>
+<li>Starting with the proven two-router example from containerlab documentation ensured I had a working baseline before adding complexity.</li>
+<li>Having NetBox running locally means I can develop automation scripts without needing internet access or worrying about API rate limits.</li>
+<li>The dual-stack IPv4/IPv6 setup provides a realistic modern network environment for testing.</li>
+</ul>
+<h2 id="next-steps">Next Steps</h2>
+<p>This foundation enables several automation workflows:</p>
+<ul>
+<li>Populate NetBox with device inventory via API</li>
+<li>Generate configurations from NetBox data using templates</li>
+<li>Deploy configs to devices using Ansible or Python scripts</li>
+<li>Add routing protocols like BGP or OSPF to test convergence scenarios</li>
+<li>Expand to more complex topologies once the automation pipeline is solid</li>
+</ul>
+<p>The next post will focus on automating the population of NetBox with device data and using that information to generate and deploy configurations.</p>
+<h2 id="clean-up">Clean Up</h2>
+<p>When you&rsquo;re done testing:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Stop the network lab</span>
+</span></span><span style="display:flex;"><span>sudo containerlab destroy -t topology/lab01.yml
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Stop NetBox</span>
+</span></span><span style="display:flex;"><span>cd netbox-docker
+</span></span><span style="display:flex;"><span>docker compose down
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Optional: Remove everything including data</span>
+</span></span><span style="display:flex;"><span>docker compose down -v
+</span></span><span style="display:flex;"><span>docker system prune -f
+</span></span></code></pre></div><hr>
+<p><em>Next up: Building automation pipelines that use NetBox as the source of truth for network device management.</em></p>
+
+            </div>
+        </article><hr style="margin-top: 40px; margin-bottom: 40px;" />
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "blog-gereader-xyz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <div class="footer_social-icons">
+<a href="https://github.com/gereader" target="_blank" rel="noopener noreferrer me"
+    title="Github">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+    stroke-linecap="round" stroke-linejoin="round">
+    <path
+        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+    </path>
+</svg>
+</a>
+<a href="https://linkedin.com/in/ereader" target="_blank" rel="noopener noreferrer me"
+    title="Linkedin">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+    stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+    <rect x="2" y="9" width="4" height="12"></rect>
+    <circle cx="4" cy="4" r="2"></circle>
+</svg>
+</a>
+</div>
+    <small class="footer_copyright">
+        © 2025 Gene Reader.
+        
+    </small>
+</footer><a href="#" title="" id="totop">
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" stroke="currentColor" viewBox="0 96 960 960">
+    <path d="M283 704.739 234.261 656 480 410.261 725.739 656 677 704.739l-197-197-197 197Z"/>
+</svg>
+
+</a>
+
+
+    
+
+
+
+
+
+
+    
+    <script async src="http://localhost:1313/js/main.js" ></script>
+
+    
+
+</body>
+</html>
