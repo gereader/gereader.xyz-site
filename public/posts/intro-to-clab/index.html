@@ -351,7 +351,8 @@ graph TB
 </span></span><span style="display:flex;"><span>mkdir -p topology
 </span></span></code></pre></div><h2 id="step-4-define-the-network-topology">Step 4: Define the Network Topology</h2>
 <p>Create the containerlab topology file that defines the two-router setup. This is based on the proven example from the official containerlab examples.
-<a href="https://github.com/srl-labs/containerlab/blob/main/lab-examples/srl02">See containerlab example here</a></p>
+<a href="https://github.com/srl-labs/containerlab/blob/main/lab-examples/srl02"
+   target="_blank" rel="noopener noreferrer">See containerlab example here</a></p>
 <p>Create <code>topology/lab01.yml</code>:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
 </span></span><span style="display:flex;"><span><span style="color:#f92672">name</span>: <span style="color:#ae81ff">lab01</span>
@@ -372,8 +373,10 @@ graph TB
 </span></span></code></pre></div><p>This topology creates two Nokia SR Linux containers connected via their e1-1 interfaces.</p>
 <h2 id="step-5-create-router-configurations">Step 5: Create Router Configurations</h2>
 <p>Create the actual device configs. Base these configurations on the proven configurations from the containerlab examples that work reliably.
-<a href="https://github.com/srl-labs/containerlab/blob/main/lab-examples/srl02">See containerlab example here</a></p>
-<p><a href="https://github.com/gereader/containerlab-lab/tree/main/network-lab01">You can find my copies of these config files here on my GitHub.</a></p>
+<a href="https://github.com/srl-labs/containerlab/blob/main/lab-examples/srl02"
+   target="_blank" rel="noopener noreferrer">See containerlab example here</a></p>
+<p><a href="https://github.com/gereader/containerlab-lab/tree/main/network-lab01"
+   target="_blank" rel="noopener noreferrer">You can find my copies of these config files here on my GitHub.</a></p>
 <h3 id="rt1-configuration-topologyrt1cfg">RT1 Configuration (<code>topology/rt1.cfg</code>)</h3>
 <pre tabindex="0"><code>set / interface ethernet-1/1 admin-state enable
 set / interface ethernet-1/1 subinterface 0

@@ -281,7 +281,8 @@ stroke-linejoin="round" class="feather feather-home">
 </span></span><span style="display:flex;"><span>    ├── edit_job.html
 </span></span><span style="display:flex;"><span>    ├── job_details.html
 </span></span><span style="display:flex;"><span>    └── jobs.html
-</span></span></code></pre></div><p>The app runs on port 8080 and uses SQLite for simplicity. You can view the complete source code and all these files in my <a href="https://github.com/gereader/FlaskJobTracker">GitHub repository</a>.</p>
+</span></span></code></pre></div><p>The app runs on port 8080 and uses SQLite for simplicity. You can view the complete source code and all these files in my <a href="https://github.com/gereader/FlaskJobTracker"
+   target="_blank" rel="noopener noreferrer">GitHub repository</a>.</p>
 <h3 id="why-this-setup-works-for-cicd">Why This Setup Works for CI/CD</h3>
 <p>This Flask app gives us everything we need to demonstrate a real-world CI/CD pipeline:</p>
 <p>Realistic dependencies - Uses SQLAlchemy, WTForms, and other common libraries
@@ -667,7 +668,8 @@ Solution: Use context: &ldquo;{{defaultContext}}:app&rdquo;</p>
 </span></span><span style="display:flex;"><span>          <span style="color:#f92672">context</span>: <span style="color:#e6db74">&#34;{{defaultContext}}:app&#34;</span>
 </span></span><span style="display:flex;"><span>          <span style="color:#f92672">push</span>: <span style="color:#66d9ef">true</span>
 </span></span><span style="display:flex;"><span>          <span style="color:#f92672">tags</span>: <span style="color:#ae81ff">${{ steps.ghcr_tag.outputs.lowercase }}</span>
-</span></span></code></pre></div><p>The Dockerfile itself is straightforward Flask containerization. Feel free to check out the complete Dockerfile on my <a href="https://github.com/gereader/FlaskJobTracker/blob/main/app/Dockerfile">GitHub</a>.</p>
+</span></span></code></pre></div><p>The Dockerfile itself is straightforward Flask containerization. Feel free to check out the complete Dockerfile on my <a href="https://github.com/gereader/FlaskJobTracker/blob/main/app/Dockerfile"
+   target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
 <h2 id="github-container-registry-ghcr-setup">GitHub Container Registry (GHCR) Setup</h2>
 <p>GHCR is available under GitHub free accounts. You will need to configure authentication to get this working with GitHub Actions though.</p>
 <h3 id="authentication-setup">Authentication Setup</h3>
@@ -3395,10 +3397,14 @@ function openLightbox(src, alt) {
 <p>This has only been the foundation so far as we prepare to deploy our code to a production environment. We&rsquo;ll see you in part 2 when we configure the infrastructure to host our application.</p>
 <h2 id="resources">Resources</h2>
 <ul>
-<li><a href="https://github.com/marketplace/actions/build-and-push-docker-images">GitHub Actions Docker build/push documentation</a></li>
-<li><a href="https://docs.aws.amazon.com/AmazonECR/latest/public/">AWS ECR Public documentation</a></li>
-<li><a href="https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry">GitHub Container Registry documentation</a></li>
-<li><a href="https://github.com/docker/login-action?tab=readme-ov-file#github-container-registry">Docker login action for GHCR</a></li>
+<li><a href="https://github.com/marketplace/actions/build-and-push-docker-images"
+   target="_blank" rel="noopener noreferrer">GitHub Actions Docker build/push documentation</a></li>
+<li><a href="https://docs.aws.amazon.com/AmazonECR/latest/public/"
+   target="_blank" rel="noopener noreferrer">AWS ECR Public documentation</a></li>
+<li><a href="https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry"
+   target="_blank" rel="noopener noreferrer">GitHub Container Registry documentation</a></li>
+<li><a href="https://github.com/docker/login-action?tab=readme-ov-file#github-container-registry"
+   target="_blank" rel="noopener noreferrer">Docker login action for GHCR</a></li>
 </ul>
 
             </div>

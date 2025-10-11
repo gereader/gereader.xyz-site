@@ -244,9 +244,11 @@ stroke-linejoin="round" class="feather feather-home">
 </span></span><span style="display:flex;"><span>    ├── fetch_rss.py
 </span></span><span style="display:flex;"><span>    └── requirements.txt
 </span></span></code></pre></div><small>Side Note: I expanded this project since conception to have an archive, but will not be addressing it directly in this post</small>
-<p><a href="https://github.com/gereader/gereader-homepage">View the complete project on GitHub</a></p>
+<p><a href="https://github.com/gereader/gereader-homepage"
+   target="_blank" rel="noopener noreferrer">View the complete project on GitHub</a></p>
 <h2 id="parsing-rss-with-python">Parsing RSS with Python</h2>
-<p>Starting out I needed a method to parse content from various sources. I remembered an ancient technology I had heard of in the early 2000s called RSS, so I spent a little time with Google and found that it was still around. Sometimes feeds were in RSS, other times they were in the modern standard Atom. I quickly learned that the <a href="https://feedparser.readthedocs.io/en/latest/">feedparser library</a> handled both of these standards in a consistent way.</p>
+<p>Starting out I needed a method to parse content from various sources. I remembered an ancient technology I had heard of in the early 2000s called RSS, so I spent a little time with Google and found that it was still around. Sometimes feeds were in RSS, other times they were in the modern standard Atom. I quickly learned that the <a href="https://feedparser.readthedocs.io/en/latest/"
+   target="_blank" rel="noopener noreferrer">feedparser library</a> handled both of these standards in a consistent way.</p>
 <p>At a high level, I created a Python script with a list of feeds I want to subscribe to. Each feed is a dictionary containing the URL, the title I want to display, and any manual tags I want to set (we&rsquo;ll also get tags from the feeds directly).</p>
 <p>The feeds are then fetched, parsed, sorted, and filtered by a date range, then output into appropriate JSON files: <code>feeds.json</code> for my main page and <code>archive.json</code> for items filtered out by date of posting.</p>
 <hr>
@@ -301,7 +303,8 @@ stroke-linejoin="round" class="feather feather-home">
 <li>Wait for GitHub to validate DNS and tick the &ldquo;Enforce HTTPS&rdquo; option if you want to use an SSL certificate provided by GitHub</li>
 </ol>
 <h2 id="project-repository">Project Repository</h2>
-<p><a href="https://github.com/gereader/gereader-homepage">gereader-homepage on GitHub</a></p>
+<p><a href="https://github.com/gereader/gereader-homepage"
+   target="_blank" rel="noopener noreferrer">gereader-homepage on GitHub</a></p>
 
             </div>
         </article><hr style="margin-top: 40px; margin-bottom: 40px;" />
