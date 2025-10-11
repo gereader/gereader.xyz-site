@@ -6,7 +6,18 @@
     <description>Recent content in Posts on Gene&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 28 Sep 2025 14:00:00 -0700</lastBuildDate><atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 11 Oct 2025 09:05:21 -0700</lastBuildDate><atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Building a RSS News Aggregator with GitHub Pages</title>
+      <link>http://localhost:1313/posts/rss-news-aggregator/</link>
+      <pubDate>Sat, 11 Oct 2025 09:05:21 -0700</pubDate>
+      
+      <guid>http://localhost:1313/posts/rss-news-aggregator/</guid>
+      
+      <description>&lt;p&gt;I find myself doom scrolling through content that an algorithm somewhere has decided I want to read. My browser&amp;rsquo;s &amp;ldquo;new tab&amp;rdquo; page often shows articles I don&amp;rsquo;t care about or don&amp;rsquo;t want to see. I realized I could take control by setting my own homepage. A page that shows the news I actually want to read, because I curated the list myself. I understand I could likely find an RSS reader website and build a feed that way, but this seemed like a simple enough problem that I should be able to do it myself without worrying about ads or algorithms.&lt;/p&gt;</description>
+      
+    </item>
+    
     <item>
       <title>Building a Network Automation Lab: Containerlab &#43; NetBox on macOS</title>
       <link>http://localhost:1313/posts/intro-to-clab/</link>
@@ -17,8 +28,8 @@
       <description>&lt;h1 id=&#34;building-a-network-automation-lab-containerlab--netbox-on-macos&#34;&gt;Building a Network Automation Lab: Containerlab + NetBox on macOS&lt;/h1&gt;
 &lt;p&gt;&lt;em&gt;Building a foundation for network automation testing and development on a Mac from 2018&lt;/em&gt;&lt;/p&gt;
 &lt;h2 id=&#34;the-challenge&#34;&gt;The Challenge&lt;/h2&gt;
-&lt;p&gt;I need a reliable local lab environment for testing network automation scripts and prototyping configurations. My 2018 MacBook Pro with 16GB RAM isn&amp;rsquo;t exactly cutting-edge anymore, so I need to be smart about how I use my resources.&lt;/p&gt;
-&lt;p&gt;The goal is to build something that can handle real routing protocols and integrates with modern automation tools, but doesn&amp;rsquo;t require enterprise hardware or cloud resources.&lt;/p&gt;</description>
+&lt;p&gt;I needed a reliable local lab environment for testing network automation scripts and prototyping configurations. My 2018 MacBook Pro with 16GB RAM isn&amp;rsquo;t exactly cutting-edge anymore, so I had to be smart about how I used my resources.&lt;/p&gt;
+&lt;p&gt;My goal was to build something that could handle real routing protocols and integrate with modern automation tools, but wouldn&amp;rsquo;t require enterprise hardware or cloud resources.&lt;/p&gt;</description>
       
     </item>
     

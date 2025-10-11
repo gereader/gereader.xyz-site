@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en-us"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">Building a RSS News Aggregator with GitHub Pages | Gene&#39;s Blog</title>
+<meta property="og:title" content="Building a RSS News Aggregator with GitHub Pages | Gene&#39;s Blog" />
+<meta name="twitter:title" content="Building a RSS News Aggregator with GitHub Pages | Gene&#39;s Blog" />
+<meta itemprop="name" content="Building a RSS News Aggregator with GitHub Pages | Gene&#39;s Blog" />
+<meta name="application-name" content="Building a RSS News Aggregator with GitHub Pages | Gene&#39;s Blog" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="Building a Personal RSS News Aggregator with GitHub Pages using GitHub Actions and Python to generate a static webpage.">
+<meta itemprop="description" content="Building a Personal RSS News Aggregator with GitHub Pages using GitHub Actions and Python to generate a static webpage." />
+<meta property="og:description" content="Building a Personal RSS News Aggregator with GitHub Pages using GitHub Actions and Python to generate a static webpage." />
+<meta name="twitter:description" content="Building a Personal RSS News Aggregator with GitHub Pages using GitHub Actions and Python to generate a static webpage." />
+
+<meta property="og:locale" content="en-us" />
+<meta name="language" content="en-us" />
+
+  <link rel="alternate" hreflang="en" href="http://localhost:1313/posts/rss-news-aggregator/" title="" />
+
+
+
+
+
+    
+    
+    
+
+    <meta property="og:type" content="article" />
+    <meta property="og:article:published_time" content=2025-10-11T09:05:21-0700 />
+    <meta property="article:published_time" content=2025-10-11T09:05:21-0700 />
+    <meta property="og:url" content="http://localhost:1313/posts/rss-news-aggregator/" />
+
+    
+    <meta property="og:article:author" content="Gene Reader" />
+    <meta property="article:author" content="Gene Reader" />
+    <meta name="author" content="Gene Reader" />
+    
+    
+
+    
+
+    <script defer type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "Article",
+        "headline": "Building a RSS News Aggregator with GitHub Pages",
+        "author": {
+        "@type": "Person",
+        "name": ""
+        },
+        "datePublished": "2025-10-11",
+        "description": "Building a Personal RSS News Aggregator with GitHub Pages using GitHub Actions and Python to generate a static webpage.",
+        "wordCount":  853 ,
+        "mainEntityOfPage": "True",
+        "dateModified": "2025-10-11",
+        "image": {
+        "@type": "imageObject",
+        "url": ""
+        },
+        "publisher": {
+        "@type": "Organization",
+        "name": "Gene\u0027s Blog"
+        }
+    }
+    </script>
+
+
+<meta name="generator" content="Hugo 0.151.0">
+
+    
+    <meta property="og:url" content="http://localhost:1313/posts/rss-news-aggregator/">
+  <meta property="og:site_name" content="Gene&#39;s Blog">
+  <meta property="og:title" content="Building a RSS News Aggregator with GitHub Pages">
+  <meta property="og:description" content="Building a Personal RSS News Aggregator with GitHub Pages using GitHub Actions and Python to generate a static webpage.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-10-11T09:05:21-07:00">
+    <meta property="article:modified_time" content="2025-10-11T09:05:21-07:00">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Building a RSS News Aggregator with GitHub Pages">
+  <meta name="twitter:description" content="Building a Personal RSS News Aggregator with GitHub Pages using GitHub Actions and Python to generate a static webpage.">
+
+
+    
+
+    <link rel="canonical" href="http://localhost:1313/posts/rss-news-aggregator/">
+    <link href="/style.min.2d921c18cf1ec555ffc03d59a8adc211c402c68c930c27d6a0c306ab175a8d09.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="http://localhost:1313/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+    
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+
+    
+    
+      <link rel="stylesheet" href="/css/custom.css">
+
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      var anchors = new AnchorJS();  
+      anchors.options = {
+        icon: '#'
+      };
+      anchors.add('h2, h3');
+    });
+  </script>
+
+    
+</head>
+<body data-theme = "auto" class="notransition">
+
+<script src="/js/theme.js"></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="http://localhost:1313/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title></title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">Building a RSS News Aggregator with GitHub Pages</h1>
+                
+                
+                
+                <div class="post-meta">
+                    <time datetime="2025-10-11T09:05:21-07:00" itemprop="datePublished"> Oct 11, 2025 </time>
+                </div>
+                
+            </header>
+            
+    
+        
+            
+        
+    
+    <details class="toc" open>
+        <summary><b></b></summary>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#the-problem">The Problem</a></li>
+    <li><a href="#the-solution">The Solution</a></li>
+    <li><a href="#project-structure">Project Structure</a></li>
+    <li><a href="#parsing-rss-with-python">Parsing RSS with Python</a></li>
+    <li><a href="#github-actions">GitHub Actions</a>
+      <ul>
+        <li><a href="#permission-requirement">Permission Requirement</a></li>
+      </ul>
+    </li>
+    <li><a href="#frontend-html-static-site">Frontend HTML Static Site</a></li>
+    <li><a href="#configure-github-pages">Configure GitHub Pages</a></li>
+    <li><a href="#setup-custom-domain-for-github-pages">Setup Custom Domain for GitHub Pages</a></li>
+    <li><a href="#project-repository">Project Repository</a></li>
+  </ul>
+</nav>
+    </details>
+            <div class="page-content">
+                <p>I find myself doom scrolling through content that an algorithm somewhere has decided I want to read. My browser&rsquo;s &ldquo;new tab&rdquo; page often shows articles I don&rsquo;t care about or don&rsquo;t want to see. I realized I could take control by setting my own homepage. A page that shows the news I actually want to read, because I curated the list myself. I understand I could likely find an RSS reader website and build a feed that way, but this seemed like a simple enough problem that I should be able to do it myself without worrying about ads or algorithms.</p>
+<h2 id="the-problem">The Problem</h2>
+<p>I need a webpage that aggregates content I care about without maintaining a database or paying for hosting.</p>
+<h2 id="the-solution">The Solution</h2>
+<p>Build a static website on GitHub Pages. It doesn&rsquo;t need to be a Hugo site like my blog, just a static HTML page with some CSS that AI can help me refine since I&rsquo;m not an HTML expert.</p>
+<p>Tech Stack:</p>
+<ul>
+<li>GitHub Pages (free hosting, already have a custom domain for my blog)</li>
+<li>GitHub Actions (cron job to fetch RSS feeds on a schedule)</li>
+<li>Python using feedparser library (parse RSS feeds and store to a JSON file)</li>
+<li>JavaScript (client-side features like light/dark mode)</li>
+<li>Static HTML (fetch and display the JSON file)</li>
+</ul>
+<h2 id="project-structure">Project Structure</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gereader-homepage
+</span></span><span style="display:flex;"><span>├── .github
+</span></span><span style="display:flex;"><span>│   └── workflows
+</span></span><span style="display:flex;"><span>│       └── fetch-feeds.yml
+</span></span><span style="display:flex;"><span>├── .gitignore
+</span></span><span style="display:flex;"><span>├── archive.html
+</span></span><span style="display:flex;"><span>├── archive.json
+</span></span><span style="display:flex;"><span>├── feeds.json
+</span></span><span style="display:flex;"><span>├── index.html
+</span></span><span style="display:flex;"><span>└── scripts
+</span></span><span style="display:flex;"><span>    ├── fetch_rss.py
+</span></span><span style="display:flex;"><span>    └── requirements.txt
+</span></span></code></pre></div><small>Side Note: I expanded this project since conception to have an archive, but will not be addressing it directly in this post</small>
+<p><a href="https://github.com/gereader/gereader-homepage">View the complete project on GitHub</a></p>
+<h2 id="parsing-rss-with-python">Parsing RSS with Python</h2>
+<p>Starting out I needed a method to parse content from various sources. I remembered an ancient technology I had heard of in the early 2000s called RSS, so I spent a little time with Google and found that it was still around. Sometimes feeds were in RSS, other times they were in the modern standard Atom. I quickly learned that the <a href="https://feedparser.readthedocs.io/en/latest/">feedparser library</a> handled both of these standards in a consistent way.</p>
+<p>At a high level, I created a Python script with a list of feeds I want to subscribe to. Each feed is a dictionary containing the URL, the title I want to display, and any manual tags I want to set (we&rsquo;ll also get tags from the feeds directly).</p>
+<p>The feeds are then fetched, parsed, sorted, and filtered by a date range, then output into appropriate JSON files: <code>feeds.json</code> for my main page and <code>archive.json</code> for items filtered out by date of posting.</p>
+<hr>
+<p>Here&rsquo;s an example of what an output looks like in JSON. Each article contains metadata that makes it easy to display and filter on the frontend:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;articles&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;title&#34;</span>: <span style="color:#e6db74">&#34;Netpicker NetBox Plugin and Automation&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;link&#34;</span>: <span style="color:#e6db74">&#34;https://www.packetswitch.co.uk/netpicker-netbox-plugin-and-automation/&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;published&#34;</span>: <span style="color:#e6db74">&#34;Sat, 11 Oct 2025 09:58:58 GMT&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;published_parsed&#34;</span>: <span style="color:#e6db74">&#34;2025-10-11T09:58:58+00:00&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;source&#34;</span>: <span style="color:#e6db74">&#34;Packet Switch&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;image&#34;</span>: <span style="color:#e6db74">&#34;https://www.packetswitch.co.uk/content/images/2025/10/netpicker-2-.png&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;summary&#34;</span>: <span style="color:#e6db74">&#34;In this post, we&#39;ll focus on Netpicker Automation and how to use the Netpicker plugin with Netbox. This post assumes you already have a functioning Netpicker&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;tags&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;netdevops&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;networking&#34;</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span></code></pre></div><h2 id="github-actions">GitHub Actions</h2>
+<p>For my GitHub Actions workflow, I set an arbitrary schedule to pull new content based on when I&rsquo;m likely to be looking at news to try to keep the feed as fresh as possible.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">on</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">schedule</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Runs at Midnight, 7am, 11am, 1pm, 4pm, 6pm Pacific (UTC-7)</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">cron</span>: <span style="color:#e6db74">&#39;0 1,7,14,18,23 * * *&#39;</span>
+</span></span></code></pre></div><p>The action runs my Python script at the scheduled interval and commits the <code>feeds.json</code> and <code>archive.json</code> files to GitHub.</p>
+<h3 id="permission-requirement">Permission Requirement</h3>
+<p>GitHub Actions needs to be able to push changes to the repository.</p>
+<ul>
+<li>Repository Settings → Actions → General → Workflow permissions</li>
+<li>Select: &ldquo;Read and write permissions&rdquo;</li>
+</ul>
+<h2 id="frontend-html-static-site">Frontend HTML Static Site</h2>
+<p>I have some basic experience with HTML so I relied on AI to help me get this functioning beyond basic tables. With the help of AI, I was able to introduce features like filters based on tags, searching, and light/dark mode toggles. The JavaScript is the biggest component that was defined by AI. You can see the HTML in the repo if you want to define your own, but the basic premise is:</p>
+<ol>
+<li>Read from the <code>feeds.json</code> file</li>
+<li>Display each article</li>
+<li>Limit articles to 20 per page</li>
+<li>Mark articles as read and store client-side in localStorage</li>
+</ol>
+<p>You can validate the website is working locally for development by running a Python web server:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python3 -m http.server <span style="color:#ae81ff">8000</span>
+</span></span></code></pre></div><h2 id="configure-github-pages">Configure GitHub Pages</h2>
+<p>You&rsquo;ll need to set your repo to enable GitHub Pages.</p>
+<p>Repo Settings &gt; Code and Automation &gt; Pages</p>
+<p>Set your &ldquo;Source&rdquo; to <code>Deploy from Branch</code> and set the branch to your desired branch. I&rsquo;m using Main.</p>
+<h2 id="setup-custom-domain-for-github-pages">Setup Custom Domain for GitHub Pages</h2>
+<p>I covered this in my <a href="http://localhost:1313/posts/set-up-hugo-blog/">Set Up a Hugo Blog</a> post in more detail, but the basics are:</p>
+<ol>
+<li>Update GitHub Pages <code>Custom Domain</code> to your custom domain</li>
+<li>Update the DNS for your domain (my domain registrar is Cloudflare) to have a CNAME pointed to GitHub</li>
+<li>Wait for GitHub to validate DNS and tick the &ldquo;Enforce HTTPS&rdquo; option if you want to use an SSL certificate provided by GitHub</li>
+</ol>
+<h2 id="project-repository">Project Repository</h2>
+<p><a href="https://github.com/gereader/gereader-homepage">gereader-homepage on GitHub</a></p>
+
+            </div>
+        </article><hr style="margin-top: 40px; margin-bottom: 40px;" />
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "blog-gereader-xyz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <div class="footer_social-icons">
+<a href="https://github.com/gereader" target="_blank" rel="noopener noreferrer me"
+    title="Github">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+    stroke-linecap="round" stroke-linejoin="round">
+    <path
+        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+    </path>
+</svg>
+</a>
+<a href="https://linkedin.com/in/ereader" target="_blank" rel="noopener noreferrer me"
+    title="Linkedin">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+    stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+    <rect x="2" y="9" width="4" height="12"></rect>
+    <circle cx="4" cy="4" r="2"></circle>
+</svg>
+</a>
+</div>
+    <small class="footer_copyright">
+        © 2025 Gene Reader.
+        
+    </small>
+</footer><a href="#" title="" id="totop">
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" stroke="currentColor" viewBox="0 96 960 960">
+    <path d="M283 704.739 234.261 656 480 410.261 725.739 656 677 704.739l-197-197-197 197Z"/>
+</svg>
+
+</a>
+
+
+    
+
+
+
+
+
+
+    
+    <script async src="http://localhost:1313/js/main.js" ></script>
+
+    
+
+</body>
+</html>
