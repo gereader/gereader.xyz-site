@@ -1,6 +1,6 @@
 {
-    "name": "Gene's Blog",
-    "short_name": "Gene's Blog",
+    "name": "blog.gereader.xyz",
+    "short_name": "blog.gereader.xyz",
     "start_url": "http://localhost:1313/",
     "theme_color": "#434648",
     "background_color": "#ffffff",

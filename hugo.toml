@@ -1,6 +1,6 @@
 baseURL = 'https://blog.gereader.xyz'
 languageCode = 'en-us'
-title = "Gene's Blog"
+title = "blog.gereader.xyz"
 theme = "hugo-blog-awesome"
 
 [params]
@@ -11,9 +11,9 @@ theme = "hugo-blog-awesome"
 
 [params.author]
   avatar = "images/MyFace.jpeg"
-  intro = "Gene's Blog"
+  intro = "Things I Broke, Things I Fixed — by Gene Reader"
   name = "Gene Reader"
-  description = "Network engineer turned platform engineer, writing about the practical side of DevOps, solutions that work, and occasionally yelling at YAML files."
+  description = "Platform engineer focused on automation and reliability. I write about the things that broke, the things I fixed, and the mistakes I want to avoid repeating."
 
 [[params.socialIcons]]
   name = "github"
@@ -21,7 +21,7 @@ theme = "hugo-blog-awesome"
 
 [[params.socialIcons]]
   name = "linkedin"
-  url = "https://linkedin.com/in/ereader"
+  url = "https://linkedin.com/in/GeReader"
 
 [services.disqus]
   shortname = "blog-gereader-xyz"
