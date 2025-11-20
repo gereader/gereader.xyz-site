@@ -8,13 +8,17 @@
     <language>en-us</language>
     <lastBuildDate>Sun, 16 Nov 2025 10:45:17 -0800</lastBuildDate><atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Transcend Micro</title>
+      <title>How I Connected My Transcend Micro CPAP to an M-Series Mac</title>
       <link>http://localhost:1313/posts/transcend-micro/</link>
       <pubDate>Sun, 16 Nov 2025 10:45:17 -0800</pubDate>
       
       <guid>http://localhost:1313/posts/transcend-micro/</guid>
       
-      <description></description>
+      <description>&lt;h2 id=&#34;overview&#34;&gt;Overview&lt;/h2&gt;
+&lt;p&gt;Running the &lt;strong&gt;Transcend MiniCPAP software&lt;/strong&gt;  on an &lt;strong&gt;M-series Mac&lt;/strong&gt; (in my case an M4 Pro) inside &lt;strong&gt;Parallels Desktop&lt;/strong&gt; was not plug-and-play.&lt;br&gt;
+Windows 11 ARM detected the Transcend Micro as an &lt;strong&gt;FT230X Basic UART&lt;/strong&gt;, but no suitable driver was available.&lt;/p&gt;
+&lt;p&gt;The trick was understanding that the Transcend Micro uses an &lt;strong&gt;FTDI FT230X&lt;/strong&gt; USB-to-serial bridge.&lt;br&gt;
+The solution required using the correct &lt;strong&gt;ARM64 VCP driver&lt;/strong&gt;, editing its &lt;code&gt;.inf&lt;/code&gt; file so Windows would accept it, and working around a Parallels path issue.&lt;/p&gt;</description>
       
     </item>
     

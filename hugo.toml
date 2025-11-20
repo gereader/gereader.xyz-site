@@ -23,6 +23,20 @@ theme = "hugo-blog-awesome"
   name = "linkedin"
   url = "https://linkedin.com/in/GeReader"
 
+[menu]
+  [[menu.main]]
+    # The page reference (pageRef) is useful for menu highlighting
+    # When pageRef is set, setting `url` is optional; it will be used as a fallback if the page is not found.
+    pageRef="/"
+    name = 'Home'
+    url = '/'
+    weight = 10
+
+  [[menu.main]]
+    name = 'Posts'
+    url = '/posts/'
+    weight = 10
+
 [services.disqus]
   shortname = "blog-gereader-xyz"
 
