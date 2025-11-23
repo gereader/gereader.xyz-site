@@ -49,5 +49,13 @@ theme = "hugo-blog-awesome"
 
 
 [markup]
-  [markup.goldmark.parser]
-    autoHeadingID = true
+  [markup.goldmark]
+    [markup.goldmark.parser]
+      autoHeadingID = true
+  
+    [markup.goldmark.renderer]
+      unsafe = true
+
+    [markup.tableOfContents]
+      startLevel = 2 # ToC starts from H2
+      endLevel = 4 # ToC ends at H4

@@ -174,3 +174,61 @@ h3:hover .anchorjs-link {
   opacity: 1;
   color: inherit; 
 }
+
+/* default = light mode */
+.callout {
+  border-left: 4px solid rgba(0, 0, 0, 0.12);
+  padding: 0.75rem 1rem;
+  margin: 1.5rem 0;
+  background-color: rgba(0, 0, 0, 0.035);
+}
+
+.callout-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  opacity: 0.7;
+  margin-bottom: 0.25rem;
+}
+
+/* Blog Awesome dark mode uses `html.dark` */
+html.dark .callout {
+  border-left-color: rgba(255, 255, 255, 0.35);
+  background-color: rgba(255, 255, 255, 0.055);
+}
+
+html.dark .callout-title {
+  opacity: 0.8;
+}
+
+
+/* Wrap box styling */
+.twocol {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  margin: 1.5rem 0;
+  background-color: rgba(0, 0, 0, 0.035);
+}
+
+.twocol-left {
+  display: flex;
+  align-items: center;
+}
+
+/* Vertical line only between the columns */
+.twocol-right {
+  border-left: 4px solid rgba(0, 0, 0, 0.12);
+  padding-left: 1rem; /* keeps text off the border */
+}
+
+/* Dark mode */
+html.dark .twocol {
+  background-color: rgba(255, 255, 255, 0.055);
+}
+
+html.dark .twocol-right {
+  border-left-color: rgba(255, 255, 255, 0.35);
+}

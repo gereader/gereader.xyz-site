@@ -6,7 +6,39 @@
     <description>Recent content in Posts on blog.gereader.xyz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 16 Nov 2025 10:45:17 -0800</lastBuildDate><atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 22 Nov 2025 14:17:51 -0800</lastBuildDate><atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>What AutoCon4 Taught Me</title>
+      <link>http://localhost:1313/posts/autocon4/</link>
+      <pubDate>Sat, 22 Nov 2025 14:17:51 -0800</pubDate>
+      
+      <guid>http://localhost:1313/posts/autocon4/</guid>
+      
+      <description>&lt;p&gt;I went into AutoCon4 expecting to hear new tooling ideas, clever automation tricks, and maybe a few case studies to bring home. I walked out with something very different.&lt;/p&gt;
+&lt;p&gt;Instead of focusing on the latest frameworks or features, almost every speaker pushed a much deeper point.&lt;/p&gt;
+&lt;div class=&#34;section-divider&#34;
+     style=&#34;width: 64px;
+            height: 3px;
+            background: currentColor;
+            opacity: 0.25;
+            border-radius: 999px;
+            margin: 2rem 0;&#34;&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;twocol&#34;
+     style=&#34;display:grid;grid-template-columns:2fr 3fr;gap:1rem;align-items:start;margin:1rem 0;&#34;&gt;
+  &lt;div class=&#34;twocol-left&#34; style=&#34;font-size:1.8rem;font-weight:700;&#34;&gt;
+    Automation is not about scripts.
+  &lt;/div&gt;
+  &lt;div class=&#34;twocol-right&#34;&gt;
+    It is about data.&lt;br&gt;It is about safety.&lt;br&gt;It is about reducing risk and proving value.
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;For me personally, it helped connect a lot of the frustrations I have been feeling at work with the bigger picture of what modern automation actually looks like.&lt;/p&gt;</description>
+      
+    </item>
+    
     <item>
       <title>How I Connected My Transcend Micro CPAP to an M-Series Mac</title>
       <link>http://localhost:1313/posts/transcend-micro/</link>
