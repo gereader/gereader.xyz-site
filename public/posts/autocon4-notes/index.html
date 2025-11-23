@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="en-us"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">Nautocon and AutoCon4 Session Notes (Unofficial) | blog.gereader.xyz</title>
+<meta property="og:title" content="Nautocon and AutoCon4 Session Notes (Unofficial) | blog.gereader.xyz" />
+<meta name="twitter:title" content="Nautocon and AutoCon4 Session Notes (Unofficial) | blog.gereader.xyz" />
+<meta itemprop="name" content="Nautocon and AutoCon4 Session Notes (Unofficial) | blog.gereader.xyz" />
+<meta name="application-name" content="Nautocon and AutoCon4 Session Notes (Unofficial) | blog.gereader.xyz" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="My personal notes and concepts unconvered from the Nautocon and AutoCon4 sessions I attended in 2025.">
+<meta itemprop="description" content="My personal notes and concepts unconvered from the Nautocon and AutoCon4 sessions I attended in 2025." />
+<meta property="og:description" content="My personal notes and concepts unconvered from the Nautocon and AutoCon4 sessions I attended in 2025." />
+<meta name="twitter:description" content="My personal notes and concepts unconvered from the Nautocon and AutoCon4 sessions I attended in 2025." />
+
+<meta property="og:locale" content="en-us" />
+<meta name="language" content="en-us" />
+
+  <link rel="alternate" hreflang="en" href="http://localhost:1313/posts/autocon4-notes/" title="" />
+
+
+
+
+
+    
+    
+    
+
+    <meta property="og:type" content="article" />
+    <meta property="og:article:published_time" content=2025-11-22T16:52:05-0800 />
+    <meta property="article:published_time" content=2025-11-22T16:52:05-0800 />
+    <meta property="og:url" content="http://localhost:1313/posts/autocon4-notes/" />
+
+    
+    <meta property="og:article:author" content="Gene Reader" />
+    <meta property="article:author" content="Gene Reader" />
+    <meta name="author" content="Gene Reader" />
+    
+    
+
+    
+
+    <script defer type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "Article",
+        "headline": "Nautocon and AutoCon4 Session Notes (Unofficial)",
+        "author": {
+        "@type": "Person",
+        "name": ""
+        },
+        "datePublished": "2025-11-22",
+        "description": "My personal notes and concepts unconvered from the Nautocon and AutoCon4 sessions I attended in 2025.",
+        "wordCount":  4492 ,
+        "mainEntityOfPage": "True",
+        "dateModified": "2025-11-22",
+        "image": {
+        "@type": "imageObject",
+        "url": ""
+        },
+        "publisher": {
+        "@type": "Organization",
+        "name": "blog.gereader.xyz"
+        }
+    }
+    </script>
+
+
+<meta name="generator" content="Hugo 0.151.0">
+
+    
+    <meta property="og:url" content="http://localhost:1313/posts/autocon4-notes/">
+  <meta property="og:site_name" content="blog.gereader.xyz">
+  <meta property="og:title" content="Nautocon and AutoCon4 Session Notes (Unofficial)">
+  <meta property="og:description" content="My personal notes and concepts unconvered from the Nautocon and AutoCon4 sessions I attended in 2025.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-11-22T16:52:05-08:00">
+    <meta property="article:modified_time" content="2025-11-22T16:52:05-08:00">
+    <meta property="article:tag" content="Autocon4">
+    <meta property="article:tag" content="Conference">
+    <meta property="article:tag" content="Network Automation">
+    <meta property="article:tag" content="Nautocon">
+
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Nautocon and AutoCon4 Session Notes (Unofficial)">
+  <meta name="twitter:description" content="My personal notes and concepts unconvered from the Nautocon and AutoCon4 sessions I attended in 2025.">
+
+
+    
+
+    <link rel="canonical" href="http://localhost:1313/posts/autocon4-notes/">
+    <link href="/style.min.2d921c18cf1ec555ffc03d59a8adc211c402c68c930c27d6a0c306ab175a8d09.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="http://localhost:1313/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+    
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+
+    
+    
+      <link rel="stylesheet" href="/css/custom.css">
+
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      var anchors = new AnchorJS();  
+      anchors.options = {
+        icon: '#'
+      };
+      anchors.add('h2, h3');
+    });
+  </script>
+
+    
+</head>
+<body data-theme = "auto" class="notransition">
+
+<script src="/js/theme.js"></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="http://localhost:1313/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title></title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link " href="/posts/">
+                        Posts
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">Nautocon and AutoCon4 Session Notes (Unofficial)</h1>
+                
+                
+                
+                <div class="post-meta">
+                    <time datetime="2025-11-22T16:52:05-08:00" itemprop="datePublished"> Nov 22, 2025 </time>
+                </div>
+                
+            </header>
+            
+    
+        
+            
+        
+    
+    <details class="toc" open>
+        <summary><b></b></summary>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#day-1---nautocon">Day 1 - Nautocon</a>
+      <ul>
+        <li><a href="#nautocon-notes">Nautocon Notes</a></li>
+        <li><a href="#real-world-stories">Real World Stories</a></li>
+        <li><a href="#key-takeaways">Key Takeaways</a></li>
+      </ul>
+    </li>
+    <li><a href="#day-1---autocon4">Day 1 - AutoCon4</a>
+      <ul>
+        <li><a href="#jeff-gray-ceo-gluware---building-a-network-automation-business-case-that-wins-at-the-top">Jeff Gray (CEO, Gluware) - Building a Network Automation Business Case that Wins at the Top</a></li>
+        <li><a href="#andy-lapteff---confessions-of-a-cli-lifer-who-learned-to-love-automation">Andy Lapteff - Confessions of a CLI Lifer Who Learned to Love Automation</a></li>
+        <li><a href="#dinesh---the-naf-network-automation-framework-a-modular-reference-architecture">Dinesh - The NAF Network Automation Framework: A Modular Reference Architecture</a></li>
+        <li><a href="#the-operating-model-for-ai-infrastructure">The Operating Model for AI Infrastructure</a></li>
+        <li><a href="#mark-prosser---break-down-barriers-before-you-build-up-platforms">Mark Prosser - Break Down Barriers Before you Build Up Platforms</a></li>
+        <li><a href="#greg-botts---overhauling-data-center-network-automation-intels-data-centric-journey">Greg Botts - Overhauling Data Center Network Automation: Intel’s Data-Centric Journey</a></li>
+        <li><a href="#cat-gurinsky---lifecycle-automation-troubleshooting-upgrading--more">Cat Gurinsky - Lifecycle Automation: Troubleshooting, Upgrading &amp; More</a></li>
+        <li><a href="#chris-grundemann---2025-state-of-network-automation-survey-results">Chris Grundemann - 2025 State of Network Automation Survey Results</a></li>
+        <li><a href="#day-1-themes-and-takeaways">Day 1 Themes and Takeaways</a></li>
+      </ul>
+    </li>
+    <li><a href="#day-2---autocon4">Day 2 - AutoCon4</a>
+      <ul>
+        <li><a href="#joseph-nicholson---scaling-network-operations-with-modular-ansible-a-multi-environment-automation-framework">Joseph Nicholson - Scaling Network Operations with Modular Ansible: A Multi-Environment Automation Framework</a></li>
+        <li><a href="#munachimso-nwaiwu---from-cli-to-model-building-a-foundational-source-of-truth-for-brownfield-networks">Munachimso Nwaiwu - From CLI to Model: Building a Foundational Source of Truth for Brownfield Networks</a></li>
+        <li><a href="#erich-crosswhite---from-manual-to-marathon-my-automation-journey-at-heb">Erich Crosswhite - From Manual to Marathon: My Automation Journey at HEB</a></li>
+        <li><a href="#scott-robohn---toward-autonomy">Scott Robohn - Toward Autonomy</a></li>
+        <li><a href="#marc-koerner---esnets-new-micro-service-based-discovery-service">Marc Koerner - ESnet’s new Micro-Service based Discovery Service</a></li>
+        <li><a href="#karl-newell---hawat-an-ai-assistant-for-network-troubleshooting">Karl Newell - HAWAT: An AI Assistant for Network Troubleshooting</a></li>
+        <li><a href="#brandon-cavett---from-band-aids-to-best-practices-usaas-network-automation-journey">Brandon Cavett - From Band-Aids to Best Practices: USAA&rsquo;s Network Automation Journey</a></li>
+        <li><a href="#john-capobianco---from-cli-to-gpt-how-ai-is-rewriting-the-rules-of-network-automation">John Capobianco - From CLI to GPT: How AI Is Rewriting the Rules of Network Automation</a></li>
+      </ul>
+    </li>
+    <li><a href="#day-3---autocon4">Day 3 - AutoCon4</a>
+      <ul>
+        <li><a href="#closing-keynote-greg-freeman---the-netdevops-journey-manual-firefighting-to-agentic-autonomy">Closing Keynote: Greg Freeman - The NetDevOps Journey: Manual Firefighting to Agentic Autonomy</a></li>
+        <li><a href="#vincent-phelan---the-secret-to-network-config--security-compliance-at-scale">Vincent Phelan - The Secret to Network Config &amp; Security Compliance at Scale</a></li>
+        <li><a href="#message-from-accelerating-sponsor-gluware">Message from Accelerating Sponsor Gluware</a></li>
+        <li><a href="#senad-palislamovic---building-ai-with-ai">Senad Palislamovic - Building AI with AI</a></li>
+        <li><a href="#eric-chou---battle-of-the-bots-which-ai-models-actually-work-for-network-engineering-tasks">Eric Chou - Battle of the Bots: Which AI Models Actually Work for Network Engineering Tasks</a></li>
+        <li><a href="#dave-duggal---a-harmonized-standards-based-ontology-for-telco-grade-agents">Dave Duggal - A Harmonized, Standards-based Ontology for Telco-grade Agents</a></li>
+        <li><a href="#joshua-mcnamara---network-troubleshooting-automation">Joshua McNamara - Network Troubleshooting Automation</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </details>
+            <div class="page-content">
+                <p>These are my personal reflection notes from the AutoCon4 and Nautocon sessions I attended. I took notes during the sessions and expanded them the same day while everything was still fresh, trying to pull out the high-level concepts I wanted to remember.</p>
+<p>I wrote most of this in fast shorthand during the talks, then turned those notes into fuller summaries later. That means there is always a chance I captured something imperfectly or interpreted a point differently than the speaker intended. <b>Any mistakes are mine.</b></p>
+<p>This is not a transcript or an official summary. It is simply what stood out to me and what I thought might be useful for revisiting ideas from the conference. NAF plans to release full talk recordings on <a href="https://www.youtube.com/@NetworkAutomationForum"
+   target="_blank" rel="noopener noreferrer">their YouTube channel</a>, which will be a more complete source.</p>
+<h2 id="day-1---nautocon">Day 1 - Nautocon</h2>
+<h3 id="nautocon-notes">Nautocon Notes</h3>
+<ul>
+<li>Many teams are moving toward Golden Config for standardization and compliance.</li>
+<li>Single Source of Truth Synchronizer plugin is gaining traction for keeping data aligned across systems.</li>
+<li>Design Builder is becoming a key companion to Golden Config for managing structured inputs.</li>
+<li>Data validation is now included in Nautobot core.</li>
+<li>Nautobot v3 released with updated navigation visuals and a new favorites section.</li>
+<li>Nautobot is establishing a certification program.</li>
+</ul>
+<hr>
+<h3 id="real-world-stories">Real World Stories</h3>
+<p><strong>Transaction Network Services (Kirstin Nickerson)</strong></p>
+<ul>
+<li>Global organization with ~20k devices today, targeting ~90k in Nautobot.</li>
+<li>Vendors: Cisco, Juniper, Fortinet, F5.</li>
+<li>Heavy use of:
+<ul>
+<li>Golden Config</li>
+<li>Device lifecycle management</li>
+<li>Operational compliance (pre and post change checks)</li>
+</ul>
+</li>
+<li>Engineers have self service automation available.</li>
+<li>May be hiring.</li>
+</ul>
+<p><strong>Intel (Greg Botts)</strong></p>
+<ul>
+<li>Uses open source Nautobot as their Source of Truth.</li>
+<li>Small automation team of 2, with network engineers handling the rest.</li>
+<li>Nautobot Jobs used to support a large brownfield migration (~5k devices).</li>
+<li>Mostly uses standard plugins.</li>
+<li>Custom plugin built to sync their internal IPAM nightly.</li>
+</ul>
+<p><strong>Arizona State University (Todd Simmons)</strong></p>
+<ul>
+<li>ASU recognized as a highly advanced technical organization.</li>
+<li>Full CI and CD pipeline managing Nautobot.
+<ul>
+<li>Pulls configuration</li>
+<li>Watches for changes with webhooks</li>
+<li>Lambda functions for automation workflows</li>
+<li>ZTP pipeline (true ZTP for greenfield)</li>
+</ul>
+</li>
+<li>Able to bring up a 50 switch site in 37 minutes.</li>
+<li>Does not use Golden Config.</li>
+</ul>
+<hr>
+<h3 id="key-takeaways">Key Takeaways</h3>
+<ul>
+<li>Senior leadership support is critical. Show cost savings and measurable impact.</li>
+<li>Focus on defining the desired state, not automating legacy processes.</li>
+<li>Involve engineers directly. Let them input and shape the data.</li>
+<li>Ownership increases adoption. People are more willing to use tools they helped influence.</li>
+</ul>
+<h2 id="day-1---autocon4">Day 1 - AutoCon4</h2>
+<h3 id="jeff-gray-ceo-gluware---building-a-network-automation-business-case-that-wins-at-the-top">Jeff Gray (CEO, Gluware) - Building a Network Automation Business Case that Wins at the Top</h3>
+<p><strong>Speaker:</strong> Jeff Gray (CEO, Gluware)</p>
+<p><strong>Core ideas</strong></p>
+<ul>
+<li>Automation is how modern business gets done. Without it, progress is just more heroic manual work.</li>
+<li>The future belongs to teams that can explain automation in CXO language, not just teams that automate the hardest.</li>
+<li>You need an <strong>impact model</strong> that ties automation to:
+<ul>
+<li>Strategic business alignment</li>
+<li>Competitive analysis</li>
+<li>Business case math</li>
+<li>Clear “why now”</li>
+</ul>
+</li>
+</ul>
+<p><strong>Financial concepts to understand</strong></p>
+<ul>
+<li><strong>Net Present Value (NPV):</strong> Present value of benefits minus costs over time.</li>
+<li><strong>Payback period:</strong> How long until the investment pays for itself.</li>
+<li><strong>Internal Rate of Return (IRR):</strong> Profitability of an investment, accounting for time value of money.</li>
+</ul>
+<p><strong>Inputs to your impact model (top variables)</strong></p>
+<ul>
+<li>Number of network devices</li>
+<li>Annual downtime and cost of outages</li>
+<li>Device growth per year</li>
+<li>Admin tasks per device per year</li>
+<li>Network operations, architecture, and network dev staff counts</li>
+<li>Fully loaded FTE cost</li>
+<li>Existing annual tooling cost</li>
+<li>Extra credit: impact on revenue acceleration</li>
+</ul>
+<p><strong>Building the case</strong></p>
+<ol>
+<li>Learn the financial lingo and math.</li>
+<li>Gather the top variables.</li>
+<li>Manage assumptions:
+<ul>
+<li>Define current baseline.</li>
+<li>Assume a five year ramp.</li>
+<li>Define realistic efficiency gains.</li>
+<li>Give yourself a “haircut” so you under promise and over deliver.</li>
+</ul>
+</li>
+<li>Build the business case:
+<ul>
+<li>Increased revenue is the strongest benefit.</li>
+</ul>
+</li>
+<li>Validate with a rollout plan:
+<ul>
+<li>What is achievable, by when, and in what phases.</li>
+</ul>
+</li>
+</ol>
+<p><strong>Competitiveness and defensibility</strong></p>
+<ul>
+<li>Focus on lowest cost that still meets capability needs.</li>
+<li>It is not about pushing a specific vendor, it is about getting the job done.</li>
+<li>Be very careful with AI assumptions:
+<ul>
+<li>Do you trust it?</li>
+<li>In production?</li>
+<li>What are you willing to sign up for, and why now?</li>
+</ul>
+</li>
+</ul>
+<p><strong>Exit: how to sell it internally</strong></p>
+<ul>
+<li>Move money from their pocket to your initiative by answering “What is in it for me?”</li>
+<li>Go to finance early and make them rationally greedy:
+<ul>
+<li>Tie automation to current pains or crises.</li>
+</ul>
+</li>
+<li>Buying motives to appeal to:
+<ul>
+<li>Desire for gain</li>
+<li>Fear of loss</li>
+<li>Comfort and convenience</li>
+<li>Security and protection</li>
+<li>Pride of ownership</li>
+<li>Emotional satisfaction</li>
+</ul>
+</li>
+</ul>
+<p><strong>NABCDE pattern</strong></p>
+<ul>
+<li>Need</li>
+<li>Approach</li>
+<li>Benefits</li>
+<li>Competitiveness</li>
+<li>Defensibility</li>
+<li>Exit</li>
+</ul>
+<hr>
+<h3 id="andy-lapteff---confessions-of-a-cli-lifer-who-learned-to-love-automation">Andy Lapteff - Confessions of a CLI Lifer Who Learned to Love Automation</h3>
+<p><strong>Speaker:</strong> Andy Lapteff</p>
+<p><strong>Core ideas</strong></p>
+<ul>
+<li>Resistance to automation is often emotional, not technical.</li>
+<li>Identity stories like “I am not a developer” block progress more than tool gaps.</li>
+<li>Small wins in automation can completely change someone’s internal narrative.</li>
+<li>Vulnerability and storytelling help others see themselves in the journey.</li>
+</ul>
+<p><strong>Mindset shifts</strong></p>
+<ul>
+<li>Start extremely small:
+<ul>
+<li>Example: one Python script that logs in and runs a show command.</li>
+</ul>
+</li>
+<li>Reframe the story:
+<ul>
+<li>“I cannot code” to “I am an engineer, I can learn this.”</li>
+</ul>
+</li>
+<li>Learn in public:
+<ul>
+<li>Share the struggle, not just polished results.</li>
+</ul>
+</li>
+<li>Treat emotional resistance like technical debt:
+<ul>
+<li>Fear of failure, past academic trauma, attachment to CLI.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Cognitive biases to address</strong></p>
+<ul>
+<li>Negativity bias (one bad comment outweighs many positive).</li>
+<li>Identity anchoring (“I am a CLI person”).</li>
+<li>Loss aversion (“automation will replace me”).</li>
+<li>Past failure imprinting.</li>
+</ul>
+<p><strong>Adoption techniques</strong></p>
+<ul>
+<li>Create safe, small automation wins for hesitant engineers.</li>
+<li>Use narrative reframes:
+<ul>
+<li>Automation as amplification, not replacement.</li>
+</ul>
+</li>
+<li>Be the “first wildebeest”:
+<ul>
+<li>Go first, show it is survivable, and others follow.</li>
+</ul>
+</li>
+<li>Build community:
+<ul>
+<li>Study groups, internal chats, shared experiments.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="dinesh---the-naf-network-automation-framework-a-modular-reference-architecture">Dinesh - The NAF Network Automation Framework: A Modular Reference Architecture</h3>
+<p><strong>Speaker:</strong> Dinesh (NAF Working Group)</p>
+<p><strong>Core ideas</strong></p>
+<ul>
+<li>NAF provides a <strong>map</strong>, not a mandate:
+<ul>
+<li>Shared vocabulary and mental model for everyone in automation.</li>
+</ul>
+</li>
+<li>Focuses on six universal building blocks that exist in every automation system.</li>
+<li>Tool, vendor, and protocol agnostic:
+<ul>
+<li>Emphasizes characteristics over brands.</li>
+</ul>
+</li>
+<li>Good automation still depends on strong networking fundamentals.</li>
+</ul>
+<p><strong>The six NAF building blocks</strong></p>
+<ol>
+<li><strong>Intent</strong> – What do I want?
+<ul>
+<li>Desired outcomes, vendor neutral, extensible, declarative.</li>
+</ul>
+</li>
+<li><strong>Operational truth (observability)</strong> – What do I have?
+<ul>
+<li>Multiple truths, needs to be timely, structured, and queryable.</li>
+</ul>
+</li>
+<li><strong>Executor</strong> – How do I change things?
+<ul>
+<li>Pushes config or changes via SSH, APIs, NETCONF, gNMI, etc.</li>
+</ul>
+</li>
+<li><strong>Collector</strong> – How do I gather state?
+<ul>
+<li>Telemetry and show commands, method is secondary to accuracy.</li>
+</ul>
+</li>
+<li><strong>Orchestrator</strong> – How do I coordinate?
+<ul>
+<li>Orders tasks and multi device workflows, optional but valuable.</li>
+</ul>
+</li>
+<li><strong>Presentation layer</strong> – How do humans interact?
+<ul>
+<li>CLI, UI, dashboards, whatever makes the system understandable and usable.</li>
+</ul>
+</li>
+</ol>
+<p><strong>Principles</strong></p>
+<ul>
+<li>Keep things functional, simple, and modular.</li>
+<li>Focus on intent and state rather than imperative step lists.</li>
+<li>Use NAF as a shared language:
+<ul>
+<li>“This project touches collector and intent” is clearer than “some scripts.”</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="the-operating-model-for-ai-infrastructure">The Operating Model for AI Infrastructure</h3>
+<p><strong>Speaker:</strong> Itential (didn&rsquo;t catch the speaker&rsquo;s name)</p>
+<p><strong>Core ideas</strong></p>
+<ul>
+<li>AI is a tool in the toolbox, not a universal solution.</li>
+<li>Many devices and processes will never be “AI native.”</li>
+<li>Safe AI for infrastructure must be:
+<ul>
+<li>Secure</li>
+<li>Governed and accountable</li>
+<li>Traceable and auditable</li>
+</ul>
+</li>
+<li>Practical model has three layers:
+<ol>
+<li>Instrumentation</li>
+<li>Deterministic execution</li>
+<li>AI reasoning</li>
+</ol>
+</li>
+</ul>
+<p><strong>Three layers</strong></p>
+<ol>
+<li><strong>Instrumentation layer</strong>
+<ul>
+<li>Existing scripts, APIs, telemetry, configuration methods.</li>
+<li>Keep investing here regardless of AI.</li>
+</ul>
+</li>
+<li><strong>Deterministic execution (orchestration)</strong>
+<ul>
+<li>Workflows that run the same way every time.</li>
+<li>Clear inputs, defined steps, predictable outputs.</li>
+</ul>
+</li>
+<li><strong>AI reasoning layer</strong>
+<ul>
+<li>Uses context plus models to suggest or select actions.</li>
+<li>Calls deterministic workflows rather than touching devices directly.</li>
+</ul>
+</li>
+</ol>
+<p><strong>Evolution of operations</strong></p>
+<ul>
+<li>Human in the loop:
+<ul>
+<li>AI recommends, humans approve.</li>
+</ul>
+</li>
+<li>Human on the loop:
+<ul>
+<li>AI triggers workflows, humans monitor and hold the kill switch.</li>
+</ul>
+</li>
+<li>Selective autonomy:
+<ul>
+<li>For bounded problems, AI operates mostly on its own with strong logging and guardrails.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Design implications</strong></p>
+<ul>
+<li>AI does not replace automation. It rides on top of well designed automation.</li>
+<li>Build small, single purpose workflows that are safe for agents to call.</li>
+<li>Log what changed, when, and why so operations stay auditable.</li>
+</ul>
+<hr>
+<h3 id="mark-prosser---break-down-barriers-before-you-build-up-platforms">Mark Prosser - Break Down Barriers Before you Build Up Platforms</h3>
+<p><strong>Speaker:</strong> Mark Prosser</p>
+<p><strong>Core ideas</strong></p>
+<ul>
+<li>Tool wars (Ansible vs Python, etc.) distract from real blockers.</li>
+<li>Most networks are not stuck because “Ansible does not scale” on 15 routers.</li>
+<li>Automation and platforms are socio technical problems:
+<ul>
+<li>People, process, data, and culture matter as much as code.</li>
+</ul>
+</li>
+<li>You must understand constraints before you invest in platforms.</li>
+</ul>
+<p><strong>Constraints first, platform second</strong></p>
+<ul>
+<li>Walk the “assembly line” of how services are delivered:
+<ul>
+<li>Tickets, approvals, documentation, handoffs, monitoring, not just router CLI.</li>
+</ul>
+</li>
+<li>Map signal driven workflows:
+<ul>
+<li>Every actor, system, and signal from request to delivery.</li>
+</ul>
+</li>
+<li>Look for bottlenecks in:
+<ul>
+<li>Change management</li>
+<li>Notifications</li>
+<li>Data ownership</li>
+<li>Human queues</li>
+</ul>
+</li>
+</ul>
+<p><strong>Platforms and risks</strong></p>
+<ul>
+<li>A platform is a collection of working subsystems with a unified interface.</li>
+<li>Vendors already sell many platforms.</li>
+<li>Building your own platform too early:
+<ul>
+<li>Can consume years</li>
+<li>Needs many skills</li>
+<li>Often misses the real organizational constraints</li>
+</ul>
+</li>
+</ul>
+<p><strong>Data and ownership</strong></p>
+<ul>
+<li>Data is scattered:
+<ul>
+<li>Ticketing, CMDBs, monitoring, spreadsheets, internal tools.</li>
+</ul>
+</li>
+<li>Ask:
+<ul>
+<li>Do we have API access?</li>
+<li>Who owns this data?</li>
+<li>Can we normalize it?</li>
+</ul>
+</li>
+<li>Do not assume “single source of truth” is always the right first step.</li>
+</ul>
+<p><strong>Skills and Moneyball analogy</strong></p>
+<ul>
+<li>You probably cannot hire a full set of platform unicorns.</li>
+<li>Assemble skills in aggregate:
+<ul>
+<li>Network, software, DB, process, and communication across teams.</li>
+</ul>
+</li>
+<li>Use Gall’s Law:
+<ul>
+<li>Start from simple systems that work and grow from there.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="greg-botts---overhauling-data-center-network-automation-intels-data-centric-journey">Greg Botts - Overhauling Data Center Network Automation: Intel’s Data-Centric Journey</h3>
+<p><strong>Speaker:</strong> Greg Botts (Intel)</p>
+<p><strong>Core ideas</strong></p>
+<ul>
+<li>Intel moved from a vendor turnkey automation stack to a data centric system built around Nautobot.</li>
+<li>The key pivot was “design for data, not for config.”</li>
+<li>Small team (about two people) supporting thousands of devices by focusing on:
+<ul>
+<li>Modeling</li>
+<li>Standardization</li>
+<li>Open tooling</li>
+</ul>
+</li>
+</ul>
+<p><strong>Old world</strong></p>
+<ul>
+<li>Vendor turnkey system with:
+<ul>
+<li>ZTP</li>
+<li>Inventory</li>
+<li>Templates and rendering</li>
+</ul>
+</li>
+<li>Worked well at first, but:
+<ul>
+<li>Hit scale limits</li>
+<li>Required many clusters</li>
+<li>Accumulated technical and operational overhead</li>
+</ul>
+</li>
+</ul>
+<p><strong>Transition</strong></p>
+<ul>
+<li>Pulled templates and logic into repos.</li>
+<li>Stored device data in internal DBaaS with custom schema.</li>
+<li>Built an internal engine to combine data and templates.</li>
+<li>Eventually decided to start again using Nautobot as the network source of truth.</li>
+</ul>
+<p><strong>New architecture</strong></p>
+<ul>
+<li>Nautobot at the center, hosted on Kubernetes with DBaaS.</li>
+<li>ZTP integrated with Nautobot for identity, images, and base configs.</li>
+<li>Data modeling:
+<ul>
+<li>VLANs, PVLANs, MLAG, BGP, roles, and more modeled explicitly.</li>
+</ul>
+</li>
+<li>Two ingestion paths:
+<ul>
+<li>Brownfield jobs to import from existing devices.</li>
+<li>Greenfield jobs for new builds.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Config generation and deployment</strong></p>
+<ul>
+<li>GraphQL queries pull modeled data.</li>
+<li>Templates render intended config.</li>
+<li>Golden config style patterns provide diff and compliance.</li>
+<li>Custom executor tool:
+<ul>
+<li>Gets intended config from Nautobot.</li>
+<li>Shows diff.</li>
+<li>Pushes changes.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Lessons</strong></p>
+<ul>
+<li>Data is king:
+<ul>
+<li>Once modeled, many tools become simpler.</li>
+</ul>
+</li>
+<li>Use migrations to remove “landmines” and snowflake configs.</li>
+<li>Design hosting, logging, and maintenance up front.</li>
+<li>Democratize network data via standard APIs and queries.</li>
+</ul>
+<hr>
+<h3 id="cat-gurinsky---lifecycle-automation-troubleshooting-upgrading--more">Cat Gurinsky - Lifecycle Automation: Troubleshooting, Upgrading &amp; More</h3>
+<p><strong>Speaker:</strong> Cat Gurinsky</p>
+<p><strong>Core ideas</strong></p>
+<ul>
+<li>Big wins in automation are often in the middle of lifecycle:
+<ul>
+<li>Troubleshooting</li>
+<li>Maintenance</li>
+<li>Upgrades</li>
+</ul>
+</li>
+<li>Most incidents and changes follow repeatable patterns that can be automated.</li>
+<li>Small teams can run large networks if they automate these patterns carefully.</li>
+</ul>
+<p><strong>Troubleshooting</strong></p>
+<ul>
+<li>After an alert, most checks are predictable:
+<ul>
+<li>Interface state and light levels</li>
+<li>Neighbors</li>
+<li>Logs and counters</li>
+</ul>
+</li>
+<li>Automation can:
+<ul>
+<li>Run commands</li>
+<li>Parse and store structured output</li>
+<li>Enrich tickets with findings</li>
+<li>Generate work orders for onsite tasks</li>
+</ul>
+</li>
+</ul>
+<p><strong>Maintenance</strong></p>
+<ul>
+<li>ACLs and large repetitive changes:
+<ul>
+<li>Model rules in data formats (for example YAML).</li>
+<li>Generate device specific fragments.</li>
+</ul>
+</li>
+<li>Extension management (for example Splunk on switches):
+<ul>
+<li>Track OS and extension compatibility.</li>
+<li>Enforce install order, prerequisites, certificates, connectivity checks.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Upgrades</strong></p>
+<ul>
+<li>Constraints:
+<ul>
+<li>Daytime upgrades, dual connected servers, tight maintenance windows.</li>
+</ul>
+</li>
+<li>Pre upgrade automation:
+<ul>
+<li>Gather facts</li>
+<li>Check flash and stage images</li>
+<li>Plan one step or two step paths</li>
+<li>Validate LACP, trunks, and MLAG</li>
+<li>Capture pre check commands and configs</li>
+</ul>
+</li>
+<li>Execution:
+<ul>
+<li>Set boot image</li>
+<li>Remove extensions if needed</li>
+<li>Reload with confirmation</li>
+<li>Watch for device return</li>
+</ul>
+</li>
+<li>Post upgrade:
+<ul>
+<li>Reinstall extensions</li>
+<li>Run post checks</li>
+<li>Compare states</li>
+<li>Summarize results</li>
+</ul>
+</li>
+</ul>
+<p><strong>Implementation style</strong></p>
+<ul>
+<li>Modular Python:
+<ul>
+<li>Small modules for facts, flash, LACP, etc.</li>
+<li>Wrappers to build full workflows.</li>
+</ul>
+</li>
+<li>Emphasis on:
+<ul>
+<li>Skipping unsafe devices</li>
+<li>Logging</li>
+<li>Handling weird edge cases gracefully</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="chris-grundemann---2025-state-of-network-automation-survey-results">Chris Grundemann - 2025 State of Network Automation Survey Results</h3>
+<p><strong>Speaker:</strong> Chris Grundemann</p>
+<p><strong>Core ideas</strong></p>
+<ul>
+<li>Network automation is still early and patchy across the industry.</li>
+<li>Many orgs automate only a small portion of their lifecycle.</li>
+<li>People and organization issues are bigger blockers than technology.</li>
+</ul>
+<p><strong>Who responded</strong></p>
+<ul>
+<li>Hundreds of respondents from many countries and industries.</li>
+<li>Roles:
+<ul>
+<li>Network automation engineer emerged as a top role for the first time.</li>
+<li>Many network engineers also doing automation.</li>
+</ul>
+</li>
+</ul>
+<p><strong>State of automation</strong></p>
+<ul>
+<li>Most orgs have less than half of lifecycle automated.</li>
+<li>A notable portion have little or no automation.</li>
+<li>Many jump straight to pushing config, often without automated validation.</li>
+</ul>
+<p><strong>Commonly automated functions</strong></p>
+<ul>
+<li>Backups</li>
+<li>Device deployment and onboarding</li>
+<li>Firmware and OS upgrades</li>
+<li>Service provisioning</li>
+</ul>
+<p><strong>Tools and approaches</strong></p>
+<ul>
+<li>Homegrown scripts and open source tools dominate.</li>
+<li>Python is the primary scripting language.</li>
+<li>Popular tools include:
+<ul>
+<li>Ansible</li>
+<li>NetBox</li>
+<li>Nautobot</li>
+<li>Nornir</li>
+<li>Terraform</li>
+</ul>
+</li>
+</ul>
+<p><strong>Staffing and skills</strong></p>
+<ul>
+<li>Many orgs have zero dedicated automation engineers.</li>
+<li>Most rely on training existing network staff.</li>
+<li>Skills gap:
+<ul>
+<li>High confidence in networking skills</li>
+<li>Lower confidence in automation skills</li>
+</ul>
+</li>
+</ul>
+<p><strong>AI and LLMs</strong></p>
+<ul>
+<li>Only a very small percentage are using AI with production networks today.</li>
+<li>More are experimenting or considering it.</li>
+<li>Almost half have no plans yet.</li>
+</ul>
+<p><strong>Barriers</strong></p>
+<ul>
+<li>Top barrier: skills challenges.</li>
+<li>Combined people barriers (org, culture, personality) outweigh technical barriers.</li>
+<li>Measurement is weak:
+<ul>
+<li>Many do not formally measure automation impact.</li>
+<li>Management often has limited or misaligned visibility into reality.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="day-1-themes-and-takeaways">Day 1 Themes and Takeaways</h3>
+<ul>
+<li><strong>Business outcomes and impact models</strong>
+<ul>
+<li>Strong push to link automation to money, risk, and revenue (Jeff, survey).</li>
+</ul>
+</li>
+<li><strong>Framework thinking</strong>
+<ul>
+<li>NAF building blocks, AI operating models, and data centric architectures provide maps for designing systems (NAF, Itential, Intel).</li>
+</ul>
+</li>
+<li><strong>Lifecycle focus</strong>
+<ul>
+<li>Troubleshooting, maintenance, and upgrades are high value areas that many agree should be automated but often are not (Cat, survey).</li>
+</ul>
+</li>
+<li><strong>Data and modeling</strong>
+<ul>
+<li>Model first, config second:
+<ul>
+<li>Nautobot and similar systems as central sources of truth (Intel, NAF).</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Skills and collaboration</strong>
+<ul>
+<li>Industry wide skills gap in automation.</li>
+<li>Success stories involve small, cross functional teams and deliberate skill building.</li>
+</ul>
+</li>
+</ul>
+<h2 id="day-2---autocon4">Day 2 - AutoCon4</h2>
+<h3 id="joseph-nicholson---scaling-network-operations-with-modular-ansible-a-multi-environment-automation-framework">Joseph Nicholson - Scaling Network Operations with Modular Ansible: A Multi-Environment Automation Framework</h3>
+<p><strong>Core Themes</strong></p>
+<ul>
+<li>Ansible modularity scales repeatable NOC workflows.</li>
+<li>Dynamic inventory tied to the real SoT is essential.</li>
+<li>Automation supports humans, it does not replace them.</li>
+<li>Modular tasks prevent duplication across vendors and playbooks.</li>
+</ul>
+<p><strong>Key Ideas</strong></p>
+<ul>
+<li>Use Ansible when a human is in the loop. Use Python for scheduled or continuous tasks.</li>
+<li>AWX adoption is gradual. Team still uses CLI but shifting to AWX pipelines.</li>
+<li>Dynamic inventory script runs on each play, pulling metadata from GUMS (their 25-year internal SoT).</li>
+<li>Inventory is millisecond fast and always fresh.</li>
+<li>Modular repo structure:
+<ul>
+<li>Shared tasks</li>
+<li>Vendor-specific folders</li>
+<li>Common upgrade tasks</li>
+<li>Maintenance snapshots</li>
+</ul>
+</li>
+<li>Router upgrade workflow:
+<ul>
+<li>Validate change ticket</li>
+<li>Pre-snapshots</li>
+<li>Auto fetch image if not staged</li>
+<li>Traffic diversion</li>
+<li>Upgrade</li>
+<li>Post validation</li>
+</ul>
+</li>
+<li>include vs import:
+<ul>
+<li>import for static tasks and start-at-task</li>
+<li>include for dynamic decisions</li>
+</ul>
+</li>
+<li>Pipeline:
+<ul>
+<li>“FixMe” detector to catch commented-out debugging code</li>
+<li>AWX sync when GUMS data changes</li>
+</ul>
+</li>
+</ul>
+<p><strong>Takeaways</strong></p>
+<ul>
+<li>Modularity multiplies efficiency and risk.</li>
+<li>Dynamic inventory avoids stale data.</li>
+<li>Testing is hard without Molecule or containerlab.</li>
+<li>Maintenance windows require mindful timeouts.</li>
+<li>Humans validate diffs before changes.</li>
+</ul>
+<hr>
+<h3 id="munachimso-nwaiwu---from-cli-to-model-building-a-foundational-source-of-truth-for-brownfield-networks">Munachimso Nwaiwu - From CLI to Model: Building a Foundational Source of Truth for Brownfield Networks</h3>
+<p><strong>Core Themes</strong></p>
+<ul>
+<li>Brownfield is the norm. Greenfield is rare.</li>
+<li>You cannot automate what you cannot model.</li>
+<li>A simple, versioned SoT can be built with almost no budget.</li>
+<li>Start with discovery and modeling before intent or templates.</li>
+</ul>
+<p><strong>Key Ideas</strong></p>
+<ul>
+<li>Revelo project:
+<ul>
+<li>Bootstrap inventory from CSV or from discovery (nmap).</li>
+<li>Generate Netmiko inventory automatically.</li>
+<li>Use free labs (dCloud, CML, Juniper vLabs).</li>
+</ul>
+</li>
+<li>SoT capture pipeline:
+<ul>
+<li>Napalm for common facts.</li>
+<li>Netmiko for CLI.</li>
+<li>Genie for structured parsing.</li>
+<li>JSON snapshots per run with version history.</li>
+</ul>
+</li>
+<li>Diff engine:
+<ul>
+<li>Compare runs (for example sot_1 vs sot_5).</li>
+<li>Detect drift over time.</li>
+</ul>
+</li>
+<li>AI opportunities:
+<ul>
+<li>LLM generated parsers to expand command coverage.</li>
+<li>Use large datasets to infer templates later.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Takeaways</strong></p>
+<ul>
+<li>You can bootstrap SoT without NetBox or Nautobot.</li>
+<li>Simple JSON folders with versioning go a long way.</li>
+<li>Version history enables drift detection.</li>
+<li>Modeling comes before intent.</li>
+<li>This is step 1 of a longer roadmap.</li>
+</ul>
+<hr>
+<h3 id="erich-crosswhite---from-manual-to-marathon-my-automation-journey-at-heb">Erich Crosswhite - From Manual to Marathon: My Automation Journey at HEB</h3>
+<p><strong>Core Themes</strong></p>
+<ul>
+<li>Small repeatable steps lead to big automation.</li>
+<li>AVD and IaC simplified operations dramatically.</li>
+<li>Pipelines with validation and documentation create trust.</li>
+<li>NetBox front end reduces YAML complexity.</li>
+</ul>
+<p><strong>Key Ideas</strong></p>
+<ul>
+<li>IaC mandate required programmatic configs and code review.</li>
+<li>Lab:
+<ul>
+<li>EVE-NG with EOS VMs</li>
+<li>Homemade CloudVision lab</li>
+</ul>
+</li>
+<li>AVD pipeline:
+<ul>
+<li>Git MR triggers AWX</li>
+<li>AVD builds configs</li>
+<li>CVP deploys diffs</li>
+<li>Docs auto published to Confluence</li>
+</ul>
+</li>
+<li>NetBox integration:
+<ul>
+<li>Script pulls objects and builds AVD YAML</li>
+<li>Eliminates manual port variables</li>
+</ul>
+</li>
+<li>Safety:
+<ul>
+<li>“state: absent” wipes switches into ZTP</li>
+<li>Need validators (my suggestion) to prevent this</li>
+</ul>
+</li>
+<li>Pipeline stages:
+<ul>
+<li>YAML validation</li>
+<li>AVD build for main and feature</li>
+<li>Diff plus Batfish checks</li>
+<li>Deployment with CVP tasks</li>
+<li>Auto docs</li>
+</ul>
+</li>
+</ul>
+<p><strong>Takeaways</strong></p>
+<ul>
+<li>AVD plus CI/CD removed years of tech debt.</li>
+<li>Documentation in Confluence keeps teams aligned.</li>
+<li>Batfish adds strong guardrails.</li>
+<li>Access ports are the hardest part of automation.</li>
+<li>Many small commits look like training logs.</li>
+</ul>
+<hr>
+<h3 id="scott-robohn---toward-autonomy">Scott Robohn - Toward Autonomy</h3>
+<p><strong>Core Themes</strong></p>
+<ul>
+<li>Autonomy is a continuum built on automation and orchestration.</li>
+<li>Closed loops, telemetry, and trust are mandatory.</li>
+<li>Autonomy already exists in networking (OSPF, BGP, LSPs).</li>
+<li>You do not need full autonomy. You need targeted autonomy.</li>
+</ul>
+<p><strong>Key Ideas</strong></p>
+<ul>
+<li>Automation: deterministic, human driven.</li>
+<li>Autonomy: goal driven, adaptive, feedback based.</li>
+<li>Ingredients for autonomy:
+<ul>
+<li>Telemetry signals</li>
+<li>Control loops</li>
+<li>Error handling</li>
+<li>Human-in / on / out-of-the-loop transitions</li>
+<li>Measurement of outcomes</li>
+</ul>
+</li>
+<li>Examples of existing autonomy:
+<ul>
+<li>Telephone switching</li>
+<li>MPLS LSP signaling</li>
+<li>BGP state machine</li>
+</ul>
+</li>
+<li>AI is a “how,” not a “what.”</li>
+<li>Control Plane 3.0:
+<ul>
+<li>More distributed intelligence</li>
+<li>Richer telemetry</li>
+<li>AI-driven reasoning</li>
+</ul>
+</li>
+<li>Business value:
+<ul>
+<li>Reduced toil</li>
+<li>Faster service enablement</li>
+<li>Lower operational cost</li>
+</ul>
+</li>
+</ul>
+<p><strong>Personal Note</strong></p>
+<ul>
+<li>Asked about “why now?” in resistant orgs.</li>
+<li>Scott reframed it as “why not now?” and encouraged continuous exploration.</li>
+</ul>
+<hr>
+<h3 id="marc-koerner---esnets-new-micro-service-based-discovery-service">Marc Koerner - ESnet’s new Micro-Service based Discovery Service</h3>
+<p><strong>Core Themes</strong></p>
+<ul>
+<li>Need a reliable, unified discovery system.</li>
+<li>Documents are the core data unit.</li>
+<li>Microservices allow modular, scalable discovery.</li>
+<li>Normalization is essential for multi-vendor networks.</li>
+</ul>
+<p><strong>Key Ideas</strong></p>
+<ul>
+<li>Discovery Service:
+<ul>
+<li>Fetches device configs, XML/JSON docs</li>
+<li>Stores compressed versions</li>
+<li>Publishes updates via Kafka</li>
+<li>Keeps history and versioning</li>
+</ul>
+</li>
+<li>TAL model:
+<ul>
+<li>Abstract topology representation</li>
+</ul>
+</li>
+<li>Data normalizer:
+<ul>
+<li>Converts raw documents into normalized data</li>
+</ul>
+</li>
+<li>Architecture:
+<ul>
+<li>Agents fetch data</li>
+<li>Controller schedules discovery</li>
+<li>Anneal service stores compressed docs</li>
+<li>Kafka broadcasts new versions</li>
+</ul>
+</li>
+<li>Filtering removes high churn fields to avoid noise.</li>
+<li>Kubernetes deployment with:
+<ul>
+<li>GitLab CI</li>
+<li>Harbor registry</li>
+<li>ArgoCD continuous delivery</li>
+</ul>
+</li>
+</ul>
+<p><strong>Takeaways</strong></p>
+<ul>
+<li>Normalization allows consistent application behavior.</li>
+<li>Microservices outperform earlier NSO-based attempts.</li>
+<li>History and versioning are crucial for trust.</li>
+<li>Open sourcing is planned once ESnet specific code is cleaned.</li>
+</ul>
+<hr>
+<h3 id="karl-newell---hawat-an-ai-assistant-for-network-troubleshooting">Karl Newell - HAWAT: An AI Assistant for Network Troubleshooting</h3>
+<p><strong>Core Themes</strong></p>
+<ul>
+<li>AI can run commands, interpret state, and summarize health.</li>
+<li>Tool calling enables safe, controlled automation.</li>
+<li>LLM acts as a troubleshooting assistant rather than an autonomous agent.</li>
+</ul>
+<p><strong>Key Ideas</strong></p>
+<ul>
+<li>Use cases:
+<ul>
+<li>Engineer queries</li>
+<li>ServiceNow ticket enrichment</li>
+<li>Looking Glass for members</li>
+</ul>
+</li>
+<li>Architecture:
+<ul>
+<li>Streamlit UI</li>
+<li>PydanticAI tool calling</li>
+<li>Containerlab topologies for testing</li>
+</ul>
+</li>
+<li>LLM loops:
+<ul>
+<li>Calls tools</li>
+<li>Gets results</li>
+<li>Summarizes insights</li>
+</ul>
+</li>
+<li>Troubleshooting examples:
+<ul>
+<li>OSPF neighbor checks</li>
+<li>Timer mismatch detection</li>
+<li>Packet loss scenarios</li>
+</ul>
+</li>
+<li>Looking Glass integration:
+<ul>
+<li>LLM reads API spec</li>
+<li>Executes REST calls</li>
+</ul>
+</li>
+<li>Multi-domain pilot:
+<ul>
+<li>Combine Internet2 + member networks</li>
+<li>Cross-domain diagnostics</li>
+</ul>
+</li>
+</ul>
+<p><strong>Takeaways</strong></p>
+<ul>
+<li>Tool calling with guardrails solves real troubleshooting.</li>
+<li>LLM provides reasoning, not direct device access.</li>
+<li>Refactors done with AI save massive time.</li>
+</ul>
+<hr>
+<h3 id="brandon-cavett---from-band-aids-to-best-practices-usaas-network-automation-journey">Brandon Cavett - From Band-Aids to Best Practices: USAA&rsquo;s Network Automation Journey</h3>
+<p><strong>Core Themes</strong></p>
+<ul>
+<li>Multi-year journey moving from scripts to AVD.</li>
+<li>Standardization is the real unlock.</li>
+<li>Day 2 operations improve the moment AVD is adopted.</li>
+<li>Culture changed once engineers saw reduced toil.</li>
+</ul>
+<p><strong>Key Ideas</strong></p>
+<ul>
+<li>Early era:
+<ul>
+<li>Datacenter rack build automation</li>
+<li>Patch matrix generation</li>
+<li>IPAM and cabling pipelines</li>
+</ul>
+</li>
+<li>Day 2 pain:
+<ul>
+<li>Single-threaded pipelines</li>
+<li>Drift in CVP design configs</li>
+<li>Limited Ansible expertise</li>
+</ul>
+</li>
+<li>AVD transition:
+<ul>
+<li>YAML models</li>
+<li>Fast rebuilds</li>
+<li>Multi-threaded pushes</li>
+<li>Two full datacenters now fully AVD</li>
+</ul>
+</li>
+<li>Refactoring provisioning:
+<ul>
+<li>Old pre-provisioning replaced by AVD inputs</li>
+</ul>
+</li>
+<li>Next steps:
+<ul>
+<li>CICD pipelines</li>
+<li>Digital twins</li>
+<li>Brownfield rebuilds</li>
+<li>Automated validation and testing</li>
+</ul>
+</li>
+</ul>
+<p><strong>Takeaways</strong></p>
+<ul>
+<li>AVD created more progress in the last year than prior three.</li>
+<li>Standardization transformed change management.</li>
+<li>Leadership support grew after seeing deployment speed.</li>
+</ul>
+<hr>
+<h3 id="john-capobianco---from-cli-to-gpt-how-ai-is-rewriting-the-rules-of-network-automation">John Capobianco - From CLI to GPT: How AI Is Rewriting the Rules of Network Automation</h3>
+<p><strong>Core Themes</strong></p>
+<ul>
+<li>AI is mandatory for future network operations.</li>
+<li>Complexity exceeds human scale.</li>
+<li>AI simplifies workflows that automation struggles with.</li>
+</ul>
+<p><strong>Key Ideas</strong></p>
+<ul>
+<li>Historical skepticism repeats with AI.</li>
+<li>Agents, RAG, and MCP will shape network operations.</li>
+<li>Documentation generation from show commands and APIs is powerful.</li>
+<li>AI and automation reinforce each other.</li>
+<li>Air gapped advice:
+<ul>
+<li>Use local models (for example Ollama)</li>
+<li>Walled gardens or secure cloud partitions</li>
+<li>Local RAG stores</li>
+</ul>
+</li>
+<li>Packet Buddy and ACI tools show AI assisted troubleshooting.</li>
+</ul>
+<p><strong>Takeaways</strong></p>
+<ul>
+<li>Curiosity and experimentation will define future engineers.</li>
+<li>AI adoption curve mirrors past major tech shifts.</li>
+<li>Engineers who embrace AI will build the next era of operations.</li>
+</ul>
+<h2 id="day-3---autocon4">Day 3 - AutoCon4</h2>
+<h3 id="closing-keynote-greg-freeman---the-netdevops-journey-manual-firefighting-to-agentic-autonomy">Closing Keynote: Greg Freeman - The NetDevOps Journey: Manual Firefighting to Agentic Autonomy</h3>
+<p><strong>Core Themes</strong></p>
+<ul>
+<li>Transform traditional tiered operations into an automation and orchestration organization.</li>
+<li>Human wisdom first, AI second: encode workflows, then let AI select and drive them.</li>
+<li>Aim for a highly orchestrated network, not just a highly automated one.</li>
+</ul>
+<p><strong>Key Ideas</strong></p>
+<ul>
+<li>Org pyramid inversion: automation engineers on top, network engineers in the middle, techs on the bottom through natural shrinkage and upskilling.</li>
+<li>Created “first followers” group with heavy investment, training, onsite collaboration, and cultural alignment.</li>
+<li>Required process discipline:
+<ul>
+<li>PDD (Process Description Document)</li>
+<li>SDD (Solution Design Document)</li>
+</ul>
+</li>
+<li>Three operational principles:
+<ul>
+<li>Do not let it break.</li>
+<li>If it breaks, fix it fast.</li>
+<li>Communicate clearly.</li>
+</ul>
+</li>
+<li>Platform as a service:
+<ul>
+<li>Northbound ticketing and portals.</li>
+<li>Workflow engine with APIs in the middle.</li>
+<li>Southbound Ansible stacks, TL1, NETCONF, multi vendor support.</li>
+</ul>
+</li>
+<li>At scale:
+<ul>
+<li>355+ workflows</li>
+<li>~10 executions per minute</li>
+<li>80 percent of interactions are machine to machine</li>
+</ul>
+</li>
+<li>AI selects deterministic workflows, not direct freeform device interaction.</li>
+</ul>
+<p><strong>Takeaways</strong></p>
+<ul>
+<li>Selling leadership on automation works best when framed as a reliability investment, not just cost savings.</li>
+<li>PDD + SDD ensures shared ownership, avoids ad hoc scripts, and makes workflows reusable.</li>
+<li>Track success by volume of workflows and percent of machine to machine interactions.</li>
+<li>A powerful narrative slide: “Do not let it break. Fix it fast. Communicate clearly.”</li>
+</ul>
+<hr>
+<h3 id="vincent-phelan---the-secret-to-network-config--security-compliance-at-scale">Vincent Phelan - The Secret to Network Config &amp; Security Compliance at Scale</h3>
+<p><strong>Core Themes</strong></p>
+<ul>
+<li>Architecture and automation must be designed together.</li>
+<li>Compliance requires intentional design, strong standards, and a clean data pipeline.</li>
+<li>Avoid accidental “Winchester House” networks. Aim for deliberate “Fallingwater” design.</li>
+</ul>
+<p><strong>Key Ideas</strong></p>
+<ul>
+<li>Anti patterns:
+<ul>
+<li>Too many platforms and tools</li>
+<li>Loses data through premature optimization</li>
+<li>Tool specific implementations</li>
+<li>Manual glue steps that inevitably fail</li>
+<li>Forcing YAML or Git too early</li>
+</ul>
+</li>
+<li>Compliance pipeline:
+<ol>
+<li>Gather configs and state (CLI scraping where needed)</li>
+<li>Parse to structured JSON</li>
+<li>Security defines controls in Excel</li>
+<li>Translate Excel to manifests to OPA policies</li>
+<li>Evaluate policies in batch</li>
+<li>Remediate and update inventory</li>
+</ol>
+</li>
+<li>Uses “probability of truth” across monitoring, CMDB, inventory, ticketing.</li>
+<li>Measured scale rather than guessed:
+<ul>
+<li>Data volumes</li>
+<li>OPA evaluation models</li>
+<li>Repository layout</li>
+<li>Batch vs per device performance</li>
+</ul>
+</li>
+</ul>
+<p><strong>Takeaways</strong></p>
+<ul>
+<li>You can start compliance automation without a perfect inventory or SoT.</li>
+<li>Excel is a perfectly valid frontend; automation should translate the data.</li>
+<li>Keep raw data so you can apply new parsers or validators later.</li>
+<li>Easy storytelling slide: Winchester House vs Fallingwater architecture.</li>
+</ul>
+<hr>
+<h3 id="message-from-accelerating-sponsor-gluware">Message from Accelerating Sponsor Gluware</h3>
+<p><strong>Core Themes</strong></p>
+<ul>
+<li>Engineers spend too much time rebuilding foundational plumbing instead of high value business logic.</li>
+<li>80 percent of the work is foundational; only 20 percent delivers most of the value.</li>
+<li>A platform can handle the 80 percent so engineers can focus on state and behavior.</li>
+</ul>
+<p><strong>Key Ideas</strong></p>
+<ul>
+<li>Foundational concerns:
+<ul>
+<li>Credential vaulting</li>
+<li>RBAC, DR</li>
+<li>Source of truth plumbing</li>
+<li>Device onboarding and patching</li>
+</ul>
+</li>
+<li>Engineers’ value:
+<ul>
+<li>Decisions about resiliency, latency, security behavior</li>
+<li>Large scale patch and remediation strategies</li>
+</ul>
+</li>
+<li>RPA and event driven flows:
+<ul>
+<li>Self remediation for failing circuits, bad interfaces, degraded sites</li>
+</ul>
+</li>
+<li>AI integrations:
+<ul>
+<li>Agents that work with NetBox, ServiceNow, workflows</li>
+<li>Validation layer grounded in known good configs from your own environment</li>
+</ul>
+</li>
+</ul>
+<p><strong>Takeaways</strong></p>
+<ul>
+<li>Use the 80/20 framing to justify investing in an automation backbone.</li>
+<li>Emphasize validated automation when pitching internal improvements.</li>
+<li>Engineers should focus on policy and behavior, not boilerplate infrastructure code.</li>
+</ul>
+<hr>
+<h3 id="senad-palislamovic---building-ai-with-ai">Senad Palislamovic - Building AI with AI</h3>
+<p>I missed the first half of this talk so my notes may be incomplete.</p>
+<p><strong>Core Themes</strong></p>
+<ul>
+<li>Effective AI for networking is an engineered system, not a single model.</li>
+<li>RAG must be constrained and purposeful.</li>
+<li>All changes must be validated through a lab/sandbox pipeline before production.</li>
+</ul>
+<p><strong>Key Ideas</strong></p>
+<ul>
+<li>Pipeline structure:
+<ul>
+<li>Intent → retrieval pipeline → MCP/tool layer → proposed config → validation → production</li>
+</ul>
+</li>
+<li>LLM alone will not reach 100 percent provisioning accuracy.</li>
+<li>Real power comes from:
+<ul>
+<li>LLM + constrained RAG + prompts + deterministic tools + validation loop</li>
+</ul>
+</li>
+<li>MVPN analogy:
+<ul>
+<li>Many knobs and components combine to create a robust system, not one feature.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Takeaways</strong></p>
+<ul>
+<li>Treat LLM as one module among many; design retrieval and validation deliberately.</li>
+<li>Adopt “lab before prod” for any AI driven changes.</li>
+<li>Messaging line: “LLM + RAG + validation, not LLM alone.”</li>
+</ul>
+<hr>
+<h3 id="eric-chou---battle-of-the-bots-which-ai-models-actually-work-for-network-engineering-tasks">Eric Chou - Battle of the Bots: Which AI Models Actually Work for Network Engineering Tasks</h3>
+<p><strong>Core Themes</strong></p>
+<ul>
+<li>Do not ask which model is best. Ask which model is best for your task.</li>
+<li>Evaluate AI tools using probability, payout, and expected value.</li>
+</ul>
+<p><strong>Key Ideas</strong></p>
+<ul>
+<li>Build decision trees:
+<ul>
+<li>Options, probabilities, payouts, expected value</li>
+</ul>
+</li>
+<li>Hardest part is estimating probability of success:
+<ul>
+<li>Human review</li>
+<li>Config validation</li>
+<li>Trusted model evaluating another model</li>
+</ul>
+</li>
+<li>Capture traces:
+<ul>
+<li>Prompts, tool calls, outputs, reasoning steps</li>
+</ul>
+</li>
+<li>Involve the whole team:
+<ul>
+<li>Define “good” outputs together</li>
+<li>Make evaluation transparent and repeatable</li>
+</ul>
+</li>
+</ul>
+<p><strong>Takeaways</strong></p>
+<ul>
+<li>Use EV based evaluation when comparing AI models or tools.</li>
+<li>Build an AI evaluation pipeline before adopting AI tools.</li>
+<li>Good phrase: “Expected value beats hype.”</li>
+</ul>
+<hr>
+<h3 id="dave-duggal---a-harmonized-standards-based-ontology-for-telco-grade-agents">Dave Duggal - A Harmonized, Standards-based Ontology for Telco-grade Agents</h3>
+<p><strong>Core Themes</strong></p>
+<ul>
+<li>GenAI and agentic AI are not safe enough for telco grade networks alone.</li>
+<li>Telco automation requires deterministic behavior built on ontologies and graphs.</li>
+</ul>
+<p><strong>Key Ideas</strong></p>
+<ul>
+<li>LLM fixes like RAG and chain of thought are still probabilistic and costly.</li>
+<li>Networks are graph shaped:
+<ul>
+<li>Knowledge graphs and ontologies provide meaning and strong typing.</li>
+<li>Hypergraphs enable multi dimensional relationships and policies.</li>
+</ul>
+</li>
+<li>Knowledge graph as control plane:
+<ul>
+<li>Northbound for agents</li>
+<li>Southbound for deterministic network operations</li>
+</ul>
+</li>
+<li>Context is a dynamic reasoning pipeline, not a static blob.</li>
+</ul>
+<p><strong>Takeaways</strong></p>
+<ul>
+<li>Use ontology language when talking to leaders who demand safety and determinism.</li>
+<li>Position NetBox plus inventory as steps toward a network knowledge graph.</li>
+<li>AI must sit on top of strong, typed domain models.</li>
+</ul>
+<hr>
+<h3 id="joshua-mcnamara---network-troubleshooting-automation">Joshua McNamara - Network Troubleshooting Automation</h3>
+<p><strong>Core Themes</strong></p>
+<ul>
+<li>Automate early triage so engineers start with clarity instead of scrambling.</li>
+<li>Integrate monitoring, ITSM, and device workflows into a single troubleshooter.</li>
+</ul>
+<p><strong>Key Ideas</strong></p>
+<ul>
+<li>Alarm → ticket → workflow → commands → unified report</li>
+<li>Features:
+<ul>
+<li>Normalized show commands</li>
+<li>Historical comparisons</li>
+<li>Change management pre/post checks</li>
+</ul>
+</li>
+<li>Future:
+<ul>
+<li>Runbooks tied to alarm types</li>
+<li>Self service workflow changes</li>
+<li>AI assistant (NotBot) with vendor aware RAG</li>
+</ul>
+</li>
+</ul>
+<p><strong>Takeaways</strong></p>
+<ul>
+<li>Troubleshooter apps are high ROI and approachable as a first automation milestone.</li>
+<li>AI assistants should suggest, not execute, while workflows do the deterministic work.</li>
+<li>Map your common alarm types to potential automated playbooks.</li>
+</ul>
+
+            </div>
+        </article><hr style="margin-top: 40px; margin-bottom: 40px;" />
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "blog-gereader-xyz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <div class="footer_social-icons">
+<a href="https://github.com/gereader" target="_blank" rel="noopener noreferrer me"
+    title="Github">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+    stroke-linecap="round" stroke-linejoin="round">
+    <path
+        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+    </path>
+</svg>
+</a>
+<a href="https://linkedin.com/in/GeReader" target="_blank" rel="noopener noreferrer me"
+    title="Linkedin">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+    stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+    <rect x="2" y="9" width="4" height="12"></rect>
+    <circle cx="4" cy="4" r="2"></circle>
+</svg>
+</a>
+</div>
+    <small class="footer_copyright">
+        © 2025 Gene Reader.
+        
+    </small>
+</footer><a href="#" title="" id="totop">
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" stroke="currentColor" viewBox="0 96 960 960">
+    <path d="M283 704.739 234.261 656 480 410.261 725.739 656 677 704.739l-197-197-197 197Z"/>
+</svg>
+
+</a>
+
+
+    
+
+
+
+
+
+
+    
+    <script async src="http://localhost:1313/js/main.js" ></script>
+
+    
+
+</body>
+</html>

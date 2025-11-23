@@ -12,6 +12,9 @@ I went into AutoCon4 expecting to hear new tooling ideas, clever automation tric
 
 Instead of focusing on the latest frameworks or features, almost every speaker pushed a much deeper point.
 
+If you want to go deeper in what I learned at Nautocon and AutoCon4, I have also published my expanded session notes:
+[Nautocon & AutoCon4 Session Notes (Unofficial)](/posts/autocon4-notes/)
+
 {{< divider >}}
 
 {{< twocol right="It is about data.<br>It is about safety.<br>It is about reducing risk and proving value." >}}
