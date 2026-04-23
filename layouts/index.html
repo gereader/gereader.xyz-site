@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+{{- $defaultColor := .Site.Params.defaultColor | default "auto" -}}
+{{- if eq $defaultColor "dark" -}}
+<html lang="{{ .Site.LanguageCode }}" class="dark">
+{{- else if eq $defaultColor "light" -}}
+<html lang="{{ .Site.LanguageCode }}" class="light">
+{{- else -}}
+<html lang="{{ .Site.LanguageCode }}">
+{{- end -}}
+
+{{- partial "head.html" . -}}
+
+<body data-theme="{{ $defaultColor }}" class="notransition">
+    {{- partial "scriptsBodyStart.html" . -}}
+    <a class="skip-link" href="#main">Skip to content</a>
+    {{- partial "header.html" . -}}
+    <main id="main" class="home" aria-label="Content">
+        {{ partial "hero.html" . }}
+
+        {{ $featuredSlugs := .Site.Params.featuredProjects }}
+        {{ $allPosts := where .Site.RegularPages "Type" "in" .Site.Params.mainSections }}
+        {{ $featuredPages := slice }}
+        {{ range $featuredSlugs }}
+          {{ $slug := . }}
+          {{ range $allPosts }}
+            {{ if or (eq .File.ContentBaseName $slug) (eq .File.TranslationBaseName $slug) (in .RelPermalink (printf "/%s/" $slug)) }}
+              {{ $featuredPages = $featuredPages | append . }}
+            {{ end }}
+          {{ end }}
+        {{ end }}
+
+        {{ if $featuredPages }}
+        <section class="home-section" id="projects" aria-labelledby="featured-heading">
+            <header class="home-section-header">
+                <h2 id="featured-heading">Featured projects</h2>
+                <p class="home-section-sub">Recent builds and write-ups I'd point you to first.</p>
+            </header>
+            <ul class="project-grid">
+                {{ range $featuredPages }}
+                {{ partial "project-card.html" . }}
+                {{ end }}
+            </ul>
+        </section>
+        {{ end }}
+
+        {{ $featuredSet := dict }}
+        {{ range $featuredPages }}{{ $featuredSet = merge $featuredSet (dict .RelPermalink true) }}{{ end }}
+        {{ $recent := slice }}
+        {{ range ($allPosts.ByDate.Reverse) }}
+          {{ if not (index $featuredSet .RelPermalink) }}
+            {{ $recent = $recent | append . }}
+          {{ end }}
+        {{ end }}
+        {{ $recent = first 5 $recent }}
+
+        {{ if $recent }}
+        <section class="home-section" id="recent" aria-labelledby="recent-heading">
+            <header class="home-section-header">
+                <h2 id="recent-heading">Recent posts</h2>
+            </header>
+            <ul class="post-list">
+                {{ range $recent }}
+                <li class="post-list-item">
+                    <a href="{{ .RelPermalink }}" class="post-list-link">
+                        <span class="post-list-title">{{ .Title }}</span>
+                        <time class="post-list-date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time>
+                    </a>
+                    {{ with .Description }}<p class="post-list-desc">{{ . }}</p>{{ end }}
+                </li>
+                {{ end }}
+            </ul>
+            <p class="home-section-more"><a href="/posts/">All posts →</a></p>
+        </section>
+        {{ end }}
+
+        <section class="home-section home-about" aria-labelledby="about-heading">
+            <header class="home-section-header">
+                <h2 id="about-heading">About</h2>
+            </header>
+            <p>{{ .Site.Params.author.description }}</p>
+        </section>
+    </main>
+    {{- partial "footer.html" . -}}
+    {{- partial "scriptsBodyEnd.html" . -}}
+</body>
+</html>

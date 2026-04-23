@@ -1,0 +1,28 @@
+{{ define "main" }}
+<div class="wrapper post">
+    <main id="main" class="page-content" aria-label="Content">
+        <header class="header">
+            <h1 class="header-title">{{ .Title }}</h1>
+            {{ with .Content }}<div class="projects-intro">{{ . }}</div>{{ end }}
+        </header>
+
+        {{ $featuredSlugs := .Site.Params.featuredProjects }}
+        {{ $allPosts := where .Site.RegularPages "Type" "in" .Site.Params.mainSections }}
+        {{ $featuredPages := slice }}
+        {{ range $featuredSlugs }}
+          {{ $slug := . }}
+          {{ range $allPosts }}
+            {{ if or (eq .File.ContentBaseName $slug) (eq .File.TranslationBaseName $slug) (in .RelPermalink (printf "/%s/" $slug)) }}
+              {{ $featuredPages = $featuredPages | append . }}
+            {{ end }}
+          {{ end }}
+        {{ end }}
+
+        <ul class="project-grid">
+            {{ range $featuredPages }}
+            {{ partial "project-card.html" . }}
+            {{ end }}
+        </ul>
+    </main>
+</div>
+{{ end }}

@@ -1,19 +1,26 @@
 baseURL = 'https://blog.gereader.xyz'
 languageCode = 'en-us'
-title = "blog.gereader.xyz"
+title = "Gene Reader"
 theme = "hugo-blog-awesome"
+enableRobotsTXT = true
 
 [params]
   goToTop = true
-  defaultColor = "auto"  # or "light" or "dark"
-  description = "My technical blog to showcase projects as I build them"
+  defaultColor = "auto"
+  description = "Gene Reader — notes from a platform engineer."
+  tagline = "Notes from a platform engineer."
   renderAnchorLinks = true
+  featuredProjects = ["autocon4", "intro-to-clab", "rss-news-aggregator"]
+  contentLicense = "CC BY 4.0"
+  contentLicenseURL = "https://creativecommons.org/licenses/by/4.0/"
+  mainSections = ["posts"]
 
 [params.author]
   avatar = "images/MyFace.jpeg"
-  intro = "Things I Broke, Things I Fixed — by Gene Reader"
+  intro = "Gene Reader"
   name = "Gene Reader"
-  description = "Platform engineer focused on automation and reliability. I write about the things that broke, the things I fixed, and the mistakes I want to avoid repeating."
+  email = "eugene.reader@gmail.com"
+  description = "Platform engineer focused on automation and reliability. I write about things I broke, things I fixed, and mistakes I want to avoid repeating."
 
 [[params.socialIcons]]
   name = "github"
@@ -25,17 +32,30 @@ theme = "hugo-blog-awesome"
 
 [menu]
   [[menu.main]]
-    # The page reference (pageRef) is useful for menu highlighting
-    # When pageRef is set, setting `url` is optional; it will be used as a fallback if the page is not found.
-    pageRef="/"
-    name = 'Home'
-    url = '/'
+    pageRef = "/"
+    name = "Home"
+    url = "/"
     weight = 10
 
   [[menu.main]]
-    name = 'Posts'
-    url = '/posts/'
-    weight = 10
+    name = "Projects"
+    url = "/projects/"
+    weight = 20
+
+  [[menu.main]]
+    name = "Posts"
+    url = "/posts/"
+    weight = 30
+
+  [[menu.main]]
+    name = "Tags"
+    url = "/tags/"
+    weight = 40
+
+  [[menu.main]]
+    name = "RSS"
+    url = "/index.xml"
+    weight = 50
 
 [services.disqus]
   shortname = "blog-gereader-xyz"
@@ -44,18 +64,17 @@ theme = "hugo-blog-awesome"
   format = "yaml"
 
 [params.seo]
-  title = "Gene's Blog"
-  description = "Blog about DevOps, CICD, AWS, OCI, anything cloud and other tech insights"
-
+  title = "Gene Reader"
+  description = "Blog about platform engineering, automation, CI/CD, AWS, and things built, broken, and fixed along the way."
 
 [markup]
   [markup.goldmark]
     [markup.goldmark.parser]
       autoHeadingID = true
-  
+
     [markup.goldmark.renderer]
       unsafe = true
 
     [markup.tableOfContents]
-      startLevel = 2 # ToC starts from H2
-      endLevel = 4 # ToC ends at H4
+      startLevel = 2
+      endLevel = 4

@@ -1,0 +1,31 @@
+{{ $avatar := resources.Get .Site.Params.author.avatar }}
+<section class="hero" aria-label="Intro">
+    <div class="hero-inner">
+        {{ with $avatar }}
+        {{ $sq := .Fill "200x200 center webp" }}
+        {{ $sq2x := .Fill "400x400 center webp" }}
+        <img class="hero-avatar"
+             src="{{ $sq.RelPermalink }}"
+             srcset="{{ $sq2x.RelPermalink }} 2x"
+             alt="{{ $.Site.Params.author.name }}"
+             width="{{ $sq.Width }}"
+             height="{{ $sq.Height }}"
+             loading="eager"
+             fetchpriority="high">
+        {{ end }}
+        <div class="hero-text">
+            <h1 class="hero-name">{{ .Site.Params.author.name }}</h1>
+            <p class="hero-tagline">{{ .Site.Params.tagline }}</p>
+            <ul class="hero-social" aria-label="Social">
+                {{ range .Site.Params.socialIcons }}
+                <li>
+                    <a href="{{ .url }}" rel="me noopener noreferrer" target="_blank" aria-label="{{ .name | humanize }}">
+                        {{ partial "svgs/svgs.html" . }}
+                        <span>{{ .name | humanize }}</span>
+                    </a>
+                </li>
+                {{ end }}
+            </ul>
+        </div>
+    </div>
+</section>

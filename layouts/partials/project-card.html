@@ -1,0 +1,15 @@
+{{ $tags := .Params.tags }}
+<li class="project-card">
+    <a href="{{ .RelPermalink }}" class="project-card-link">
+        <h3 class="project-card-title">{{ .Title }}</h3>
+        {{ with .Description }}<p class="project-card-desc">{{ . }}</p>{{ end }}
+        <div class="project-card-meta">
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2006" }}</time>
+            {{ if $tags }}
+            <span class="project-card-tags">
+                {{ range first 3 $tags }}<span class="tag-chip">{{ . }}</span>{{ end }}
+            </span>
+            {{ end }}
+        </div>
+    </a>
+</li>

@@ -1,0 +1,24 @@
+{{ $author := .Site.Params.author }}
+<footer class="footer" role="contentinfo">
+    <div class="footer-inner">
+        <p class="footer-copy">
+            Content &copy; {{ now.Format "2006" }} {{ $author.name }}
+            {{ with .Site.Params.contentLicense }}
+            · <a href="{{ $.Site.Params.contentLicenseURL }}" rel="license noopener noreferrer" target="_blank">{{ . }}</a>
+            {{ end }}
+        </p>
+        <nav class="footer-social" aria-label="Social">
+            {{ partial "socialIcons.html" .Site.Params.socialIcons }}
+        </nav>
+        <p class="footer-built">
+            Built with <a href="https://gohugo.io" rel="noopener noreferrer" target="_blank">Hugo</a>.
+            {{ with .Lastmod }}Last updated <time datetime="{{ .Format "2006-01-02" }}">{{ .Format "Jan 2, 2006" }}</time>.{{ end }}
+        </p>
+    </div>
+</footer>
+
+{{- if .Site.Params.goToTop -}}
+<a href="#" title="{{ T "footer.go_to_top" }}" id="totop">
+    {{ partial "svgs/arrowUp.svg" (dict "height" 48 "width" 48) . }}
+</a>
+{{- end -}}
