@@ -217,6 +217,10 @@ h3:focus-within .anchorjs-link {
 .twocol-left {
   display: flex;
   align-items: center;
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-semibold);
+  color: var(--color-heading);
+  line-height: var(--lh-snug);
 }
 
 .twocol-right {
@@ -243,4 +247,98 @@ h3:focus-within .anchorjs-link {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+.highlight {
+  position: relative;
+  margin: var(--space-5) 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-border-soft);
+}
+
+.highlight pre,
+.highlight pre.chroma {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  overflow-x: auto;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.highlight .chroma .lntable td { padding: 0; }
+.highlight .chroma .lntable td:first-child { width: 1%; white-space: nowrap; }
+.highlight .chroma .lntd:first-child { padding-right: var(--space-3); }
+
+.copy-code-btn {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.75rem;
+  font-family: var(--font-sans);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-muted);
+  background: color-mix(in srgb, var(--color-bg) 80%, transparent);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--motion-fast) var(--easing), color var(--motion-fast) var(--easing), border-color var(--motion-fast) var(--easing);
+}
+
+.highlight:hover .copy-code-btn,
+.highlight:focus-within .copy-code-btn,
+.copy-code-btn:focus-visible {
+  opacity: 1;
+}
+
+.copy-code-btn:hover {
+  color: var(--color-link);
+  border-color: var(--color-link);
+}
+
+.copy-code-btn.copied {
+  color: var(--callout-tip);
+  border-color: var(--callout-tip);
+  opacity: 1;
+}
+
+.copy-code-btn svg { flex-shrink: 0; }
+
+.copy-code-label { line-height: 1; }
+
+@media (max-width: 640px) {
+  .copy-code-btn { opacity: 1; }
+}
+
+.lightbox-figure {
+  margin: var(--space-5) 0;
+}
+
+.lightbox-figure a {
+  display: block;
+  cursor: zoom-in;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.lightbox-figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius-md);
+}
+
+.lightbox-figure figcaption {
+  text-align: center;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-2);
 }

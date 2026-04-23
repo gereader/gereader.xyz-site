@@ -1,10 +1,8 @@
-<div class="callout">
-  {{ with .Get "title" }}
-    <div class="callout-title">
-      {{ . }}
-    </div>
-  {{ end }}
-  <div class="callout-body">
-    {{ .Inner | markdownify }}
-  </div>
-</div>
+{{- $type := .Get "type" | default "info" -}}
+{{- $validTypes := slice "info" "tip" "warn" "danger" "note" -}}
+{{- if not (in $validTypes $type) }}{{ $type = "info" }}{{ end -}}
+{{- $title := .Get "title" -}}
+<aside class="callout callout--{{ $type }}" role="note">
+  {{ with $title }}<div class="callout-title">{{ . }}</div>{{ end }}
+  <div class="callout-body">{{ .Inner | markdownify }}</div>
+</aside>
