@@ -1,0 +1,34 @@
+{{- /* Generate and return the permalink for a per-post OG card. */ -}}
+{{- $boldFont := resources.Get "og/Inter-Bold.ttf" -}}
+{{- $regularFont := resources.Get "og/Inter-Regular.ttf" -}}
+{{- $base := resources.Get "og/og-base-light.png" -}}
+{{- $siteName := .Site.Title -}}
+{{- $authorName := .Site.Params.author.name -}}
+
+{{- $title := .Title -}}
+{{- if .IsHome }}{{ $title = $siteName }}{{ end -}}
+
+{{- $img := $base -}}
+{{- if and $boldFont $regularFont $base -}}
+  {{- $words := split $title " " -}}
+  {{- $lines := slice -}}
+  {{- $cur := "" -}}
+  {{- range $words -}}
+    {{- $cand := cond (eq $cur "") . (printf "%s %s" $cur .) -}}
+    {{- if gt (len $cand) 28 -}}
+      {{- $lines = $lines | append $cur -}}
+      {{- $cur = . -}}
+    {{- else -}}
+      {{- $cur = $cand -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if ne $cur "" }}{{ $lines = $lines | append $cur }}{{ end -}}
+  {{- $wrapped := delimit $lines "\n" -}}
+
+  {{- $img = $base.Filter
+    (images.Text $siteName (dict "color" "#6c6f85" "size" 28 "x" 80 "y" 100 "font" $regularFont))
+    (images.Text $wrapped   (dict "color" "#2c2d3a" "size" 56 "x" 80 "y" 180 "linespacing" 14 "font" $boldFont))
+    (images.Text (printf "— %s" $authorName) (dict "color" "#6c6f85" "size" 24 "x" 80 "y" 540 "font" $regularFont))
+  -}}
+{{- end -}}
+{{ $img.Permalink }}
