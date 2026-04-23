@@ -1,41 +1,33 @@
+<link rel="preload" href="{{ "fonts/inter-latin-variable.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ "fonts/jetbrains-mono-latin-variable.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+
+<link rel="stylesheet" href="{{ "css/tokens.css" | relURL }}">
+<link rel="stylesheet" href="{{ "css/typography.css" | relURL }}">
 <link rel="stylesheet" href="{{ "css/custom.css" | relURL }}">
 
 {{ if .Params.renderMermaid }}
   <style>
-    /* Optional: Mermaid diagrams might need some styling tweaks */
     .mermaid {
       text-align: center;
       margin: 1em 0;
     }
   </style>
 
-    <script type="module">
+  <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
-
-    // Initialize Mermaid with the correct theme on page load
-    mermaid.initialize({
-        startOnLoad: true,
-        theme: 'default',  // hard-coded to light mode theme
-    });
-
-    // Don't do anything on theme toggle
+    mermaid.initialize({ startOnLoad: true, theme: 'default' });
     const observer = new MutationObserver(() => {});
-
     observer.observe(document.documentElement, { attributes: true });
-
-    </script>
+  </script>
 {{ end }}
-
 
 {{ if .Params.renderAnchorLinks }}
   <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
   <script>
     window.addEventListener('DOMContentLoaded', function () {
-      var anchors = new AnchorJS();  // instantiate it
-      anchors.options = {
-        icon: '#'
-      };
-      anchors.add('h2, h3');
+      var anchors = new AnchorJS();
+      anchors.options = { icon: '#' };
+      anchors.add('h2, h3, h4');
     });
   </script>
 {{ end }}
