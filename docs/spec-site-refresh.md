@@ -270,3 +270,13 @@ All blockers resolved. Remaining soft question: final tagline. Interim "Notes fr
 - Author reviews after each milestone before the next starts.
 - No push to remote without explicit request.
 - Merge to `main` is the deploy; author triggers.
+
+---
+
+## Follow-ups from M1–M5 QA (2026-04-22)
+
+- **Nav alignment**: nav currently left-aligned. Options: center the whole menu, OR keep links left and right-align the theme toggle (`a#mode`). Author leans toward one of those — revisit on M2 polish.
+- **Mermaid blank renders**: diagrams showed blank spots during QA. Self-hosted bundle loads, but `mermaid.run` isn't painting. Likely causes to check: `.mermaid` opacity gate never flipping to `.ready` (run promise rejecting silently), or themeVariables format mismatch for Mermaid v11. Add a `console.error` in the catch to diagnose, verify `mermaid.run` node-list behavior on v11, and confirm the element starts with raw source (not a pre-processed SVG). Belongs with M4 acceptance.
+- **Bash syntax highlighting**: Python blocks read well; bash looks flat. Catppuccin Chroma assigns the same color to many bash tokens. Options: tune the `.language-bash .chroma` ruleset (distinguish strings/flags/subshells), or switch to `lineNos=false` for shell only. Try manual token-color overrides in `chroma.css` first.
+- **Lightboxes**: confirmed good, no changes needed.
+- **Typography**: Inter + tokens feel right, keep as-is.
