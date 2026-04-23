@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "hugo-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "/Users/gene/Developer/personal/hugo-mcp",
+        "run",
+        "main.py"
+      ]
+    }
+  }
+}
