@@ -1,0 +1,48 @@
+{{- $src := .Get "src" -}}
+{{- $alt := .Get "alt" | default "" -}}
+{{- $caption := .Get "caption" | default "" -}}
+{{- $class := .Get "class" | default "" -}}
+{{- $loading := .Get "loading" | default "lazy" -}}
+
+{{- /* Prefer page-bundle resource, fall back to global assets, fall back to literal URL */ -}}
+{{- $img := .Page.Resources.GetMatch $src -}}
+{{- if not $img }}{{ $img = resources.Get $src }}{{ end -}}
+
+{{- if $img -}}
+  {{- $widths := slice 400 800 1200 1800 -}}
+  {{- $origW := $img.Width -}}
+  {{- $webpSet := slice -}}
+  {{- $fallbackSet := slice -}}
+  {{- range $widths -}}
+    {{- if le . $origW -}}
+      {{- $w := . -}}
+      {{- $webp := $img.Resize (printf "%dx webp q82" $w) -}}
+      {{- $webpSet = $webpSet | append (printf "%s %dw" $webp.RelPermalink $w) -}}
+      {{- $orig := $img.Resize (printf "%dx" $w) -}}
+      {{- $fallbackSet = $fallbackSet | append (printf "%s %dw" $orig.RelPermalink $w) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- /* Always include the original size in the set */ -}}
+  {{- $webpFull := $img.Process "webp q82" -}}
+  {{- $webpSet = $webpSet | append (printf "%s %dw" $webpFull.RelPermalink $origW) -}}
+  {{- $fallbackSet = $fallbackSet | append (printf "%s %dw" $img.RelPermalink $origW) -}}
+<figure class="post-figure{{ with $class }} {{ . }}{{ end }}">
+  <picture>
+    <source type="image/webp" srcset="{{ delimit $webpSet ", " }}" sizes="(min-width: 768px) 720px, 100vw">
+    <img src="{{ $img.RelPermalink }}"
+         srcset="{{ delimit $fallbackSet ", " }}"
+         sizes="(min-width: 768px) 720px, 100vw"
+         alt="{{ $alt }}"
+         width="{{ $img.Width }}"
+         height="{{ $img.Height }}"
+         loading="{{ $loading }}"
+         decoding="async">
+  </picture>
+  {{ with $caption }}<figcaption>{{ . | markdownify }}</figcaption>{{ end }}
+</figure>
+{{- else -}}
+<figure class="post-figure{{ with $class }} {{ . }}{{ end }}">
+  <img src="{{ $src }}" alt="{{ $alt }}" loading="{{ $loading }}" decoding="async">
+  {{ with $caption }}<figcaption>{{ . | markdownify }}</figcaption>{{ end }}
+</figure>
+{{- end -}}

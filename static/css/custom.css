@@ -342,3 +342,34 @@ h3:focus-within .anchorjs-link {
   color: var(--color-text-muted);
   margin-top: var(--space-2);
 }
+
+.post-figure {
+  margin: var(--space-5) 0;
+}
+
+.post-figure img,
+.post-figure picture {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  margin: 0 auto;
+}
+
+.post-figure figcaption {
+  text-align: center;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-2);
+}
+
+.mermaid {
+  text-align: center;
+  margin: var(--space-5) 0;
+  opacity: 0;
+  transition: opacity var(--motion-base) var(--easing);
+}
+
+.mermaid.ready {
+  opacity: 1;
+}

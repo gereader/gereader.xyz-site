@@ -8,18 +8,61 @@
 <link rel="stylesheet" href="{{ "css/chroma.css" | relURL }}">
 
 {{ if .Params.renderMermaid }}
-  <style>
-    .mermaid {
-      text-align: center;
-      margin: 1em 0;
-    }
-  </style>
-
-  <script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({ startOnLoad: true, theme: 'default' });
-    const observer = new MutationObserver(() => {});
-    observer.observe(document.documentElement, { attributes: true });
+  <script defer src="{{ "js/mermaid.min.js" | relURL }}"></script>
+  <script defer>
+    (function () {
+      function isDark() {
+        var html = document.documentElement;
+        if (html.classList.contains('dark')) return true;
+        if (html.classList.contains('light')) return false;
+        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      }
+      function themeVars() {
+        var cs = getComputedStyle(document.documentElement);
+        return {
+          primaryColor: cs.getPropertyValue('--ctp-base').trim() || '#eff1f5',
+          primaryTextColor: cs.getPropertyValue('--color-text').trim() || '#4c4f69',
+          primaryBorderColor: cs.getPropertyValue('--ctp-lavender').trim() || '#7287fd',
+          lineColor: cs.getPropertyValue('--color-text-muted').trim() || '#6c6f85',
+          secondaryColor: cs.getPropertyValue('--ctp-mantle').trim() || '#e6e9ef',
+          tertiaryColor: cs.getPropertyValue('--ctp-crust').trim() || '#dce0e8',
+          background: cs.getPropertyValue('--color-bg').trim() || '#eff1f5'
+        };
+      }
+      function render() {
+        if (typeof window.mermaid === 'undefined') return;
+        var blocks = document.querySelectorAll('.mermaid');
+        blocks.forEach(function (el) {
+          if (!el.dataset.source) el.dataset.source = el.textContent;
+          el.textContent = el.dataset.source;
+          el.removeAttribute('data-processed');
+        });
+        window.mermaid.initialize({
+          startOnLoad: false,
+          theme: isDark() ? 'dark' : 'default',
+          themeVariables: themeVars(),
+          securityLevel: 'loose',
+          fontFamily: getComputedStyle(document.documentElement).getPropertyValue('--font-sans').trim()
+        });
+        window.mermaid.run({ nodes: blocks }).then(function () {
+          blocks.forEach(function (el) { el.classList.add('ready'); });
+        }).catch(function () {});
+      }
+      function whenReady(fn) {
+        if (document.readyState !== 'loading') fn();
+        else document.addEventListener('DOMContentLoaded', fn);
+      }
+      whenReady(function () {
+        var poll = setInterval(function () {
+          if (typeof window.mermaid !== 'undefined') { clearInterval(poll); render(); }
+        }, 30);
+        new MutationObserver(function (muts) {
+          for (var i = 0; i < muts.length; i++) {
+            if (muts[i].attributeName === 'class') { render(); break; }
+          }
+        }).observe(document.documentElement, { attributes: true });
+      });
+    })();
   </script>
 {{ end }}
 
