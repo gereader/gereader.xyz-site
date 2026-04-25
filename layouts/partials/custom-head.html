@@ -9,9 +9,21 @@
 <link rel="stylesheet" href="{{ "css/chroma.css" | relURL }}">
 
 {{ if .Params.renderMermaid }}
-  <script defer src="{{ "js/mermaid.min.js" | relURL }}"></script>
   <script defer>
     (function () {
+      var BUNDLE = "{{ "js/mermaid.min.js" | relURL }}";
+      var bundlePromise;
+      function loadBundle() {
+        if (bundlePromise) return bundlePromise;
+        bundlePromise = new Promise(function (resolve, reject) {
+          var s = document.createElement('script');
+          s.src = BUNDLE;
+          s.onload = resolve;
+          s.onerror = reject;
+          document.head.appendChild(s);
+        });
+        return bundlePromise;
+      }
       function isDark() {
         var html = document.documentElement;
         if (html.classList.contains('dark')) return true;
@@ -88,12 +100,26 @@
         else document.addEventListener('DOMContentLoaded', fn);
       }
       whenReady(function () {
-        var poll = setInterval(function () {
-          if (typeof window.mermaid !== 'undefined') { clearInterval(poll); render(); }
-        }, 30);
+        var blocks = document.querySelectorAll('.mermaid');
+        if (!blocks.length) return;
+        var io = new IntersectionObserver(function (entries, observer) {
+          for (var i = 0; i < entries.length; i++) {
+            if (entries[i].isIntersecting) {
+              observer.disconnect();
+              loadBundle().then(render).catch(function (e) {
+                console.error('[mermaid] bundle load failed:', e);
+              });
+              return;
+            }
+          }
+        }, { rootMargin: '300px 0px' });
+        blocks.forEach(function (b) { io.observe(b); });
         new MutationObserver(function (muts) {
           for (var i = 0; i < muts.length; i++) {
-            if (muts[i].attributeName === 'class') { render(); break; }
+            if (muts[i].attributeName === 'class') {
+              if (typeof window.mermaid !== 'undefined') render();
+              break;
+            }
           }
         }).observe(document.documentElement, { attributes: true });
       });
