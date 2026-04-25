@@ -62,8 +62,8 @@ A project-scoped MCP server is configured in `.mcp.json` pointing at `/Users/gen
 
 ## Repo hygiene
 
-- `public/` is committed but is pure build output. GitHub Pages serves the artifact produced by the Actions workflow, **not** the committed `public/` — so the directory is dead weight and a merge-conflict magnet. Safe to add `public/` and `.hugo_build.lock` to `.gitignore` and `git rm -r --cached` them. Not removing proactively; flag for user.
-- `.gitignore` currently only contains `.DS_Store`.
+- `public/`, `.hugo_build.lock`, and `resources/_gen/` are gitignored (build outputs / Hugo asset cache regenerated on every build). CI builds fresh from source.
+- `.gitignore`: `.DS_Store`, `public/`, `.hugo_build.lock`, `resources/_gen/`.
 
 ## Style (per user global preferences)
 
