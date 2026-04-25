@@ -26,7 +26,7 @@
 
 ### Identity
 
-- **Tagline:** "Notes from a platform engineer." *(interim — author may revise during M2 brainstorm.)*
+- **Tagline:** "From idea to system, end to end." *(set 2026-04-24.)*
 - **Avatar:** keep `assets/images/MyFace.jpeg`.
 - **Resume:** no PDF. LinkedIn button in nav & footer.
 - **Featured projects (3):** `autocon4`, `intro-to-clab`, `rss-news-aggregator`.
@@ -259,7 +259,7 @@ Each milestone is an independent, mergeable commit series. Author QAs before mov
 
 ## Open questions
 
-All blockers resolved. Remaining soft question: final tagline. Interim "Notes from a platform engineer." ships with M2; author may revise any time.
+All blockers resolved.
 
 ---
 

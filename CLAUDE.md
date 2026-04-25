@@ -25,11 +25,11 @@ A project-scoped MCP server is configured in `.mcp.json` pointing at `/Users/gen
 - `archetypes/default.md` — frontmatter template `hugo new` uses. Current defaults: `toc`, `tocOpen`, `renderMermaid: false`, `renderAnchorLinks: true`.
 - `layouts/shortcodes/` — custom shortcodes (see below).
 - `layouts/_markup/` — goldmark render hooks. `render-codeblock-mermaid.html` (turns ` ```mermaid ` fences into a div and flags the page), `render-link.html` (external http(s) links get `target="_blank" rel="noopener noreferrer"`).
-- `layouts/partials/custom-head.html` — injects `css/custom.css`; conditionally loads mermaid (CDN, ESM) when `renderMermaid: true`, and AnchorJS when `renderAnchorLinks: true`.
+- `layouts/partials/custom-head.html` — injects tokens/typography/custom/home/chroma CSS; conditionally loads self-hosted mermaid (`static/js/mermaid.min.js`) when `renderMermaid: true`, and AnchorJS when `renderAnchorLinks: true`. Also includes `analytics.html` partial (CF Web Analytics, prod-only when `params.cloudflareAnalytics` token is set).
 - `static/` — served at site root. `CNAME` pins `blog.gereader.xyz`. `css/custom.css` holds width overrides, callout/twocol styling, and dark-mode rules (keyed on `html.dark`).
 - `assets/images/` — author avatar (`MyFace.jpeg`) pipelined by the theme.
 - `themes/hugo-blog-awesome/` — submodule. Don't edit; override via `layouts/` instead.
-- `hugo.toml` — site config. YAML frontmatter, goldmark `unsafe: true` (raw HTML allowed), Disqus `blog-gereader-xyz`, ToC levels 2–4.
+- `hugo.toml` — site config. YAML frontmatter, goldmark `unsafe: true` (raw HTML allowed), ToC levels 2–4. `params.cloudflareAnalytics` holds the CF Web Analytics beacon token — set to enable analytics in production. Disqus removed.
 - `public/` and `.hugo_build.lock` — **build output / local lock**. See "Repo hygiene" below.
 - `.github/workflows/hugo.yaml` — CI/deploy.
 
@@ -55,7 +55,7 @@ A project-scoped MCP server is configured in `.mcp.json` pointing at `/Users/gen
 
 ## Gotchas and tech debt
 
-- **Mermaid theme is hardcoded `'default'`** (light) in `custom-head.html`; a comment notes the `MutationObserver` intentionally ignores theme toggles.
+- **Mermaid source must round-trip via `data-mermaid-source` attr** (set by `render-codeblock-mermaid.html`). The bundled mermaid has a DOMContentLoaded auto-init that races our `mermaid.initialize`; reading `textContent` after that race captures the rendered SVG instead of the source. Don't change the script to read from `textContent` — keep the data-attr path.
 - **`lightbox` duplicates its script** per invocation. Fine for now; if a post has many images and the page feels heavy, move the script to `custom-head.html` behind a page flag.
 - **Theme is a submodule**, not Hugo Modules — `git submodule update --init` after clone; `git submodule update --remote themes/hugo-blog-awesome` to update.
 - **`goldmark.unsafe = true`** — raw HTML in markdown will render. Source is trusted (single-author blog) so this is fine, but be aware when pasting external content.

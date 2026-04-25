@@ -7,13 +7,14 @@ enableRobotsTXT = true
 [params]
   goToTop = true
   defaultColor = "auto"
-  description = "Gene Reader — notes from a platform engineer."
-  tagline = "Notes from a platform engineer."
+  description = "Gene Reader — from idea to system, end to end."
+  tagline = "From idea to system, end to end."
   renderAnchorLinks = true
   featuredProjects = ["autocon4", "intro-to-clab", "rss-news-aggregator"]
   contentLicense = "CC BY 4.0"
   contentLicenseURL = "https://creativecommons.org/licenses/by/4.0/"
   mainSections = ["posts"]
+  cloudflareAnalytics = "909b04433e8a4b80af8b8bbd398b817f"
 
 [params.author]
   avatar = "images/MyFace.jpeg"
@@ -56,9 +57,6 @@ enableRobotsTXT = true
     name = "RSS"
     url = "/index.xml"
     weight = 50
-
-[services.disqus]
-  shortname = "blog-gereader-xyz"
 
 [frontmatter]
   format = "yaml"

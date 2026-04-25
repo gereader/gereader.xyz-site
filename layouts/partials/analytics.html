@@ -1,0 +1,3 @@
+{{- if and (not hugo.IsServer) site.Params.cloudflareAnalytics -}}
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "{{ site.Params.cloudflareAnalytics }}"}'></script>
+{{- end -}}
