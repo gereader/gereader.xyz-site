@@ -258,12 +258,6 @@
   line-height: var(--lh-normal);
 }
 
-.home-about p {
-  color: var(--color-text-muted);
-  font-size: var(--fs-lg);
-  max-width: 60ch;
-  line-height: var(--lh-relaxed);
-}
 
 .footer {
   border-top: 1px solid var(--color-border-soft);
