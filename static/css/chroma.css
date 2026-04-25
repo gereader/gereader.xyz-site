@@ -235,3 +235,29 @@
 /* GenericUnderline */ html:not(.light) .chroma .gl { text-decoration:underline }
 
 }
+
+
+/* Bash-specific tweaks: chroma's bash lexer emits few token classes,
+   so most of the line is unstyled. Make the tokens that DO exist pop. */
+
+/* Light */
+html:not(.dark) .language-bash .nb { color:#8839ef;font-weight:600 }
+html:not(.dark) .language-bash .nv { color:#df8e1d }
+html:not(.dark) .language-bash .o,
+html:not(.dark) .language-bash .ow { color:#d20f39;font-weight:bold }
+html:not(.dark) .language-bash .se { color:#fe640b }
+
+/* Dark */
+html.dark .language-bash .nb { color:#cba6f7;font-weight:600 }
+html.dark .language-bash .nv { color:#f9e2af }
+html.dark .language-bash .o,
+html.dark .language-bash .ow { color:#f38ba8;font-weight:bold }
+html.dark .language-bash .se { color:#fab387 }
+
+@media (prefers-color-scheme: dark) {
+  html:not(.light) .language-bash .nb { color:#cba6f7;font-weight:600 }
+  html:not(.light) .language-bash .nv { color:#f9e2af }
+  html:not(.light) .language-bash .o,
+  html:not(.light) .language-bash .ow { color:#f38ba8;font-weight:bold }
+  html:not(.light) .language-bash .se { color:#fab387 }
+}

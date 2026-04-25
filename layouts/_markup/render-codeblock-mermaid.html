@@ -1,4 +1,4 @@
-<div class="mermaid">
-{{ .Inner | safeHTML }}
+<div class="mermaid" data-mermaid-source="{{ .Inner }}">
+{{ .Inner }}
 </div>
 {{ .Page.Store.Set "hasMermaid" true }}

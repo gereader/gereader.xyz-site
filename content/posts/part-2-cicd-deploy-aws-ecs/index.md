@@ -42,26 +42,17 @@ Before I start clicking around the AWS console, let me understand what the compo
 - **Tasks**: Individual running instances of your containers based on task definitions
 
 ```mermaid
-graph TD
-
-  subgraph OuterCluster[" "]
+flowchart TD
+  subgraph OuterCluster [ECS]
     Cluster[EC2 Cluster]
-
     subgraph Cluster
       Service1[Service 1]
     end
-
     Service1 -->|runs| TaskA[Task A]
-    Service1 -->|runs| TaskB[Task b]
-
+    Service1 -->|runs| TaskB[Task B]
     TaskA -->|based on| TaskDefinitionA[Task Definition]
     TaskB -->|based on| TaskDefinitionA
-
   end
-
-  style OuterCluster fill:#D6EAF8,stroke:#2980B9,stroke-width:2px
-  style Cluster fill:#AED6F1,stroke:#1B4F72,stroke-width:1.5px
-
 ```
 
 The flow works like this: I create a Task Definition (the blueprint for how my container should run), create a Service that manages how many tasks I want running, and ECS schedules those tasks across my cluster of EC2 instances. In my setup, I'll have one cluster with one service running one task based on one task definition.

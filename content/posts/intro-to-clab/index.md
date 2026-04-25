@@ -31,17 +31,12 @@ After looking at options, I settled on Containerlab for the network simulation a
 I decided on a simple two router topology using Nokia SR Linux routers:
 
 ```mermaid
-graph TB
-    subgraph Outer["Two Router Lab"]
-        RT1[RT1<br/>10.0.0.0/31<br/>IPv6: fd00:0:0:1::0/127]
-        RT2[RT2<br/>10.0.0.1/31<br/>IPv6: fd00:0:0:1::1/127]
-        
+flowchart TB
+    subgraph Outer [Two Router Lab]
+        RT1["RT1<br>10.0.0.0/31<br>IPv6 fd00:0:0:1::0/127"]
+        RT2["RT2<br>10.0.0.1/31<br>IPv6 fd00:0:0:1::1/127"]
         RT1 ---|e1-1 to e1-1| RT2
     end
-    
-    style RT1 fill:DarkSeaGreen
-    style RT2 fill:LightBlue  
-    style Outer fill:white,stroke:steelblue,stroke-width:2px
 ```
 
 This setup gives me:

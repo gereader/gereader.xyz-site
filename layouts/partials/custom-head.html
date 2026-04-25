@@ -19,34 +19,68 @@
       }
       function themeVars() {
         var cs = getComputedStyle(document.documentElement);
+        function v(name) { return cs.getPropertyValue(name).trim(); }
+        var surface0 = v('--ctp-surface0');
+        var surface1 = v('--ctp-surface1');
+        var mantle = v('--ctp-mantle');
+        var text = v('--color-text');
+        var muted = v('--color-text-muted');
+        var lavender = v('--ctp-lavender');
+        var overlay1 = v('--ctp-overlay1');
+        var overlay0 = v('--ctp-overlay0');
+        var bgElev = v('--color-bg-elev');
         return {
-          primaryColor: cs.getPropertyValue('--ctp-base').trim() || '#eff1f5',
-          primaryTextColor: cs.getPropertyValue('--color-text').trim() || '#4c4f69',
-          primaryBorderColor: cs.getPropertyValue('--ctp-lavender').trim() || '#7287fd',
-          lineColor: cs.getPropertyValue('--color-text-muted').trim() || '#6c6f85',
-          secondaryColor: cs.getPropertyValue('--ctp-mantle').trim() || '#e6e9ef',
-          tertiaryColor: cs.getPropertyValue('--ctp-crust').trim() || '#dce0e8',
-          background: cs.getPropertyValue('--color-bg').trim() || '#eff1f5'
+          background: 'transparent',
+          mainBkg: surface0,
+          primaryColor: surface0,
+          primaryTextColor: text,
+          primaryBorderColor: lavender,
+          secondaryColor: surface1,
+          secondaryTextColor: text,
+          secondaryBorderColor: lavender,
+          tertiaryColor: mantle,
+          tertiaryTextColor: text,
+          tertiaryBorderColor: overlay0,
+          nodeBorder: lavender,
+          nodeTextColor: text,
+          textColor: text,
+          titleColor: text,
+          lineColor: overlay1,
+          defaultLinkColor: overlay1,
+          edgeLabelBackground: bgElev,
+          labelTextColor: text,
+          clusterBkg: mantle,
+          clusterBorder: overlay0
         };
       }
       function render() {
         if (typeof window.mermaid === 'undefined') return;
-        var blocks = document.querySelectorAll('.mermaid');
+        var blocks = Array.from(document.querySelectorAll('.mermaid'));
+        if (!blocks.length) return;
         blocks.forEach(function (el) {
-          if (!el.dataset.source) el.dataset.source = el.textContent;
-          el.textContent = el.dataset.source;
+          var src = el.dataset.mermaidSource;
+          if (src) el.textContent = src;
           el.removeAttribute('data-processed');
         });
-        window.mermaid.initialize({
-          startOnLoad: false,
-          theme: isDark() ? 'dark' : 'default',
-          themeVariables: themeVars(),
-          securityLevel: 'loose',
-          fontFamily: getComputedStyle(document.documentElement).getPropertyValue('--font-sans').trim()
+        try {
+          window.mermaid.initialize({
+            startOnLoad: false,
+            theme: 'base',
+            themeVariables: themeVars(),
+            securityLevel: 'loose',
+            fontFamily: getComputedStyle(document.documentElement).getPropertyValue('--font-sans').trim()
+          });
+        } catch (e) {
+          console.error('[mermaid] initialize failed:', e);
+        }
+        blocks.forEach(function (el) {
+          window.mermaid.run({ nodes: [el] })
+            .then(function () { el.classList.add('ready'); })
+            .catch(function (err) {
+              console.error('[mermaid] render failed:', err, el);
+              el.classList.add('ready');
+            });
         });
-        window.mermaid.run({ nodes: blocks }).then(function () {
-          blocks.forEach(function (el) { el.classList.add('ready'); });
-        }).catch(function () {});
       }
       function whenReady(fn) {
         if (document.readyState !== 'loading') fn();
