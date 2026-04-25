@@ -1,12 +1,14 @@
 ---
 date: 2025-11-22T16:52:05-08:00
+lastmod: 2025-11-22T16:52:05-08:00
 title: "Nautocon and AutoCon4 Session Notes (Unofficial)"
 description: "My personal notes and concepts unconvered from the Nautocon and AutoCon4 sessions I attended in 2025."
 toc: true
 tocOpen: true
 renderMermaid: false
 renderAnchorLinks: true
-tags: ["autocon4", "conference", "network automation", "nautocon"]
+categories: ["network-automation"]
+tags: ["autocon"]
 ---
 
 These are my personal reflection notes from the AutoCon4 and Nautocon sessions I attended. I took notes during the sessions and expanded them the same day while everything was still fresh, trying to pull out the high-level concepts I wanted to remember.

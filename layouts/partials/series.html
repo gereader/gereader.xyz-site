@@ -1,0 +1,27 @@
+{{- with .Params.series -}}
+  {{- $current := $ -}}
+  {{- range . -}}
+    {{- $name := . -}}
+    {{- $pages := where (where site.RegularPages "Type" "posts") "Params.series" "intersect" (slice $name) -}}
+    {{- $sorted := sort $pages "Weight" "asc" -}}
+    {{- if gt (len $sorted) 1 -}}
+      <aside class="post-series" aria-label="Series navigation">
+        <div class="post-series-title">Series · {{ $name | humanize | title }}</div>
+        <ol class="post-series-list">
+          {{- range $i, $p := $sorted -}}
+            <li class="post-series-item{{ if eq $p.RelPermalink $current.RelPermalink }} post-series-current{{ end }}">
+              {{- if eq $p.RelPermalink $current.RelPermalink -}}
+                <span class="post-series-num">Part {{ add $i 1 }}</span>
+                <span class="post-series-link">{{ $p.LinkTitle }}</span>
+                <span class="post-series-here">you are here</span>
+              {{- else -}}
+                <span class="post-series-num">Part {{ add $i 1 }}</span>
+                <a class="post-series-link" href="{{ $p.RelPermalink }}">{{ $p.LinkTitle }}</a>
+              {{- end -}}
+            </li>
+          {{- end -}}
+        </ol>
+      </aside>
+    {{- end -}}
+  {{- end -}}
+{{- end -}}

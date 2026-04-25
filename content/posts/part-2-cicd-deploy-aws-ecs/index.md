@@ -1,11 +1,16 @@
 ---
 date: 2025-08-22T15:10:14-07:00
+lastmod: 2025-08-22T15:10:14-07:00
 title: "Part 2 - Deploying to AWS ECS: From Container Registry to Production"
 description: "Deploy Flask containers to AWS ECS with automated GitHub Actions deployment. Learn ECS cluster setup, task definitions, services, and minimal-downtime deployments while staying within free tier limits."
 toc: true
 tocOpen: true
 renderMermaid: true
 renderAnchorLinks: true
+categories: ["infrastructure"]
+tags: ["cicd", "github-actions", "containers", "aws"]
+series: ["cicd-on-aws"]
+weight: 2
 ---
 # Deploying to AWS ECS: From Container Registry to Production
 

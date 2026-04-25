@@ -1,9 +1,15 @@
 ---
 date: 2025-08-18T15:10:14-07:00
+lastmod: 2025-08-18T15:10:14-07:00
 title: "Part 1 - Building a CI/CD Pipeline with GitHub Actions and Container Registries"
 description: "Build a complete CI/CD pipeline with GitHub Actions for Flask apps. Learn to test containers, push to GHCR and AWS ECR, handle gotchas, and set up automated testing workflows - all within free AWS tier limits."
 toc: true
 tocOpen: true
+renderAnchorLinks: true
+categories: ["infrastructure"]
+tags: ["cicd", "github-actions", "containers", "aws"]
+series: ["cicd-on-aws"]
+weight: 1
 ---
 # Building a CI/CD Pipeline with GitHub Actions and Container Registries
 

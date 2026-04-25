@@ -1,11 +1,14 @@
 ---
 date: 2025-11-22T14:17:51-08:00
+lastmod: 2025-11-22T14:17:51-08:00
 title: "What AutoCon4 Taught Me"
 description: "Four takeaways from AutoCon4 in 2025 that reshaped how I think about automation, reliability, and where I see my career going."
 toc: true
 tocOpen: true
 renderMermaid: false
 renderAnchorLinks: true
+categories: ["network-automation"]
+tags: ["autocon"]
 ---
 
 I went into AutoCon4 expecting to hear new tooling ideas, clever automation tricks, and maybe a few case studies to bring home. I walked out with something very different.

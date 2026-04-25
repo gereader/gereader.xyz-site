@@ -1,11 +1,14 @@
 ---
 date: 2025-09-28T14:00:00-07:00
+lastmod: 2025-09-28T14:00:00-07:00
 title: "Building a Network Automation Lab: Containerlab + NetBox on macOS"
 description: "Setting up a foundation for network automation testing with containerized network devices on macOS"
 toc: true
 tocOpen: true
 renderMermaid: true
 renderAnchorLinks: true
+categories: ["network-automation"]
+tags: ["containers"]
 ---
 
 # Building a Network Automation Lab: Containerlab + NetBox on macOS

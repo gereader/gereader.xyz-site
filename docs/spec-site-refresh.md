@@ -216,6 +216,14 @@ Each milestone is an independent, mergeable commit series. Author QAs before mov
 - Tag pages are meaningful and non-redundant.
 - Series navigation works on the two CICD posts.
 
+**Status (2026-04-24)**
+- Categories: `infrastructure`, `network-automation`, `personal` (one per post).
+- Tags: `autocon`, `aws`, `cicd`, `containers`, `cpap`, `github-actions`, `hugo`, `macos`, `python`. `network-automation` collapsed into the category to avoid taxonomy redundancy. `autocon4`/`conference`/`nautocon` collapsed into `autocon`.
+- Series: `cicd-on-aws` taxonomy with `weight`-based ordering on part-1/part-2; `layouts/partials/series.html` renders a banner via `layouts/_default/single.html` override (also adds a `lastmod` "updated" suffix when ≠ date).
+- `lastmod` backfilled to equal `date` on all keeper posts; `archetypes/default.md` updated to seed it for new posts.
+- `transcend-micro/` renamed to `transcend-micro-mac-setup/` (URL change accepted).
+- `hello-world.md` deleted.
+
 ### M8 — Accessibility + QA
 **Scope**
 - Contrast sweep (axe + manual).

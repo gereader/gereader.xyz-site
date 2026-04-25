@@ -1,11 +1,14 @@
 ---
 date: 2025-10-11T09:05:21-07:00
+lastmod: 2025-10-11T09:05:21-07:00
 title: "Building a RSS News Aggregator with GitHub Pages"
 description: "Building a Personal RSS News Aggregator with GitHub Pages using GitHub Actions and Python to generate a static webpage."
 toc: true
 tocOpen: true
 renderMermaid: false
 renderAnchorLinks: true
+categories: ["infrastructure"]
+tags: ["github-actions", "python"]
 ---
 
 I find myself doom scrolling through content that an algorithm somewhere has decided I want to read. My browser's "new tab" page often shows articles I don't care about or don't want to see. I realized I could take control by setting my own homepage. A page that shows the news I actually want to read, because I curated the list myself. I understand I could likely find an RSS reader website and build a feed that way, but this seemed like a simple enough problem that I should be able to do it myself without worrying about ads or algorithms.

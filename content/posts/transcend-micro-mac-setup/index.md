@@ -1,11 +1,14 @@
 ---
 date: 2025-11-16T10:45:17-08:00
+lastmod: 2025-11-16T10:45:17-08:00
 title: "How I Connected My Transcend Micro CPAP to an M-Series Mac"
 description: "Getting the Transcend MiniCPAP software to work on an M4 Pro Mac using Parallels took some digging. Here is exactly what worked."
 toc: true
 tocOpen: true
 renderMermaid: false
 renderAnchorLinks: true
+categories: ["personal"]
+tags: ["macos", "cpap"]
 ---
 
 

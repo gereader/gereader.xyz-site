@@ -61,6 +61,11 @@ enableRobotsTXT = true
 [frontmatter]
   format = "yaml"
 
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+  series = "series"
+
 [params.seo]
   title = "Gene Reader"
   description = "Blog about platform engineering, automation, CI/CD, AWS, and things built, broken, and fixed along the way."
