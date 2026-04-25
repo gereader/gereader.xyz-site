@@ -2,9 +2,16 @@
 {{- $alt := .Get "alt" -}}
 {{- $caption := .Get "caption" | default "" -}}
 {{- $.Page.Store.Set "hasLightbox" true -}}
+{{- $img := .Page.Resources.GetMatch $src -}}
 <figure class="lightbox-figure">
-  <a href="{{ $src }}" class="glightbox" data-gallery="post-gallery"{{ with $caption }} data-description="{{ . }}"{{ end }}>
+  {{- if $img }}
+  <a href="{{ $img.RelPermalink }}" data-pswp-width="{{ $img.Width }}" data-pswp-height="{{ $img.Height }}" target="_blank" rel="noopener noreferrer">
+    <img src="{{ $img.RelPermalink }}" alt="{{ $alt }}" width="{{ $img.Width }}" height="{{ $img.Height }}" loading="lazy">
+  </a>
+  {{- else }}
+  <a href="{{ $src }}" target="_blank" rel="noopener noreferrer">
     <img src="{{ $src }}" alt="{{ $alt }}" loading="lazy">
   </a>
+  {{- end }}
   {{ with $caption }}<figcaption>{{ . }}</figcaption>{{ end }}
 </figure>

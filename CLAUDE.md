@@ -40,7 +40,7 @@ A project-scoped MCP server is configured in `.mcp.json` pointing at `/Users/gen
 | `callout` | Titled highlight box | `{{< callout title="..." >}}...{{< /callout >}}` — inner is markdownified |
 | `divider` | Short horizontal rule | No args |
 | `twocol` | 2fr:3fr grid; left inner, right via attr | `{{< twocol right="right markdown" >}}left markdown{{< /twocol >}}` |
-| `lightbox` | Click-to-zoom image with pan/zoom | Args: `src`, `alt`, `caption`. **Gotcha:** injects the same `<script>` every use — works but duplicates on image-heavy posts |
+| `lightbox` | Click-to-zoom image (pinch / scroll / double-tap) | Args: `src`, `alt`, `caption`. Powered by self-hosted PhotoSwipe v5; emits `<a data-pswp-width data-pswp-height>` with dimensions resolved from page-bundle resource. Caption rendered as figcaption under the figure (NOT overlaid on the lightbox slide). |
 | `small` | Wraps inner in `<small>` | Inner is raw, not markdownified |
 
 ## Conventions

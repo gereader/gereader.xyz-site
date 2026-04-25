@@ -35,15 +35,41 @@
 {{/* Copy-code button: script is tiny and bails early when no code blocks */}}
 <script defer src="{{ "js/copy-code.js" | relURL }}"></script>
 
-{{/* GLightbox: load only if lightbox shortcode used on page */}}
+{{/* PhotoSwipe: load only if lightbox shortcode used on page */}}
 {{ if .Page.Store.Get "hasLightbox" }}
-<link rel="stylesheet" href="{{ "css/vendor/glightbox.min.css" | relURL }}">
-<script defer src="{{ "js/glightbox.min.js" | relURL }}"></script>
+<link rel="stylesheet" href="{{ "css/vendor/photoswipe.css" | relURL }}">
+<script defer src="{{ "js/photoswipe.umd.min.js" | relURL }}"></script>
+<script defer src="{{ "js/photoswipe-lightbox.umd.min.js" | relURL }}"></script>
 <script defer>
   window.addEventListener('DOMContentLoaded', function () {
-    if (typeof GLightbox === 'function') {
-      GLightbox({ selector: '.glightbox', touchNavigation: true, loop: false });
-    }
+    if (typeof PhotoSwipeLightbox !== 'function' || typeof PhotoSwipe !== 'function') return;
+    var lightbox = new PhotoSwipeLightbox({
+      gallery: '.lightbox-figure',
+      children: 'a',
+      pswpModule: PhotoSwipe,
+      bgOpacity: 0.95,
+      showHideAnimationType: 'fade'
+    });
+    lightbox.init();
   });
 </script>
 {{ end }}
+
+{{/* Mobile nav: click outside the open menu overlay closes it */}}
+<script defer>
+  (function () {
+    document.addEventListener('click', function (e) {
+      var trigger = document.getElementById('menu-trigger');
+      if (!trigger || !trigger.checked) return;
+      if (e.target === trigger) return;
+      if (e.target.closest('.trigger')) return;
+      if (e.target.closest('label[for="menu-trigger"]')) return;
+      trigger.checked = false;
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      var trigger = document.getElementById('menu-trigger');
+      if (trigger && trigger.checked) trigger.checked = false;
+    });
+  })();
+</script>

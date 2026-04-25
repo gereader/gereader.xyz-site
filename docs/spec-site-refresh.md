@@ -240,6 +240,16 @@ Each milestone is an independent, mergeable commit series. Author QAs before mov
 - All perf/a11y targets met.
 - No axe violations at default severity.
 
+**Status (2026-04-25)**
+- axe: 0/0 violations across `/`, `/posts/`, `/posts/intro-to-clab/`, `/posts/part-1-cicd-container-registry/`, `/posts/set-up-hugo-blog/`, `/projects/`, `/tags/aws/`, `/categories/infrastructure/`, 404 — both light and dark modes.
+- Skip-to-content link: target moved to post-TOC content area on single posts (lands on prose body, not above TOC). Visually hidden via `clip-path` until focused.
+- Mobile nav: hamburger left + home logo (vertically centered), theme toggle right (escapes `.trigger` visibility:hidden via absolute position), click-outside-and-Esc close, solid `--color-bg` overlay for legibility.
+- Code-block contrast: switched to "always-Mocha" code blocks (Latte page, Mocha code) so every chroma token passes WCAG AA on a dark code card. Catppuccin-aligned pattern, used in many Catppuccin themes.
+- Link contrast: `--color-link` is now `color-mix(--ctp-blue 75%, --ctp-text 25%)` so it passes AA against Latte base AND mantle (TOC bg). Stays in Catppuccin blue family.
+- Muted-text contrast: `--color-text-muted` bumped from `--ctp-subtext0` to `--ctp-subtext1` in light (passes AA at 5.8:1).
+- Lightbox: replaced GLightbox with PhotoSwipe v5 (self-hosted) for built-in pinch / scroll-wheel / double-tap zoom + drag-to-pan + swipe between images. No caption overlay (figcaption stays under figure).
+- Lighthouse: deferred to post-deploy (run via PageSpeed Insights against blog.gereader.xyz once main is updated).
+
 ---
 
 ## Out of scope (post-refresh)

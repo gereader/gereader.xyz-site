@@ -12,9 +12,9 @@
 
 <body data-theme="{{ $defaultColor }}" class="notransition">
     {{- partial "scriptsBodyStart.html" . -}}
-    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     {{- partial "header.html" . -}}
-    <main id="main" class="home" aria-label="Content">
+    <main id="main-content" class="home" aria-label="Content" tabindex="-1">
         {{ partial "hero.html" . }}
 
         {{ $featuredSlugs := .Site.Params.featuredProjects }}

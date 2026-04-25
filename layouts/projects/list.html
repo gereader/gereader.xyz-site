@@ -1,6 +1,6 @@
 {{ define "main" }}
 <div class="wrapper post">
-    <main id="main" class="page-content" aria-label="Content">
+    <main id="main-content" class="page-content" aria-label="Content" tabindex="-1">
         <header class="header">
             <h1 class="header-title">{{ .Title }}</h1>
             {{ with .Content }}<div class="projects-intro">{{ . }}</div>{{ end }}

@@ -28,15 +28,15 @@
 
   --color-bg: var(--ctp-base);
   --color-bg-elev: var(--ctp-mantle);
-  --color-bg-code: var(--ctp-mantle);
+  --color-bg-code: #1e1e2e;
   --color-surface: var(--ctp-surface0);
   --color-border: var(--ctp-surface1);
   --color-border-soft: var(--ctp-surface0);
   --color-text: var(--ctp-text);
-  --color-text-muted: var(--ctp-subtext0);
+  --color-text-muted: var(--ctp-subtext1);
   --color-heading: #2c2d3a;
-  --color-link: var(--ctp-blue);
-  --color-link-hover: var(--ctp-lavender);
+  --color-link: color-mix(in srgb, var(--ctp-blue) 75%, var(--ctp-text) 25%);
+  --color-link-hover: var(--ctp-mauve);
   --color-accent: var(--ctp-mauve);
   --color-selection-bg: #dce1ff;
   --color-selection-fg: #2c2d3a;
@@ -124,7 +124,7 @@ html.dark {
 
   --color-bg: var(--ctp-base);
   --color-bg-elev: var(--ctp-mantle);
-  --color-bg-code: var(--ctp-mantle);
+  --color-bg-code: #1e1e2e;
   --color-surface: var(--ctp-surface0);
   --color-border: var(--ctp-surface1);
   --color-border-soft: var(--ctp-surface0);
@@ -179,7 +179,7 @@ html.dark {
 
     --color-bg: var(--ctp-base);
     --color-bg-elev: var(--ctp-mantle);
-    --color-bg-code: var(--ctp-mantle);
+    --color-bg-code: #1e1e2e;
     --color-surface: var(--ctp-surface0);
     --color-border: var(--ctp-surface1);
     --color-border-soft: var(--ctp-surface0);

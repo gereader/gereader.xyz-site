@@ -18,7 +18,7 @@
             </header>
             {{ partial "series.html" . }}
             {{ partial "toc.html" . }}
-            <div class="page-content">
+            <div id="main-content" class="page-content" tabindex="-1">
                 {{ .Content }}
             </div>
         </article>
